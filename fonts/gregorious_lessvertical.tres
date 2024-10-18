@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://b31r1i2ad0r5t"]
+
+[ext_resource type="FontFile" uid="uid://dcwjxltqfmi2b" path="res://fonts/gregorious.ttf" id="1_elsnk"]
+
+[resource]
+base_font = ExtResource("1_elsnk")
+spacing_top = -7
+spacing_bottom = -2

@@ -1,0 +1,91 @@
+[gd_scene load_steps=9 format=3 uid="uid://4w4qcrwlsqyk"]
+
+[ext_resource type="Script" path="res://util/screen_settings.gd" id="1_oqh8x"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/battle_manager.gd" id="3_f5w6v"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/actor_grid.gd" id="3_hkssh"]
+[ext_resource type="Theme" uid="uid://bluqnktkqq206" path="res://scenes/rpg_battle/gregmovie/art/main_theme.tres" id="3_ukysc"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/char_selection.gd" id="4_kuqm3"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/comps/character.gd" id="4_r7a16"]
+[ext_resource type="SpriteFrames" uid="uid://cgg6yedlort55" path="res://scenes/rpg_battle/gregmovie/art/sfr_greg.tres" id="5_xdqs5"]
+[ext_resource type="PackedScene" uid="uid://r7a1c2ukiiji" path="res://scenes/rpg_battle/gregmovie/comps/character_mouse_select.tscn" id="6_f267l"]
+
+[node name="GregMovieBattle" type="Node2D"]
+
+[node name="ScreenSettings" type="Node2D" parent="."]
+script = ExtResource("1_oqh8x")
+window_size = Vector2(960, 540)
+viewport_size = Vector2i(240, 160)
+content_scale_mode = 2
+
+[node name="BattleManager" type="Node" parent="." node_paths=PackedStringArray("actor_grid")]
+script = ExtResource("3_f5w6v")
+actor_grid = NodePath("../ActorGrid")
+
+[node name="CharSelection" type="Control" parent="BattleManager"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -77.0
+offset_top = 21.0
+offset_right = -77.0
+offset_bottom = 21.0
+theme = ExtResource("3_ukysc")
+script = ExtResource("4_kuqm3")
+
+[node name="PanelContainer" type="PanelContainer" parent="BattleManager/CharSelection"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleManager/CharSelection/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Greg"
+horizontal_alignment = 1
+
+[node name="MainMenu" type="VBoxContainer" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Button" type="Button" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer/MainMenu"]
+layout_mode = 2
+text = "Info..."
+alignment = 0
+
+[node name="Button2" type="Button" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer/MainMenu"]
+layout_mode = 2
+text = "Move..."
+alignment = 0
+
+[node name="Button3" type="Button" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer/MainMenu"]
+layout_mode = 2
+text = "Act..."
+alignment = 0
+
+[node name="MovingMenu" type="VBoxContainer" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Button" type="Button" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer/MovingMenu"]
+layout_mode = 2
+text = "leave"
+
+[node name="ActorGrid" type="Node2D" parent="."]
+script = ExtResource("3_hkssh")
+
+[node name="MGCharacter" type="CharacterBody2D" parent="ActorGrid" node_paths=PackedStringArray("component_mouse_select")]
+position = Vector2(66, 63)
+script = ExtResource("4_r7a16")
+component_mouse_select = NodePath("CharacterMouseSelect")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ActorGrid/MGCharacter"]
+position = Vector2(0, -8)
+sprite_frames = ExtResource("5_xdqs5")
+animation = &"walk_down"
+
+[node name="CharacterMouseSelect" parent="ActorGrid/MGCharacter" instance=ExtResource("6_f267l")]
+offset_top = -16.0
+offset_bottom = 0.0

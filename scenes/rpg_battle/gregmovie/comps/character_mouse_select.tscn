@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://r7a1c2ukiiji"]
+
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/comps/character_mouse_select.gd" id="1_1kfmq"]
+
+[node name="CharacterMouseSelect" type="Button"]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+pivot_offset = Vector2(8, 8)
+focus_mode = 0
+mouse_default_cursor_shape = 2
+flat = true
+script = ExtResource("1_1kfmq")

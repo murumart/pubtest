@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bluqnktkqq206"]
+
+[ext_resource type="FontVariation" uid="uid://b31r1i2ad0r5t" path="res://fonts/gregorious_lessvertical.tres" id="1_xprmq"]
+
+[resource]
+default_font = ExtResource("1_xprmq")
