@@ -1,5 +1,5 @@
 @tool
-@icon("res://icon.svg")
+@icon("res://scenes/rpg_battle/gregmovie/art/spr_greg_overworld.png")
 class_name ScreenSettings extends Node2D
 
 @export var window_size := Vector2(1920, 1080)

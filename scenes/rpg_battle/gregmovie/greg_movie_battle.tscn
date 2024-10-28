@@ -37,47 +37,67 @@ offset_bottom = 21.0
 theme = ExtResource("3_ukysc")
 script = ExtResource("4_kuqm3")
 
-[node name="PanelContainer" type="PanelContainer" parent="BattleManager/CharSelection"]
+[node name="Tabs" type="TabContainer" parent="BattleManager/CharSelection"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+current_tab = 2
+tabs_visible = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BattleManager/CharSelection/PanelContainer"]
+[node name="Main" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs"]
+visible = false
 layout_mode = 2
+metadata/_tab_index = 0
 
-[node name="Label" type="Label" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="BattleManager/CharSelection/Tabs/Main"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Greg"
 horizontal_alignment = 1
 
-[node name="MainMenu" type="VBoxContainer" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer"]
+[node name="MainMenu" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs/Main"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Button" type="Button" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer/MainMenu"]
+[node name="Button" type="Button" parent="BattleManager/CharSelection/Tabs/Main/MainMenu"]
 layout_mode = 2
 text = "Info..."
 alignment = 0
 
-[node name="Button2" type="Button" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer/MainMenu"]
-layout_mode = 2
-text = "Move..."
-alignment = 0
-
-[node name="Button3" type="Button" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer/MainMenu"]
+[node name="Button3" type="Button" parent="BattleManager/CharSelection/Tabs/Main/MainMenu"]
 layout_mode = 2
 text = "Act..."
 alignment = 0
 
-[node name="MovingMenu" type="VBoxContainer" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer"]
+[node name="MovingMenu" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs/Main"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Button" type="Button" parent="BattleManager/CharSelection/PanelContainer/VBoxContainer/MovingMenu"]
+[node name="Button" type="Button" parent="BattleManager/CharSelection/Tabs/Main/MovingMenu"]
 layout_mode = 2
-text = "leave"
+text = "sleave"
+
+[node name="Info" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Label" type="Label" parent="BattleManager/CharSelection/Tabs/Info"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "name: greg
+ATK 1 DEF 1 SPD 1 GRG 1 RPG 1
+you should take a shower! and shave!"
+autowrap_mode = 2
+
+[node name="Attack" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs"]
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Button" type="Button" parent="BattleManager/CharSelection/Tabs/Attack"]
+layout_mode = 2
+text = "KILLL!!!!!!"
 
 [node name="ActorGrid" type="Node2D" parent="."]
 position = Vector2(24, 18)
@@ -122,3 +142,6 @@ offset_bottom = 0.0
 [node name="Node" type="Node" parent="ActorGrid/MGCharacter2" node_paths=PackedStringArray("target")]
 script = ExtResource("10_45r10")
 target = NodePath("..")
+
+[connection signal="pressed" from="BattleManager/CharSelection/Tabs/Main/MainMenu/Button" to="BattleManager/CharSelection/Tabs" method="set_current_tab" binds= [1]]
+[connection signal="pressed" from="BattleManager/CharSelection/Tabs/Main/MainMenu/Button3" to="BattleManager/CharSelection/Tabs" method="set_current_tab" binds= [2]]

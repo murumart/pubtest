@@ -6,6 +6,10 @@ signal finished
 @export var _time_cost: int = 10
 
 
+@export var shape: BitMap
+@export var shape_offset: Vector2i
+
+
 func set_time_cost(to: int) -> MGAction:
 	_time_cost = to
 	return self

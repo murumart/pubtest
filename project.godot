@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="pubtest"
+run/main_scene="res://scenes/rpg_battle/gregmovie/greg_movie_battle.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/bitmap_editor/plugin.cfg")
 
 [input]
 

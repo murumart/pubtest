@@ -6,6 +6,8 @@ class_name MGBattleManager extends Node
 var _action_queue := {}
 var _time := 0
 
+@onready var char_selection: MGCharSelection = $CharSelection
+
 
 func _ready() -> void:
 	_signal_setup()
@@ -74,3 +76,4 @@ func _on_char_selection_requested(mgchar: MGCharacter) -> void:
 
 func select(mgchar: MGCharacter) -> void:
 	selected_actor = mgchar
+	char_selection.open(mgchar)

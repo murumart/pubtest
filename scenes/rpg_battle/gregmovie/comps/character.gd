@@ -12,7 +12,7 @@ enum Flags {
 
 var is_acting := false
 
-@export_group("Components")
+@export_group("Components", "component_")
 @export var component_mouse_select: MGCharacterMouseSelect
 @export var component_movement: MGMoveComponent
 @export_flags("Player Controlled") var _flags: int
