@@ -5,11 +5,13 @@ const GRID_SIZE_PX := 16
 
 @export var grid_size := Vector2i(12, 8)
 
-var _spots := {}
+var _spots := Spots.new()
 
 
 func _ready() -> void:
-	pass
+	for child in get_children():
+		assert(child is MGCharacter)
+		_spots.let(pos_to_spot(child.position), child)
 
 
 func _draw() -> void:
@@ -23,3 +25,29 @@ func _draw() -> void:
 					Color.CORNFLOWER_BLUE,
 					false
 			)
+
+
+func pos_to_spot(pos: Vector2) -> Vector2i:
+	return Vector2i((pos / GRID_SIZE_PX).floor())
+
+
+func get_characters() -> Array[MGCharacter]:
+	return _spots.get_values()
+
+
+class Spots:
+	var _data := {}
+
+
+	func let(pos: Vector2i, chara: MGCharacter) -> void:
+		_data[pos] = chara
+	
+	
+	func who(pos: Vector2i) -> MGCharacter:
+		return _data.get(pos, null)
+	
+	
+	func get_values() -> Array[MGCharacter]:
+		var new_cool_memory: Array[MGCharacter] = []
+		new_cool_memory.assign(_data.values())
+		return new_cool_memory

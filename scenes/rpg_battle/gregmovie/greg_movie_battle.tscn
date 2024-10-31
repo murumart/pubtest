@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://4w4qcrwlsqyk"]
+[gd_scene load_steps=8 format=3 uid="uid://4w4qcrwlsqyk"]
 
 [ext_resource type="Script" path="res://util/screen_settings.gd" id="1_oqh8x"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/signal_bus.gd" id="2_mtn5t"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/battle_manager.gd" id="3_f5w6v"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/actor_grid.gd" id="3_hkssh"]
 [ext_resource type="Theme" uid="uid://bluqnktkqq206" path="res://scenes/rpg_battle/gregmovie/art/main_theme.tres" id="3_ukysc"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/mg_character.gd" id="5_rce0m"]
 [ext_resource type="SpriteFrames" uid="uid://cgg6yedlort55" path="res://scenes/rpg_battle/gregmovie/art/sfr_greg.tres" id="5_xdqs5"]
 
 [node name="GregMovieBattle" type="Node2D"]
@@ -17,7 +19,9 @@ content_scale_mode = 2
 [node name="MGSignalBus" type="Node" parent="."]
 script = ExtResource("2_mtn5t")
 
-[node name="BattleManager" type="Node" parent="."]
+[node name="BattleManager" type="Node" parent="." node_paths=PackedStringArray("grid")]
+script = ExtResource("3_f5w6v")
+grid = NodePath("../ActorGrid")
 
 [node name="CharSelection" type="Control" parent="BattleManager"]
 layout_mode = 3
@@ -96,11 +100,9 @@ script = ExtResource("3_hkssh")
 
 [node name="MGCharacter" type="CharacterBody2D" parent="ActorGrid"]
 position = Vector2(56, 57)
+script = ExtResource("5_rce0m")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ActorGrid/MGCharacter"]
 position = Vector2(0, -8)
 sprite_frames = ExtResource("5_xdqs5")
 animation = &"walk_down"
-
-[connection signal="pressed" from="BattleManager/CharSelection/Tabs/Main/MainMenu/Button" to="BattleManager/CharSelection/Tabs" method="set_current_tab" binds= [1]]
-[connection signal="pressed" from="BattleManager/CharSelection/Tabs/Main/MainMenu/Button3" to="BattleManager/CharSelection/Tabs" method="set_current_tab" binds= [2]]
