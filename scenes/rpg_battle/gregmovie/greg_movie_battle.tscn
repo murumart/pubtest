@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://4w4qcrwlsqyk"]
+[gd_scene load_steps=10 format=3 uid="uid://4w4qcrwlsqyk"]
 
 [ext_resource type="Script" path="res://util/screen_settings.gd" id="1_oqh8x"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/signal_bus.gd" id="2_mtn5t"]
@@ -6,7 +6,9 @@
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/actor_grid.gd" id="3_hkssh"]
 [ext_resource type="Theme" uid="uid://bluqnktkqq206" path="res://scenes/rpg_battle/gregmovie/art/main_theme.tres" id="3_ukysc"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/mg_character.gd" id="5_rce0m"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/player_char_selection.gd" id="5_wa8dm"]
 [ext_resource type="SpriteFrames" uid="uid://cgg6yedlort55" path="res://scenes/rpg_battle/gregmovie/art/sfr_greg.tres" id="5_xdqs5"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/compo/player_action_button.gd" id="8_vstuf"]
 
 [node name="GregMovieBattle" type="Node2D"]
 
@@ -23,7 +25,7 @@ script = ExtResource("2_mtn5t")
 script = ExtResource("3_f5w6v")
 grid = NodePath("../ActorGrid")
 
-[node name="CharSelection" type="Control" parent="BattleManager"]
+[node name="PlayerCharSelection" type="Control" parent="BattleManager"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -77.0
@@ -31,66 +33,68 @@ offset_top = 21.0
 offset_right = -77.0
 offset_bottom = 21.0
 theme = ExtResource("3_ukysc")
+script = ExtResource("5_wa8dm")
 
-[node name="Tabs" type="TabContainer" parent="BattleManager/CharSelection"]
+[node name="Tabs" type="TabContainer" parent="BattleManager/PlayerCharSelection"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-current_tab = 2
+current_tab = 0
 tabs_visible = false
 
-[node name="Main" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs"]
-visible = false
+[node name="Main" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Label" type="Label" parent="BattleManager/CharSelection/Tabs/Main"]
+[node name="Label" type="Label" parent="BattleManager/PlayerCharSelection/Tabs/Main"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Greg"
 horizontal_alignment = 1
 
-[node name="MainMenu" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs/Main"]
+[node name="MainMenu" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs/Main"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Button" type="Button" parent="BattleManager/CharSelection/Tabs/Main/MainMenu"]
+[node name="Button" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MainMenu"]
 layout_mode = 2
 text = "Info..."
 alignment = 0
 
-[node name="Button3" type="Button" parent="BattleManager/CharSelection/Tabs/Main/MainMenu"]
+[node name="Button3" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MainMenu"]
 layout_mode = 2
 text = "Act..."
 alignment = 0
 
-[node name="MovingMenu" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs/Main"]
+[node name="MovingMenu" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs/Main"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Button" type="Button" parent="BattleManager/CharSelection/Tabs/Main/MovingMenu"]
+[node name="Button" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MovingMenu"]
 layout_mode = 2
 text = "sleave"
 
-[node name="Info" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs"]
+[node name="Info" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Label" type="Label" parent="BattleManager/CharSelection/Tabs/Info"]
+[node name="Label" type="Label" parent="BattleManager/PlayerCharSelection/Tabs/Info"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "name: greg
-ATK 1 DEF 1 SPD 1 GRG 1 RPG 1
-you should take a shower! and shave!"
+text = "name:
+  greg
+house:
+  no"
 autowrap_mode = 2
 
-[node name="Attack" type="VBoxContainer" parent="BattleManager/CharSelection/Tabs"]
+[node name="Attack" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Button" type="Button" parent="BattleManager/CharSelection/Tabs/Attack"]
+[node name="Button" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Attack"]
 layout_mode = 2
 text = "KILLL!!!!!!"
 
@@ -98,11 +102,19 @@ text = "KILLL!!!!!!"
 position = Vector2(24, 18)
 script = ExtResource("3_hkssh")
 
-[node name="MGCharacter" type="CharacterBody2D" parent="ActorGrid"]
+[node name="MGCharacter" type="CharacterBody2D" parent="ActorGrid" node_paths=PackedStringArray("actor_component")]
 position = Vector2(56, 57)
 script = ExtResource("5_rce0m")
+actor_component = NodePath("Button")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ActorGrid/MGCharacter"]
 position = Vector2(0, -8)
 sprite_frames = ExtResource("5_xdqs5")
 animation = &"walk_down"
+
+[node name="Button" type="Button" parent="ActorGrid/MGCharacter" node_paths=PackedStringArray("player_char_selection")]
+offset_left = -8.0
+offset_top = -16.0
+offset_right = 8.0
+script = ExtResource("8_vstuf")
+player_char_selection = NodePath("../../../BattleManager/PlayerCharSelection")

@@ -1,0 +1,20 @@
+how to make
+
+imagined gameplay "flow":
+	* click on him
+	* select action
+		- some are like "move here"
+			. this should have mouse highlight a tile and await for a click
+			. and then return a move action result toward that
+		- others are like "attack region"
+			. highlight region under mouse and hide menu?
+			. need to keep in mind maximum range perhaps
+			. await for click again and apply
+	* what's in the action menu?
+		- move
+		- attack tile
+	* move forward in the menu with left clicks, backward with right clicks
+	* after action completed, other actors can act
+		- need to stuff awaits there so its humanly visible time
+			. damn
+	
