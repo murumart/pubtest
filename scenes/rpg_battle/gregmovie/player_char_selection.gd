@@ -1,5 +1,9 @@
 class_name MGPlayerCharSelection extends Control
 
+enum Tab {
+	MAIN, MOVING, INFO, ACT
+}
+
 const AR := ActorComponent.ActionResult
 
 signal decision_made(decision: AR)
@@ -12,13 +16,13 @@ signal decision_made(decision: AR)
 
 func _ready() -> void:
 	$Tabs/Main/MainMenu/InfoButton.pressed.connect(func():
-		tabs.current_tab = 2
+		tabs.current_tab = Tab.INFO
 	)
 	$Tabs/Main/MainMenu/ActButton.pressed.connect(func():
-		tabs.current_tab = 3
+		tabs.current_tab = Tab.ACT
 	)
 	$Tabs/Main/MainMenu/MoveButton.pressed.connect(func():
-		tabs.current_tab = 1
+		tabs.current_tab = Tab.MOVING
 		hide()
 		mouse_follower.activate_with(
 				grid.global_pos_to_spot(character.global_position), 2)

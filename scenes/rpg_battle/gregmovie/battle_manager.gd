@@ -27,14 +27,18 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	for chara: MGCharacter in grid.get_characters():
+		if state != State.WAITING:
+			continue
 		chara.decrease_time(delta)
 
 
 func _on_act_requested(who: MGCharacter) -> void:
 	state = State.ACTING
+	print("acting with ", who)
 	who.act_finished.connect(_on_act_finished, CONNECT_ONE_SHOT)
 	who.start_act()
 
 
 func _on_act_finished(_who: MGCharacter) -> void:
+	print(_who, " finished act")
 	state = State.WAITING

@@ -49,6 +49,7 @@ func set_params(centre_pos: Vector2, crange: int) -> void:
 func get_clickable(gridpos: Vector2) -> bool:
 	return _active and (
 			_centre_position.distance_squared_to(gridpos) < _range * _range
+			and grid.spots.who(Vector2i(gridpos)) == null
 	)
 
 

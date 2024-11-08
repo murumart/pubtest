@@ -5,12 +5,12 @@ const GRID_SIZE_PX := 16
 
 @export var grid_size := Vector2i(12, 8)
 
-var _spots := Spots.new()
+var spots := Spots.new()
 
 
 func _ready() -> void:
 	for child: MGCharacter in get_children():
-		_spots.let(pos_to_spot(child.position), child)
+		spots.let(pos_to_spot(child.position), child)
 		child.move_requested.connect(move_character)
 
 
@@ -36,12 +36,13 @@ func global_pos_to_spot(global_pos: Vector2) -> Vector2i:
 
 
 func get_characters() -> Array[MGCharacter]:
-	return _spots.get_values()
+	return spots.get_values()
 
 
 func move_character(who: MGCharacter, to: Vector2) -> void:
-	_spots.erase_char(who)
-	_spots.let(Vector2i(to), who)
+	assert(spots.who(to) == null)
+	spots.erase_char(who)
+	spots.let(Vector2i(to), who)
 	who.position = to * GRID_SIZE_PX + Vector2.ONE * GRID_SIZE_PX * 0.5
 
 

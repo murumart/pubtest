@@ -20,6 +20,7 @@ func _ready() -> void:
 func decrease_time(amount: float) -> void:
 	_time -= absf(amount)
 	if _time <= 0:
+		print("\t", self, " am requesting act!")
 		act_requested.emit(self)
 
 
@@ -36,3 +37,7 @@ func start_act() -> void:
 
 func finish_act() -> void:
 	act_finished.emit(self)
+
+
+func _to_string() -> String:
+	return name

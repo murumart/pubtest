@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://4w4qcrwlsqyk"]
+[gd_scene load_steps=12 format=3 uid="uid://4w4qcrwlsqyk"]
 
 [ext_resource type="Script" path="res://util/screen_settings.gd" id="1_oqh8x"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/signal_bus.gd" id="2_mtn5t"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/player_char_selection.gd" id="5_wa8dm"]
 [ext_resource type="SpriteFrames" uid="uid://cgg6yedlort55" path="res://scenes/rpg_battle/gregmovie/art/sfr_greg.tres" id="5_xdqs5"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/compo/player_action_button.gd" id="8_vstuf"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/compo/enemy_actor_component.gd" id="10_1lsla"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/grid_mouse_follower.gd" id="10_k1fb8"]
 
 [node name="GregMovieBattle" type="Node2D"]
@@ -42,10 +43,11 @@ grid = NodePath("../../ActorGrid")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-current_tab = 0
+current_tab = 3
 tabs_visible = false
 
 [node name="Main" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -98,12 +100,49 @@ house:
   no"
 autowrap_mode = 2
 
-[node name="Attack" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
-visible = false
+[node name="ScrollContainer" type="ScrollContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
 layout_mode = 2
+horizontal_scroll_mode = 0
 metadata/_tab_index = 3
 
-[node name="Button" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Attack"]
+[node name="Act" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
+layout_mode = 2
+text = "KILLL!!!!!!"
+
+[node name="Button2" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
+layout_mode = 2
+text = "KILLL!!!!!!"
+
+[node name="Button3" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
+layout_mode = 2
+text = "KILLL!!!!!!"
+
+[node name="Button4" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
+layout_mode = 2
+text = "KILLL!!!!!!"
+
+[node name="Button5" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
+layout_mode = 2
+text = "KILLL!!!!!!"
+
+[node name="Button6" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
+layout_mode = 2
+text = "KILLL!!!!!!"
+
+[node name="Button7" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
+layout_mode = 2
+text = "KILLL!!!!!!"
+
+[node name="Button8" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
+layout_mode = 2
+text = "KILLL!!!!!!"
+
+[node name="Button9" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/ScrollContainer/Act"]
 layout_mode = 2
 text = "KILLL!!!!!!"
 
@@ -127,6 +166,20 @@ offset_top = -16.0
 offset_right = 8.0
 script = ExtResource("8_vstuf")
 player_char_selection = NodePath("../../../BattleManager/PlayerCharSelection")
+
+[node name="TheEnemy_" type="CharacterBody2D" parent="ActorGrid" node_paths=PackedStringArray("actor_component")]
+position = Vector2(121, 58)
+script = ExtResource("5_rce0m")
+actor_component = NodePath("EnemyActionCompnent")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="ActorGrid/TheEnemy_"]
+position = Vector2(0, -8)
+sprite_frames = ExtResource("5_xdqs5")
+animation = &"walk_down"
+
+[node name="EnemyActionCompnent" type="Node" parent="ActorGrid/TheEnemy_" node_paths=PackedStringArray("grid")]
+script = ExtResource("10_1lsla")
+grid = NodePath("../..")
 
 [node name="GridMouseFollower" type="Node2D" parent="." node_paths=PackedStringArray("grid")]
 script = ExtResource("10_k1fb8")
