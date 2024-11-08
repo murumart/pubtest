@@ -36,5 +36,5 @@ func _on_act_requested(who: MGCharacter) -> void:
 	who.start_act()
 
 
-func _on_act_finished(who: MGCharacter) -> void:
+func _on_act_finished(_who: MGCharacter) -> void:
 	state = State.WAITING

@@ -15,12 +15,12 @@ class ActionResult:
 	var target_pos: Vector2
 
 
-	func move_to(target_pos: Vector2) -> ActionResult:
+	func move_to(target_pos_: Vector2) -> ActionResult:
 		type = TYPE_MOVE
-		self.target_pos = target_pos
+		self.target_pos = target_pos_
 		return self
 
 
-	func timed(time: float) -> ActionResult:
-		self.time = time
+	func timed(time_: float) -> ActionResult:
+		self.time = time_
 		return self

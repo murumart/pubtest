@@ -20,7 +20,7 @@ func _ready() -> void:
 	set_active(false)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var gridpos := grid.global_position
 	var pos_in_grid := ((get_global_mouse_position() - gridpos)
 			* DOWNSIZE_MULT).floor()
@@ -36,14 +36,14 @@ func _process(delta: float) -> void:
 		grid_clicked.emit(pos_in_grid)
 
 
-func activate_with(centre_pos := Vector2.ZERO, range := 0xFFFFFFFFFFFFFFF) -> void:
-	set_params(centre_pos, range)
+func activate_with(centre_pos := Vector2.ZERO, crange := 0xFFFFFFFFFFFFFFF) -> void:
+	set_params(centre_pos, crange)
 	set_active(true)
 
 
-func set_params(centre_pos: Vector2, range: int) -> void:
+func set_params(centre_pos: Vector2, crange: int) -> void:
 	_centre_position = centre_pos
-	_range = range
+	_range = crange
 
 
 func get_clickable(gridpos: Vector2) -> bool:
