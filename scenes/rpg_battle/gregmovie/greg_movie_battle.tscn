@@ -56,29 +56,35 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Button" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MainMenu"]
+[node name="InfoButton" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MainMenu"]
 layout_mode = 2
 text = "Info..."
 alignment = 0
 
-[node name="Button3" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MainMenu"]
+[node name="ActButton" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MainMenu"]
 layout_mode = 2
 text = "Act..."
 alignment = 0
 
-[node name="MovingMenu" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs/Main"]
+[node name="MoveButton" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MainMenu"]
+layout_mode = 2
+text = "Move..."
+alignment = 0
+
+[node name="MovingMenu" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 1
+metadata/_tab_index = 1
 
-[node name="Button" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Main/MovingMenu"]
+[node name="Moment" type="Label" parent="BattleManager/PlayerCharSelection/Tabs/MovingMenu"]
 layout_mode = 2
-text = "sleave"
+text = "momevent"
 
 [node name="Info" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 
 [node name="Label" type="Label" parent="BattleManager/PlayerCharSelection/Tabs/Info"]
 layout_mode = 2
@@ -92,7 +98,7 @@ autowrap_mode = 2
 [node name="Attack" type="VBoxContainer" parent="BattleManager/PlayerCharSelection/Tabs"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2
+metadata/_tab_index = 3
 
 [node name="Button" type="Button" parent="BattleManager/PlayerCharSelection/Tabs/Attack"]
 layout_mode = 2
