@@ -1,7 +1,11 @@
 class_name MGCharacter extends CharacterBody2D
 
+const AR = ActorComponent.ActionResult
+
 signal act_requested(who: MGCharacter)
 signal act_finished(who: MGCharacter)
+
+signal move_requested(who: MGCharacter, to: Vector2)
 
 @export var actor_component: Node
 
@@ -20,8 +24,13 @@ func decrease_time(amount: float) -> void:
 
 
 func start_act() -> void:
-	var result: ActorComponent.ActionResult = await actor_component.act()
+	var result: AR = await actor_component.act()
 	_time = result.time
+
+	match result.type:
+		AR.TYPE_MOVE:
+			move_requested.emit(self, result.target_pos)
+
 	finish_act()
 
 

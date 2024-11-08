@@ -17,4 +17,3 @@ imagined gameplay "flow":
 	* after action completed, other actors can act
 		- need to stuff awaits there so its humanly visible time
 			. damn
-	

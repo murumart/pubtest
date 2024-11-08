@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://4w4qcrwlsqyk"]
+[gd_scene load_steps=11 format=3 uid="uid://4w4qcrwlsqyk"]
 
 [ext_resource type="Script" path="res://util/screen_settings.gd" id="1_oqh8x"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/signal_bus.gd" id="2_mtn5t"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/player_char_selection.gd" id="5_wa8dm"]
 [ext_resource type="SpriteFrames" uid="uid://cgg6yedlort55" path="res://scenes/rpg_battle/gregmovie/art/sfr_greg.tres" id="5_xdqs5"]
 [ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/compo/player_action_button.gd" id="8_vstuf"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregmovie/grid_mouse_follower.gd" id="10_k1fb8"]
 
 [node name="GregMovieBattle" type="Node2D"]
 
@@ -25,7 +26,7 @@ script = ExtResource("2_mtn5t")
 script = ExtResource("3_f5w6v")
 grid = NodePath("../ActorGrid")
 
-[node name="PlayerCharSelection" type="Control" parent="BattleManager"]
+[node name="PlayerCharSelection" type="Control" parent="BattleManager" node_paths=PackedStringArray("mouse_follower", "grid")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -77.0
@@ -34,6 +35,8 @@ offset_right = -77.0
 offset_bottom = 21.0
 theme = ExtResource("3_ukysc")
 script = ExtResource("5_wa8dm")
+mouse_follower = NodePath("../../GridMouseFollower")
+grid = NodePath("../../ActorGrid")
 
 [node name="Tabs" type="TabContainer" parent="BattleManager/PlayerCharSelection"]
 layout_mode = 0
@@ -124,3 +127,11 @@ offset_top = -16.0
 offset_right = 8.0
 script = ExtResource("8_vstuf")
 player_char_selection = NodePath("../../../BattleManager/PlayerCharSelection")
+
+[node name="GridMouseFollower" type="Node2D" parent="." node_paths=PackedStringArray("grid")]
+script = ExtResource("10_k1fb8")
+grid = NodePath("../ActorGrid")
+
+[node name="ColorRect" type="ColorRect" parent="GridMouseFollower"]
+offset_right = 16.0
+offset_bottom = 16.0

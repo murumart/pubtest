@@ -9,9 +9,9 @@ var _spots := Spots.new()
 
 
 func _ready() -> void:
-	for child in get_children():
-		assert(child is MGCharacter)
+	for child: MGCharacter in get_children():
 		_spots.let(pos_to_spot(child.position), child)
+		child.move_requested.connect(move_character)
 
 
 func _draw() -> void:
@@ -31,8 +31,18 @@ func pos_to_spot(pos: Vector2) -> Vector2i:
 	return Vector2i((pos / GRID_SIZE_PX).floor())
 
 
+func global_pos_to_spot(global_pos: Vector2) -> Vector2i:
+	return pos_to_spot(to_local(global_pos))
+
+
 func get_characters() -> Array[MGCharacter]:
 	return _spots.get_values()
+
+
+func move_character(who: MGCharacter, to: Vector2) -> void:
+	_spots.erase_char(who)
+	_spots.let(Vector2i(to), who)
+	who.position = to * GRID_SIZE_PX + Vector2.ONE * GRID_SIZE_PX * 0.5
 
 
 class Spots:
@@ -41,12 +51,20 @@ class Spots:
 
 	func let(pos: Vector2i, chara: MGCharacter) -> void:
 		_data[pos] = chara
-	
-	
+
+
+	func erase(pos: Vector2i) -> void:
+		_data.erase(pos)
+
+
+	func erase_char(chara: MGCharacter) -> void:
+		_data.erase(_data.find_key(chara))
+
+
 	func who(pos: Vector2i) -> MGCharacter:
 		return _data.get(pos, null)
-	
-	
+
+
 	func get_values() -> Array[MGCharacter]:
 		var new_cool_memory: Array[MGCharacter] = []
 		new_cool_memory.assign(_data.values())
