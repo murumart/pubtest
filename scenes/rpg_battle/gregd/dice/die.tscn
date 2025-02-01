@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://btlovw56cphne"]
+
+[ext_resource type="Texture2D" uid="uid://dk4q7arg3pe2s" path="res://scenes/rpg_battle/gregd/dice/die4.png" id="1_xcoc6"]
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregd/dice/die.gd" id="2_hdhrr"]
+
+[node name="Die" type="TextureRect"]
+custom_minimum_size = Vector2(48, 48)
+texture = ExtResource("1_xcoc6")
+expand_mode = 2
+script = ExtResource("2_hdhrr")

@@ -1,0 +1,115 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2rcwrrhkfhb7"]
+
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregd/battle.gd" id="1_prw0q"]
+[ext_resource type="PackedScene" uid="uid://c5rsb25i4nhf4" path="res://scenes/rpg_battle/gregd/dice/player_actor_display.tscn" id="3_y74ew"]
+
+[node name="Battle" type="Control" node_paths=PackedStringArray("film_reel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_prw0q")
+film_reel = NodePath("FilmReel")
+
+[node name="FilmReel" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 48.0
+grow_horizontal = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ClickableStuff" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.628
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.199982
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="PlayerActorDisplay" parent="ClickableStuff" instance=ExtResource("3_y74ew")]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="ActionOptions" type="PanelContainer" parent="ClickableStuff"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ClickableStuff/ActionOptions"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ClickableStuff/ActionOptions/MarginContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ClickableStuff/ActionOptions/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Fight"
+
+[node name="Button2" type="Button" parent="ClickableStuff/ActionOptions/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Item"
+
+[node name="Button3" type="Button" parent="ClickableStuff/ActionOptions/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Spirit"
+
+[node name="SelectionMenu" type="PanelContainer" parent="ClickableStuff"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ClickableStuff/SelectionMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ClickableStuff/SelectionMenu/MarginContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ClickableStuff/SelectionMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ClickableStuff/SelectionMenu/MarginContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="SelectionList" type="ItemList" parent="ClickableStuff/SelectionMenu/MarginContainer/HBoxContainer/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+item_count = 3
+item_0/text = "a"
+item_1/text = "b"
+item_2/text = "c"
+
+[node name="MarginContainer" type="MarginContainer" parent="ClickableStuff/SelectionMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="InfoDisplay" type="RichTextLabel" parent="ClickableStuff/SelectionMenu/MarginContainer/HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+bbcode_enabled = true
+text = "this is the info about what ever!"

@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5rsb25i4nhf4"]
+
+[ext_resource type="Script" path="res://scenes/rpg_battle/gregd/dice/player_actor_display.gd" id="1_lt4r4"]
+[ext_resource type="Texture2D" uid="uid://xrcdmh3ch5l1" path="res://scenes/rpg_battle/gregmovie/art/spr_greg_overworld.png" id="1_rkvh7"]
+
+[node name="PlayerActorController" type="PanelContainer"]
+offset_right = 96.0
+offset_bottom = 177.0
+script = ExtResource("1_lt4r4")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Halves" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Halves"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FaceTexture" type="TextureRect" parent="MarginContainer/Halves/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("1_rkvh7")
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/Halves/VBoxContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/Halves/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Greg"
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/Halves/VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/Halves/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+value = 1.0
+
+[node name="MagicBar" type="ProgressBar" parent="MarginContainer/Halves/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+value = 1.0
