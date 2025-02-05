@@ -5,6 +5,8 @@ const VISIBLE_DICE = 8
 const DIE = preload("res://scenes/rpg_battle/gregd/dice/die.tscn")
 const Die = preload("res://scenes/rpg_battle/gregd/dice/die.gd")
 
+const Actor = preload("res://scenes/rpg_battle/gregd/actor.gd")
+
 @export var film_reel: HBoxContainer
 
 @onready var player_actor_display: PanelContainer = $ClickableStuff/PlayerActorDisplay
@@ -13,9 +15,15 @@ const Die = preload("res://scenes/rpg_battle/gregd/dice/die.gd")
 @onready var selection_list: ItemList = %SelectionList
 @onready var info_display: RichTextLabel = %InfoDisplay
 
+@onready var actors_node: Control = %Actors
+
+var actors: Array[Actor] = []
+
 
 func _ready() -> void:
 	populate_dice()
+	for child: Actor in actors_node.get_children():
+		actors.append(child)
 
 
 func _input(event: InputEvent) -> void:
