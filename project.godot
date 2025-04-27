@@ -12,7 +12,7 @@ config_version=5
 
 config/name="pubtest"
 run/main_scene="res://scenes/rpg_battle/gregmovie/greg_movie_battle.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]

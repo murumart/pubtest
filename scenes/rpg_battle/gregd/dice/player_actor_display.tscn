@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c5rsb25i4nhf4"]
 
-[ext_resource type="Script" path="res://scenes/rpg_battle/gregd/dice/player_actor_display.gd" id="1_lt4r4"]
+[ext_resource type="Script" uid="uid://iewifqdnrq8u" path="res://scenes/rpg_battle/gregd/dice/player_actor_display.gd" id="1_lt4r4"]
 [ext_resource type="Texture2D" uid="uid://xrcdmh3ch5l1" path="res://scenes/rpg_battle/gregmovie/art/spr_greg_overworld.png" id="1_rkvh7"]
 
 [node name="PlayerActorController" type="PanelContainer"]

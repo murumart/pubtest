@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://d2rcwrrhkfhb7"]
 
-[ext_resource type="Script" path="res://scenes/rpg_battle/gregd/battle.gd" id="1_prw0q"]
-[ext_resource type="Script" path="res://scenes/rpg_battle/gregd/actor.gd" id="3_ancde"]
+[ext_resource type="Script" uid="uid://b2ndpoop40ohj" path="res://scenes/rpg_battle/gregd/battle.gd" id="1_prw0q"]
+[ext_resource type="Script" uid="uid://dbvwhygy4q8mm" path="res://scenes/rpg_battle/gregd/actor.gd" id="3_ancde"]
 [ext_resource type="Texture2D" uid="uid://bbrg0t85x1ygj" path="res://scenes/rpg_battle/gregd/fight_sprite.png" id="3_k4se5"]
 [ext_resource type="PackedScene" uid="uid://c5rsb25i4nhf4" path="res://scenes/rpg_battle/gregd/dice/player_actor_display.tscn" id="3_y74ew"]
 

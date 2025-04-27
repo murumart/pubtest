@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dfvil05c2giuc"]
 
-[ext_resource type="Script" path="res://addons/bitmap_editor/editor.gd" id="1_jbnsg"]
-[ext_resource type="Script" path="res://addons/bitmap_editor/editor_texture.gd" id="2_d1hw2"]
+[ext_resource type="Script" uid="uid://cgm01pqo0nuu4" path="res://addons/bitmap_editor/editor.gd" id="1_jbnsg"]
+[ext_resource type="Script" uid="uid://cmcba10xohabr" path="res://addons/bitmap_editor/editor_texture.gd" id="2_d1hw2"]
 
 [node name="Editor" type="PanelContainer"]
 offset_right = 54.0
