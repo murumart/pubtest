@@ -82,3 +82,11 @@ func draw(canvas: CanvasItem, position: Vector2) -> void:
 				to_string())
 	, CONNECT_ONE_SHOT)
 	canvas.queue_redraw()
+
+
+func m_get_name() -> String:
+	return _jobname
+
+
+static func get_name(job: Job) -> String:
+	return job._jobname

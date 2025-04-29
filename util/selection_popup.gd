@@ -11,7 +11,7 @@ func pop(params: Parameters) -> Variant:
 	assert(not visible, "dont pop me up now.....")
 	
 	var p := params
-	title = p.title if p.title else ""
+	title = p._title if p._title else ""
 	
 	_populate_list(p)
 	
@@ -19,23 +19,23 @@ func pop(params: Parameters) -> Variant:
 	exclusive = true
 	show()
 	
-	var result: Variant = await _await_result()
+	var result: Variant = await params._result_callable.call()
 	hide()
 	reset()
 	return result
 
 
 func _populate_list(p: Parameters) -> void:
-	assert(p.input_labels.size() == p.input_labels.size())
-	for i in p.input_labels.size():
-		var label := p.input_labels[i]
-		var object: Variant = p.input_objects[i]
+	assert(p._input_labels.size() == p._input_labels.size())
+	for i in p._input_labels.size():
+		var label := p._input_labels[i]
+		var object: Variant = p._input_objects[i]
 		
 		items.add_item(label, null, true)
 		items.set_item_metadata(i, object)
 
 
-func _await_result() -> Variant:
+func wait_item_result() -> Variant:
 	while true:
 		var clicked: Array = await items.item_clicked
 		var index: int = clicked[0]
@@ -56,16 +56,17 @@ func reset() -> void:
 
 class Parameters:
 	
-	var input_labels: PackedStringArray
-	var input_objects: Array
-	var title: String
-	var size := Vector2(120, 100)
+	var _input_labels: PackedStringArray
+	var _input_objects: Array
+	var _title: String
+	var _size := Vector2(120, 100)
+	var _result_callable: Callable
 	
 	
 	func set_inputs(labels: Array, objects: Array) -> Parameters:
 		assert(labels.size() == objects.size(), "inconsistent label and object lists")
-		input_labels = PackedStringArray(labels)
-		input_objects = objects
+		_input_labels = PackedStringArray(labels)
+		_input_objects = objects
 		return self
 	
 	
@@ -78,10 +79,15 @@ class Parameters:
 
 
 	func set_title(ttle: String) -> Parameters:
-		title = ttle
+		_title = ttle
 		return self
 	
 	
 	func set_size(sze: Vector2) -> Parameters:
-		size = sze
+		_size = sze
+		return self
+	
+	
+	func set_result_callable(callable: Callable) -> Parameters:
+		_result_callable = callable
 		return self

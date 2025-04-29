@@ -6,6 +6,8 @@ const Job := preload("res://scenes/colony/job.gd")
 const Worker := preload("res://scenes/colony/worker.gd")
 const Place := preload("res://scenes/colony/place.gd")
 
+const JobButton := preload("res://scenes/colony/job_button.gd")
+
 @export var camera: Cam
 @export var ui: UI
 @export var tiles: TileMapLayer
@@ -38,7 +40,6 @@ func _physics_process(_delta: float) -> void:
 	
 	ui.display_resources(resources)
 	ui.display_workers(workers)
-	draw_jobs()
 
 
 func mousestuff() -> void:
@@ -67,9 +68,10 @@ func clicked_place(pos: Vector2i, place: Place) -> void:
 	if jobs.has(pos): return
 	var selected: Job = await ui.popup.pop(SelectionPopup.Parameters.new()
 			.set_inputs(
-				place.jobs.keys().map(func(j: Job) -> String: return j._jobname),
+				place.jobs.keys().map(Job.get_name),
 				place.jobs.keys())
-			.set_title("select job"))
+			.set_title("select job")
+			.set_result_callable(ui.popup.wait_item_result))
 	place_job(pos, selected)
 	#print("selected", selected)
 
@@ -95,7 +97,20 @@ func clean_places() -> void:
 func place_job(pos: Vector2i, job: Job) -> void:
 	assert(jobs.get(pos) == null, "job position occupied")
 	jobs[pos] = job
-	draw_jobs()
+	var button := JobButton.instantiate()
+	button.init(job, complete_job.bind(job, true))
+	add_child(button)
+	button.position = Vector2(pos) * 16
+	job.set_meta("button", button)
+
+
+func complete_job(job: Job, erase := false) -> Error:
+	if not job.can_complete(resources): return FAILED
+	job.deplete(resources)
+	job.reward(resources)
+	if erase:
+		jobs.erase(jobs.find_key(job))
+	return OK
 
 
 func complete_jobs() -> void:
@@ -103,17 +118,12 @@ func complete_jobs() -> void:
 	
 	for job_pos in jobs:
 		var job := jobs[job_pos]
-		if not job.can_complete(resources): continue
-		job.deplete(resources)
-		job.reward(resources)
+		if complete_job(job) != OK: continue
 		rm.append(job_pos)
+		if job.has_meta("button"):
+			(job.get_meta("button") as JobButton).queue_free()
 	
 	for jp: Vector2i in rm:
 		jobs.erase(jp)
 	
 	clean_places()
-
-
-func draw_jobs() -> void:
-	for jobp in jobs:
-		jobs[jobp].draw(self, Vector2(jobp) * 16)

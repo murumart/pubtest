@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkf0k2webwah5"]
+
+[ext_resource type="Theme" uid="uid://bluqnktkqq206" path="res://scenes/rpg_battle/gregmovie/art/main_theme.tres" id="1_njgap"]
+[ext_resource type="Script" uid="uid://bnjyqwiftmep" path="res://scenes/colony/job_button.gd" id="1_wjqgg"]
+
+[node name="JobButton" type="Button"]
+offset_right = 8.0
+offset_bottom = 8.0
+theme = ExtResource("1_njgap")
+text = "job name"
+script = ExtResource("1_wjqgg")
