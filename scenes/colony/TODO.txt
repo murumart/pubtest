@@ -1,0 +1,25 @@
+colony game prototype requirements
+
+jobs:
+	list of jobs to edit them (or just click in world)
+	edit jobs menu (after placing a job)
+	add workers to job
+	amount of workers should reduce required time
+	time should be different from resources (or make resources float)
+	progressing to next day:
+		leave uncompletable jobs uncompleted for now
+	
+city building:
+	jobs to build new buildings
+	special buildings with special jobs:
+		sawmill: wood → planks
+		well: → water
+		farm: → crops
+	house for new workers to move in randomly
+
+workers:
+	eat food each day
+	get deleted if not enough food
+
+defense battle:
+	try copy everything from greg lol
