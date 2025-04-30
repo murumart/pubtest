@@ -20,7 +20,7 @@ func _ready() -> void:
 static func create_forest() -> Place:
 	var f := Forest.new()
 	f.add_job(Job.create("chop trees")
-			.add_requirement("time", 5)
+			.time_to_complete(5.0)
 			.add_reward("wood", 10)
 			.set_reward_callback(f.queue_free))
 	return f

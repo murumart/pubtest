@@ -1,7 +1,8 @@
 const Job = preload("res://scenes/colony/job.gd")
+const Worker = preload("res://scenes/colony/worker.gd")
 
 var _jobname: String
-#var _time_to_complete := -1.0
+var _time_to_complete := -1.0
 var _resources_to_complete: Dictionary[StringName, int]
 var _rewards: Dictionary[StringName, int]
 var _reward_callback: Callable
@@ -28,9 +29,8 @@ static func create(nomen: String) -> Job:
 	return job
 
 
-func time_to_complete(time: int) -> Job:
-	#_time_to_complete = time
-	add_requirement("time", time)
+func time_to_complete(time: float) -> Job:
+	_time_to_complete = time
 	return self
 
 
@@ -51,7 +51,8 @@ func set_reward_callback(cb: Callable) -> Job:
 # methods
 
 
-func can_complete(resources: Dictionary[StringName, int]) -> bool:
+func can_complete(resources: Dictionary[StringName, int], timeleft: float) -> bool:
+	if m_get_time() > timeleft: return false
 	for k in _resources_to_complete:
 		var v := _resources_to_complete[k]
 		if not resources.has(k): return false
@@ -59,10 +60,12 @@ func can_complete(resources: Dictionary[StringName, int]) -> bool:
 	return true
 
 
-func deplete(resources: Dictionary[StringName, int]) -> void:
+func deplete(resources: Dictionary[StringName, int], timeleft: float) -> float:
+	assert(can_complete(resources, timeleft), "job incompletable")
 	for k in _resources_to_complete:
 		var v := _resources_to_complete[k]
 		resources[k] -= v
+	return timeleft - m_get_time()
 
 
 func reward(resources: Dictionary[StringName, int]) -> void:
@@ -89,4 +92,13 @@ func m_get_name() -> String:
 
 
 static func get_name(job: Job) -> String:
-	return job._jobname
+	return job.m_get_name()
+
+
+func m_get_time() -> float:
+	assert(_time_to_complete >= 0, "time uninitialised?")
+	return _time_to_complete
+
+
+static func get_time(job: Job) -> float:
+	return job.m_get_time()

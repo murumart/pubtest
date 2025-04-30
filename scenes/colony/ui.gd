@@ -24,8 +24,9 @@ func display_place(pos: Vector2i, place: Place) -> void:
 	_mouse_label.text += " (%s)" % place.name
 
 
-func display_resources(resources: Dictionary[StringName, int]) -> void:
+func display_resources(resources: Dictionary[StringName, int], time: float) -> void:
 	var txt := "resources:\n"
+	txt += "time: %.2f\n" % time
 	for k in resources:
 		var v := resources[k]
 		txt += k + ": " + str(v)

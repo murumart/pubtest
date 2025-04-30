@@ -13,7 +13,8 @@ const JobButton := preload("res://scenes/colony/job_button.gd")
 @export var tiles: TileMapLayer
 @export var places_root: Node2D
 
-var resources: Dictionary[StringName, int] = {"time": 18}
+var resources: Dictionary[StringName, int] = {}
+var time: float = 18
 var jobs: Dictionary[Vector2i, Job]
 var workers: Dictionary[Worker, bool]
 var grid: Dictionary[Vector2i, Place]
@@ -38,7 +39,7 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	mousestuff()
 	
-	ui.display_resources(resources)
+	ui.display_resources(resources, time)
 	ui.display_workers(workers)
 
 
@@ -105,8 +106,8 @@ func place_job(pos: Vector2i, job: Job) -> void:
 
 
 func complete_job(job: Job, erase := false) -> Error:
-	if not job.can_complete(resources): return FAILED
-	job.deplete(resources)
+	if not job.can_complete(resources, time): return FAILED
+	time = job.deplete(resources, time)
 	job.reward(resources)
 	if erase:
 		jobs.erase(jobs.find_key(job))
