@@ -15,7 +15,6 @@ const JobButton := preload("res://scenes/colony/job_button.gd")
 
 var resources: Dictionary[StringName, int] = {}
 var time: float = 18
-var jobs: Dictionary[Vector2i, Job]
 var workers: Dictionary[Worker, bool]
 var grid: Dictionary[Vector2i, Place]
 
@@ -66,11 +65,11 @@ func mousestuff() -> void:
 
 func clicked_place(pos: Vector2i, place: Place) -> void:
 	place.clicked_on()
-	if jobs.has(pos): return
+	if place.has_active_job(): return
 	var selected: Job = await ui.popup.pop(SelectionPopup.Parameters.new()
 			.set_inputs(
-				place.jobs.keys().map(Job.get_name),
-				place.jobs.keys())
+				place._jobs.keys().map(Job.get_name),
+				place._jobs.keys())
 			.set_title("select job")
 			.set_result_callable(ui.popup.wait_item_result))
 	place_job(pos, selected)
@@ -96,35 +95,31 @@ func clean_places() -> void:
 
 
 func place_job(pos: Vector2i, job: Job) -> void:
-	assert(jobs.get(pos) == null, "job position occupied")
-	jobs[pos] = job
+	var place := grid[pos]
+	assert(not place.has_active_job(), "job position occupied")
+	place.set_active_job(job)
 	var button := JobButton.instantiate()
-	button.init(job, complete_job.bind(job, true))
+	button.init(job, complete_job.bind(job))
 	add_child(button)
 	button.position = Vector2(pos) * 16
 	job.set_meta("button", button)
 
 
-func complete_job(job: Job, erase := false) -> Error:
+func complete_job(job: Job) -> Error:
 	if not job.can_complete(resources, time): return FAILED
 	time = job.deplete(resources, time)
 	job.reward(resources)
-	if erase:
-		jobs.erase(jobs.find_key(job))
+	job.job_completed_self.emit(job)
 	return OK
 
 
 func complete_jobs() -> void:
-	var rm := []
-	
-	for job_pos in jobs:
-		var job := jobs[job_pos]
+	for pos in grid:
+		var place := grid[pos]
+		if not place.has_active_job(): continue
+		var job := place.get_active_job()
 		if complete_job(job) != OK: continue
-		rm.append(job_pos)
 		if job.has_meta("button"):
 			(job.get_meta("button") as JobButton).queue_free()
-	
-	for jp: Vector2i in rm:
-		jobs.erase(jp)
-	
+
 	clean_places()

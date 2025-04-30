@@ -1,6 +1,9 @@
 const Job = preload("res://scenes/colony/job.gd")
 const Worker = preload("res://scenes/colony/worker.gd")
 
+signal job_completed
+signal job_completed_self(job: Job)
+
 var _jobname: String
 var _time_to_complete := -1.0
 var _resources_to_complete: Dictionary[StringName, int]

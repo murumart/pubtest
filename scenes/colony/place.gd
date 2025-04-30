@@ -5,7 +5,8 @@ const Job := preload("res://scenes/colony/job.gd")
 const Place := preload("res://scenes/colony/place.gd")
 const Forest := preload("res://scenes/colony/places/forest.gd")
 
-var jobs: Dictionary[Job, bool]
+var _jobs: Dictionary[Job, bool]
+var _active_job: Job
 
 
 # virtual overrides
@@ -27,7 +28,7 @@ static func create_forest() -> Place:
 
 
 func add_job(job: Job) -> Place:
-	jobs[job] = true
+	_jobs[job] = true
 	return self
 
 
@@ -40,3 +41,15 @@ func get_place_texture() -> Texture2D:
 
 func clicked_on() -> void:
 	return
+
+
+func has_active_job() -> bool:
+	return is_instance_valid(_active_job) and _active_job != null
+
+
+func set_active_job(job: Job) -> void:
+	_active_job = job
+
+
+func get_active_job() -> Job:
+	return _active_job
