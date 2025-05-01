@@ -31,3 +31,33 @@ text = "complete job"
 [node name="Button2" type="Button" parent="Menu/Do"]
 layout_mode = 2
 text = "remove job"
+
+[node name="Workers" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = -85.0
+offset_right = -2.0
+offset_bottom = 84.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Workers"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="VBoxContainer" type="ItemList" parent="Workers/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Workers/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Right" type="Button" parent="Workers/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = ">"
+
+[node name="Left" type="Button" parent="Workers/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "<"
+
+[node name="VBoxContainer2" type="ItemList" parent="Workers/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

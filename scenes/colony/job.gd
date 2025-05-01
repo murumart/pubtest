@@ -10,6 +10,7 @@ var _time_to_complete := -1.0
 var _resources_to_complete: Dictionary[StringName, int]
 var _rewards: Dictionary[StringName, int]
 var _reward_callback: Callable
+var _assigned_workers: Array[Worker]
 
 
 # virtual impls
@@ -52,8 +53,8 @@ func set_reward_callback(cb: Callable) -> Job:
 	_reward_callback = cb
 	return self
 
-# methods
 
+# methods
 
 func can_complete(resources: Dictionary[StringName, int], timeleft: float) -> bool:
 	if m_get_time() > timeleft: return false
@@ -112,3 +113,31 @@ static func get_time(job: Job) -> float:
 
 func request_removal() -> void:
 	removal_requested.emit()
+
+
+func m_get_assigned_workers_t() -> Array[Worker]:
+	var a: Array[Worker] = []
+	a.assign(_assigned_workers)
+	return _assigned_workers
+
+
+func m_get_assigned_workers() -> Array:
+	var a := []
+	a.assign(_assigned_workers)
+	return a
+
+
+func remove_assigned_worker(w: Worker) -> void:
+	if w not in _assigned_workers:
+		assert(false, "how can you remove if there is not. doumpass")
+	_assigned_workers.erase(w)
+
+
+func has_assigned_worker(w: Worker) -> bool:
+	return w in _assigned_workers
+
+
+func add_assigned_worker(w: Worker) -> void:
+	if w in _assigned_workers:
+		assert(false, "you shouldnt be doupling them")
+	_assigned_workers.append(w)
