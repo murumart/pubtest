@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bkcqoij548esj"]
+[gd_scene load_steps=13 format=3 uid="uid://bkcqoij548esj"]
 
 [ext_resource type="Script" uid="uid://i4hqu01jf2pf" path="res://scenes/colony/colony.gd" id="1_eojuh"]
 [ext_resource type="Texture2D" uid="uid://bpt1se42tfvnq" path="res://scenes/colony/houses.png" id="1_ix3fe"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bvgeifgd1akyb" path="res://scenes/colony/ui.gd" id="4_8m1vn"]
 [ext_resource type="Theme" uid="uid://bluqnktkqq206" path="res://scenes/rpg_battle/gregmovie/art/main_theme.tres" id="5_ivsnc"]
 [ext_resource type="PackedScene" uid="uid://ckw1wb0m151fn" path="res://util/selection_popup.tscn" id="7_xn0ig"]
+[ext_resource type="Script" uid="uid://cdoncrjy30dm4" path="res://scenes/colony/console.gd" id="8_sg23e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_smy5i"]
 texture = ExtResource("1_ix3fe")
@@ -18,6 +19,13 @@ texture = ExtResource("1_ix3fe")
 custom_data_layer_0/name = "tileid"
 custom_data_layer_0/type = 2
 sources/0 = SubResource("TileSetAtlasSource_smy5i")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sg23e"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sg23e"]
+bg_color = Color(0, 0, 0, 1)
+border_width_top = 2
+border_color = Color(0.143603, 0.143603, 0.143603, 1)
 
 [node name="Colony" type="Node2D" node_paths=PackedStringArray("camera", "ui", "tiles", "places_root")]
 script = ExtResource("1_eojuh")
@@ -39,11 +47,12 @@ tile_set = SubResource("TileSet_ntrno")
 
 [node name="Places" type="Node2D" parent="."]
 
-[node name="Look" type="Camera2D" parent="."]
+[node name="Look" type="Camera2D" parent="." node_paths=PackedStringArray("ui")]
 editor_draw_screen = false
 script = ExtResource("3_ntrno")
+ui = NodePath("UI")
 
-[node name="UI" type="Control" parent="Look" node_paths=PackedStringArray("_mouse_label", "_resources_label", "_workers_label", "_job_completion_button", "popup")]
+[node name="UI" type="Control" parent="Look" node_paths=PackedStringArray("_mouse_label", "_resources_label", "_workers_label", "_job_completion_button", "popup", "console")]
 custom_minimum_size = Vector2(29.525, 15.23)
 layout_mode = 3
 anchors_preset = 15
@@ -63,12 +72,13 @@ _resources_label = NodePath("ResourcesLabel")
 _workers_label = NodePath("WorkersLabel")
 _job_completion_button = NodePath("CompleteJobs")
 popup = NodePath("SelectionPopup")
+console = NodePath("Console")
 
 [node name="ResourcesLabel" type="Label" parent="Look/UI"]
 layout_mode = 0
-offset_left = 246.0
+offset_left = 151.0
 offset_top = 2.0
-offset_right = 313.0
+offset_right = 218.0
 offset_bottom = 72.0
 text = "resources:"
 horizontal_alignment = 2
@@ -91,10 +101,38 @@ text = "aa"
 
 [node name="CompleteJobs" type="Button" parent="Look/UI"]
 layout_mode = 0
-offset_left = 254.0
+offset_left = 159.0
 offset_top = 184.0
-offset_right = 316.0
+offset_right = 221.0
 offset_bottom = 196.0
 text = "complete jobs"
 
 [node name="SelectionPopup" parent="Look/UI" instance=ExtResource("7_xn0ig")]
+
+[node name="Console" type="LineEdit" parent="Look/UI" node_paths=PackedStringArray("output")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 1.0
+anchor_bottom = 0.08
+offset_left = 0.0999908
+offset_bottom = -3.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sg23e")
+script = ExtResource("8_sg23e")
+output = NodePath("Outout")
+
+[node name="Outout" type="RichTextLabel" parent="Look/UI/Console"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 12.062
+offset_left = 1.0
+offset_top = 16.0
+offset_right = 1.0
+offset_bottom = 0.00799561
+theme_override_constants/line_separation = 5
+theme_override_styles/normal = SubResource("StyleBoxFlat_sg23e")
+text = "hello
+"

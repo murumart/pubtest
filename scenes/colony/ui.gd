@@ -2,6 +2,7 @@ extends Control
 
 const Place := preload("res://scenes/colony/place.gd")
 const Worker := preload("res://scenes/colony/worker.gd")
+const Console := preload("res://scenes/colony/console.gd")
 
 signal job_completion_requested
 
@@ -10,10 +11,16 @@ signal job_completion_requested
 @export var _workers_label: Label
 @export var _job_completion_button: Button
 @export var popup: SelectionPopup
+@export var console: Console
 
 
 func _ready() -> void:
 	_job_completion_button.pressed.connect(job_completion_requested.emit)
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed("escape"):
+		console.release_focus()
 
 
 func display_place(pos: Vector2i, place: Place) -> void:
