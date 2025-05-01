@@ -49,7 +49,12 @@ func has_active_job() -> bool:
 
 func set_active_job(job: Job) -> void:
 	_active_job = job
+	job.job_completed.connect(clear_active_job, CONNECT_ONE_SHOT)
 
 
 func get_active_job() -> Job:
 	return _active_job
+
+
+func clear_active_job() -> void:
+	_active_job = null

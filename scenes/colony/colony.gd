@@ -107,9 +107,9 @@ func place_job(pos: Vector2i, job: Job) -> void:
 
 func complete_job(job: Job) -> Error:
 	if not job.can_complete(resources, time): return FAILED
-	time = job.deplete(resources, time)
+	time = job.complete(resources, time)
 	job.reward(resources)
-	job.job_completed_self.emit(job)
+	
 	return OK
 
 

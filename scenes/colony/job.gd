@@ -63,11 +63,13 @@ func can_complete(resources: Dictionary[StringName, int], timeleft: float) -> bo
 	return true
 
 
-func deplete(resources: Dictionary[StringName, int], timeleft: float) -> float:
+func complete(resources: Dictionary[StringName, int], timeleft: float) -> float:
 	assert(can_complete(resources, timeleft), "job incompletable")
 	for k in _resources_to_complete:
 		var v := _resources_to_complete[k]
 		resources[k] -= v
+	job_completed_self.emit(self)
+	job_completed.emit()
 	return timeleft - m_get_time()
 
 
