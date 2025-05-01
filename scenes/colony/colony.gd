@@ -21,12 +21,12 @@ var grid: Dictionary[Vector2i, Place]
 
 func _ready() -> void:
 	ui.job_completion_requested.connect(complete_jobs)
-	
+
 	for i in range(-10, 10):
 		for j in range(-10, 10):
 			if randf() < 0.05:
 				place_place(Vector2i(i, j), Place.create_forest())
-	
+
 	const alpha = "abcdefghijklmnopqrst"
 	for i in 10:
 		var n := ""
@@ -37,7 +37,7 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	mousestuff()
-	
+
 	ui.display_resources(resources, time)
 	ui.display_workers(workers)
 
@@ -49,17 +49,17 @@ func mousestuff() -> void:
 	var _err := draw.connect(func() -> void:
 		draw_rect(Rect2(tilepos.x * 16, tilepos.y * 16, 16, 16), Color(Color.WHITE, 0.2))
 	, CONNECT_ONE_SHOT)
-	
+
 	if not is_instance_valid(grid.get(tilepos)):
 		grid.erase(tilepos)
 	var place: Place = grid.get(tilepos)
 	ui.display_place(tilepos, place)
-	
+
 	if Input.is_action_just_pressed("click") and not ui.popup.visible:
 		if not is_instance_valid(place):
 			return
 		clicked_place(tilepos, place)
-	
+
 	queue_redraw()
 
 
@@ -84,14 +84,11 @@ func place_place(pos: Vector2i, place: Place) -> void:
 
 
 func clean_places() -> void:
-	var rm := []
-	
-	for k in grid:
+	print("so clean")
+	for k: Vector2i in grid.keys():
 		var v := grid[k]
-		if not is_instance_valid(v): rm.append(k)
-	
-	for k in rm:
-		grid.erase(k)
+		if not is_instance_valid(v) or v == null:
+			grid.erase(k)
 
 
 func place_job(pos: Vector2i, job: Job) -> void:
@@ -109,11 +106,12 @@ func complete_job(job: Job) -> Error:
 	if not job.can_complete(resources, time): return FAILED
 	time = job.complete(resources, time)
 	job.reward(resources)
-	
+	clean_places()
 	return OK
 
 
 func complete_jobs() -> void:
+	clean_places()
 	for pos in grid:
 		var place := grid[pos]
 		if not place.has_active_job(): continue
@@ -121,5 +119,3 @@ func complete_jobs() -> void:
 		if complete_job(job) != OK: continue
 		if job.has_meta("button"):
 			(job.get_meta("button") as JobButton).queue_free()
-
-	clean_places()

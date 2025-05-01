@@ -48,6 +48,8 @@ func has_active_job() -> bool:
 
 
 func set_active_job(job: Job) -> void:
+	if has_active_job():
+		assert(false, "shoyuldn't have active job")
 	_active_job = job
 	job.job_completed.connect(clear_active_job, CONNECT_ONE_SHOT)
 
