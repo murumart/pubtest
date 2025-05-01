@@ -35,15 +35,18 @@ func _ready() -> void:
 		workers[Worker.create_worker(n)] = true
 
 
-func _physics_process(_delta: float) -> void:
-	mousestuff()
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouse:
+		mousestuff(event)
 
 	ui.display_resources(resources, time)
 	ui.display_workers(workers)
 
+	queue_redraw()
 
-func mousestuff() -> void:
-	var mousepos := get_global_mouse_position()
+
+func mousestuff(event: InputEventMouse) -> void:
+	var mousepos := get_canvas_transform().affine_inverse() * event.global_position
 	var tilepos := tiles.local_to_map(tiles.to_local(mousepos))
 
 	var _err := draw.connect(func() -> void:
@@ -55,12 +58,11 @@ func mousestuff() -> void:
 	var place: Place = grid.get(tilepos)
 	ui.display_place(tilepos, place)
 
-	if Input.is_action_just_pressed("click") and not SelectionPopup.instance.visible:
+	var mevent := (event as InputEventMouseButton)
+	if mevent != null and mevent.pressed and not SelectionPopup.instance.visible:
 		if not is_instance_valid(place):
 			return
 		clicked_place(tilepos, place)
-
-	queue_redraw()
 
 
 func clicked_place(pos: Vector2i, place: Place) -> void:

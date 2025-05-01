@@ -55,6 +55,7 @@ offset_right = 158.0
 offset_bottom = 99.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("5_ivsnc")
 script = ExtResource("4_8m1vn")
 _mouse_label = NodePath("MouseLabel")
