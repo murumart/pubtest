@@ -8,7 +8,7 @@ jobs:
 	time should be different from resources (or make resources float)
 	progressing to next day:
 		leave uncompletable jobs uncompleted for now
-	
+
 city building:
 	jobs to build new buildings
 	special buildings with special jobs:

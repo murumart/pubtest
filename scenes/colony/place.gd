@@ -51,7 +51,8 @@ func set_active_job(job: Job) -> void:
 	if has_active_job():
 		assert(false, "shoyuldn't have active job")
 	_active_job = job
-	job.job_completed.connect(clear_active_job, CONNECT_ONE_SHOT)
+	job.completed.connect(clear_active_job, CONNECT_ONE_SHOT)
+	job.removal_requested.connect(clear_active_job, CONNECT_ONE_SHOT)
 
 
 func get_active_job() -> Job:
@@ -59,4 +60,8 @@ func get_active_job() -> Job:
 
 
 func clear_active_job() -> void:
+	if _active_job.completed.is_connected(clear_active_job):
+		_active_job.completed.disconnect(clear_active_job)
+	if _active_job.removal_requested.is_connected(clear_active_job):
+		_active_job.removal_requested.disconnect(clear_active_job)
 	_active_job = null

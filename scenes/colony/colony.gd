@@ -55,7 +55,7 @@ func mousestuff() -> void:
 	var place: Place = grid.get(tilepos)
 	ui.display_place(tilepos, place)
 
-	if Input.is_action_just_pressed("click") and not ui.popup.visible:
+	if Input.is_action_just_pressed("click") and not SelectionPopup.instance.visible:
 		if not is_instance_valid(place):
 			return
 		clicked_place(tilepos, place)
@@ -66,12 +66,12 @@ func mousestuff() -> void:
 func clicked_place(pos: Vector2i, place: Place) -> void:
 	place.clicked_on()
 	if place.has_active_job(): return
-	var selected: Job = await ui.popup.pop(SelectionPopup.Parameters.new()
+	var selected: Job = await SelectionPopup.instance.pop(SelectionPopup.Parameters.new()
 			.set_inputs(
 				place._jobs.keys().map(Job.get_name),
 				place._jobs.keys())
 			.set_title("select job")
-			.set_result_callable(ui.popup.wait_item_result))
+			.set_result_callable(SelectionPopup.instance.wait_item_result))
 	place_job(pos, selected)
 	#print("selected", selected)
 
@@ -84,7 +84,6 @@ func place_place(pos: Vector2i, place: Place) -> void:
 
 
 func clean_places() -> void:
-	print("so clean")
 	for k: Vector2i in grid.keys():
 		var v := grid[k]
 		if not is_instance_valid(v) or v == null:
@@ -96,7 +95,7 @@ func place_job(pos: Vector2i, job: Job) -> void:
 	assert(not place.has_active_job(), "job position occupied")
 	place.set_active_job(job)
 	var button := JobButton.instantiate()
-	button.init(job, complete_job.bind(job))
+	button.init(job, self, complete_job.bind(job))
 	add_child(button)
 	button.position = Vector2(pos) * 16
 	job.set_meta("button", button)

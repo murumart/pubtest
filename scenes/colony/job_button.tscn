@@ -9,3 +9,25 @@ offset_bottom = 8.0
 theme = ExtResource("1_njgap")
 text = "job name"
 script = ExtResource("1_wjqgg")
+
+[node name="Menu" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 13.0
+offset_right = 41.0
+offset_bottom = 53.0
+
+[node name="Do" type="VBoxContainer" parent="Menu"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Menu/Do"]
+layout_mode = 2
+text = "select workers"
+
+[node name="Button3" type="Button" parent="Menu/Do"]
+layout_mode = 2
+text = "complete job"
+
+[node name="Button2" type="Button" parent="Menu/Do"]
+layout_mode = 2
+text = "remove job"

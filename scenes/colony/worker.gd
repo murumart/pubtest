@@ -14,3 +14,6 @@ static func create_worker(name: String) -> Worker:
 
 
 # methods
+
+func m_get_name() -> String:
+	return _name

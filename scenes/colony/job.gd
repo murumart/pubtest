@@ -1,8 +1,9 @@
 const Job = preload("res://scenes/colony/job.gd")
 const Worker = preload("res://scenes/colony/worker.gd")
 
-signal job_completed
-signal job_completed_self(job: Job)
+signal completed
+signal completed_self(job: Job)
+signal removal_requested
 
 var _jobname: String
 var _time_to_complete := -1.0
@@ -68,8 +69,8 @@ func complete(resources: Dictionary[StringName, int], timeleft: float) -> float:
 	for k in _resources_to_complete:
 		var v := _resources_to_complete[k]
 		resources[k] -= v
-	job_completed_self.emit(self)
-	job_completed.emit()
+	completed_self.emit(self)
+	completed.emit()
 	return timeleft - m_get_time()
 
 
@@ -107,3 +108,7 @@ func m_get_time() -> float:
 
 static func get_time(job: Job) -> float:
 	return job.m_get_time()
+
+
+func request_removal() -> void:
+	removal_requested.emit()

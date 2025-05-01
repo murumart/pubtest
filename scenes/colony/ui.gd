@@ -37,5 +37,5 @@ func display_resources(resources: Dictionary[StringName, int], time: float) -> v
 func display_workers(workers: Dictionary[Worker, bool]) -> void:
 	var txt := "workers:\n"
 	for w in workers:
-		txt += w._name + "\n"
+		txt += w.m_get_name() + "\n"
 	_workers_label.text = txt
