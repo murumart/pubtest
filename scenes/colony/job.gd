@@ -7,7 +7,7 @@ signal removal_requested
 
 var _jobname: String
 var _time_to_complete := -1.0
-var _resources_to_complete: Dictionary[StringName, int]
+var _resource_requirements: Dictionary[StringName, int]
 var _rewards: Dictionary[StringName, int]
 var _reward_callback: Callable
 var _assigned_workers: Array[Worker]
@@ -17,10 +17,10 @@ var _assigned_workers: Array[Worker]
 
 func _to_string() -> String:
 	var txt := "job %s" % [_jobname]
-	if not _resources_to_complete.is_empty():
+	if not _resource_requirements.is_empty():
 		txt += "\nneeded:\n"
-	for k in _resources_to_complete:
-		var v := _resources_to_complete[k]
+	for k in _resource_requirements:
+		var v := _resource_requirements[k]
 		txt += k + ": " + str(v)
 	return txt
 
@@ -40,7 +40,7 @@ func time_to_complete(time: float) -> Job:
 
 
 func add_requirement(res: StringName, amt: int) -> Job:
-	_resources_to_complete[res] = amt
+	_resource_requirements[res] = amt
 	return self
 
 
@@ -58,8 +58,8 @@ func set_reward_callback(cb: Callable) -> Job:
 
 func can_complete(resources: Dictionary[StringName, int], timeleft: float) -> bool:
 	if m_get_time() > timeleft: return false
-	for k in _resources_to_complete:
-		var v := _resources_to_complete[k]
+	for k in _resource_requirements:
+		var v := _resource_requirements[k]
 		if not resources.has(k): return false
 		if resources[k] < v: return false
 	return true
@@ -67,8 +67,8 @@ func can_complete(resources: Dictionary[StringName, int], timeleft: float) -> bo
 
 func complete(resources: Dictionary[StringName, int], timeleft: float) -> float:
 	assert(can_complete(resources, timeleft), "job incompletable")
-	for k in _resources_to_complete:
-		var v := _resources_to_complete[k]
+	for k in _resource_requirements:
+		var v := _resource_requirements[k]
 		resources[k] -= v
 	completed_self.emit(self)
 	completed.emit()
@@ -104,7 +104,8 @@ static func get_name(job: Job) -> String:
 
 func m_get_time() -> float:
 	assert(_time_to_complete >= 0, "time uninitialised?")
-	return _time_to_complete
+	var div = maxf(_assigned_workers.size(), 1)
+	return maxf(_time_to_complete / div, 1.0)
 
 
 static func get_time(job: Job) -> float:
@@ -141,3 +142,18 @@ func add_assigned_worker(w: Worker) -> void:
 	if w in _assigned_workers:
 		assert(false, "you shouldnt be doupling them")
 	_assigned_workers.append(w)
+
+
+func get_string_description() -> String:
+	var t := m_get_time()
+	var txt := "time: "
+	txt += str(t)
+	for r in _resource_requirements:
+		var a := _resource_requirements[r]
+		txt += "\n" + r + ": " + str(a)
+	txt += "\nresults:"
+	for r in _rewards:
+		var a := _rewards[r]
+		txt += "\n" + r + ": " + str(a)
+
+	return txt
