@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://bvgeifgd1akyb" path="res://scenes/colony/ui.gd" id="4_8m1vn"]
 [ext_resource type="Theme" uid="uid://bluqnktkqq206" path="res://scenes/rpg_battle/gregmovie/art/main_theme.tres" id="5_ivsnc"]
 [ext_resource type="PackedScene" uid="uid://ckw1wb0m151fn" path="res://util/selection_popup.tscn" id="7_xn0ig"]
-[ext_resource type="Script" uid="uid://cdoncrjy30dm4" path="res://scenes/colony/console.gd" id="8_sg23e"]
+[ext_resource type="Script" path="res://scenes/colony/console.gd" id="8_sg23e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_smy5i"]
 texture = ExtResource("1_ix3fe")
@@ -52,7 +52,7 @@ editor_draw_screen = false
 script = ExtResource("3_ntrno")
 ui = NodePath("UI")
 
-[node name="UI" type="Control" parent="Look" node_paths=PackedStringArray("_mouse_label", "_resources_label", "_workers_label", "_job_completion_button", "popup", "console")]
+[node name="UI" type="Control" parent="Look" node_paths=PackedStringArray("_mouse_label", "_resources_label", "_workers_label", "_job_completion_button", "popup", "console", "colony")]
 custom_minimum_size = Vector2(29.525, 15.23)
 layout_mode = 3
 anchors_preset = 15
@@ -73,6 +73,7 @@ _workers_label = NodePath("WorkersLabel")
 _job_completion_button = NodePath("CompleteJobs")
 popup = NodePath("SelectionPopup")
 console = NodePath("Console")
+colony = NodePath("../..")
 
 [node name="ResourcesLabel" type="Label" parent="Look/UI"]
 layout_mode = 0
@@ -110,6 +111,7 @@ text = "complete jobs"
 [node name="SelectionPopup" parent="Look/UI" instance=ExtResource("7_xn0ig")]
 
 [node name="Console" type="LineEdit" parent="Look/UI" node_paths=PackedStringArray("output")]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.7

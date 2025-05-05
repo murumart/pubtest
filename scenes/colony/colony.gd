@@ -35,49 +35,6 @@ func _ready() -> void:
 		workers[Worker.create_worker(n)] = true
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouse:
-		mousestuff(event)
-
-	ui.display_resources(resources, time)
-	ui.display_workers(workers)
-
-	queue_redraw()
-
-
-func mousestuff(event: InputEventMouse) -> void:
-	var mousepos := get_canvas_transform().affine_inverse() * event.global_position
-	var tilepos := tiles.local_to_map(tiles.to_local(mousepos))
-
-	var _err := draw.connect(func() -> void:
-		draw_rect(Rect2(tilepos.x * 16, tilepos.y * 16, 16, 16), Color(Color.WHITE, 0.2))
-	, CONNECT_ONE_SHOT)
-
-	if not is_instance_valid(grid.get(tilepos)):
-		grid.erase(tilepos)
-	var place: Place = grid.get(tilepos)
-	ui.display_place(tilepos, place)
-
-	var mevent := (event as InputEventMouseButton)
-	if mevent != null and mevent.pressed and not SelectionPopup.instance.visible:
-		if not is_instance_valid(place):
-			return
-		clicked_place(tilepos, place)
-
-
-func clicked_place(pos: Vector2i, place: Place) -> void:
-	place.clicked_on()
-	if place.has_active_job(): return
-	var selected: Job = await SelectionPopup.instance.pop(SelectionPopup.Parameters.new()
-			.set_inputs(
-				place._jobs.keys().map(Job.get_name),
-				place._jobs.keys())
-			.set_title("select job")
-			.set_result_callable(SelectionPopup.instance.wait_item_result))
-	place_job(pos, selected)
-	#print("selected", selected)
-
-
 func place_place(pos: Vector2i, place: Place) -> void:
 	assert(grid.get(pos) == null, "grid position occupied")
 	grid[pos] = place
