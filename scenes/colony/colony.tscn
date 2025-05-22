@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bkcqoij548esj"]
+[gd_scene load_steps=17 format=3 uid="uid://bkcqoij548esj"]
 
 [ext_resource type="Script" uid="uid://i4hqu01jf2pf" path="res://scenes/colony/colony.gd" id="1_eojuh"]
 [ext_resource type="Texture2D" uid="uid://bpt1se42tfvnq" path="res://scenes/colony/houses.png" id="1_ix3fe"]
@@ -8,6 +8,8 @@
 [ext_resource type="Theme" uid="uid://bluqnktkqq206" path="res://scenes/rpg_battle/gregmovie/art/main_theme.tres" id="5_ivsnc"]
 [ext_resource type="PackedScene" uid="uid://ckw1wb0m151fn" path="res://util/selection_popup.tscn" id="7_xn0ig"]
 [ext_resource type="Script" path="res://scenes/colony/console.gd" id="8_sg23e"]
+[ext_resource type="Script" uid="uid://b2pht6kpm82gw" path="res://util/sin_animator.gd" id="9_vq7em"]
+[ext_resource type="Script" uid="uid://bhfr0fb0sxj5n" path="res://util/sin_animator_animation.gd" id="10_e5sl0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_smy5i"]
 texture = ExtResource("1_ix3fe")
@@ -26,6 +28,22 @@ sources/0 = SubResource("TileSetAtlasSource_smy5i")
 bg_color = Color(0, 0, 0, 1)
 border_width_top = 2
 border_color = Color(0.143603, 0.143603, 0.143603, 1)
+
+[sub_resource type="Resource" id="Resource_qb820"]
+script = ExtResource("10_e5sl0")
+_min_value = 0.0
+_max_value = 90.0
+_speed = 0.01
+_algo = 0
+metadata/_custom_type_script = "uid://bhfr0fb0sxj5n"
+
+[sub_resource type="Resource" id="Resource_vq7em"]
+script = ExtResource("10_e5sl0")
+_min_value = 0.0
+_max_value = 8.73
+_speed = 0.001
+_algo = 1
+metadata/_custom_type_script = "uid://bhfr0fb0sxj5n"
 
 [node name="Colony" type="Node2D" node_paths=PackedStringArray("camera", "ui", "tiles", "places_root")]
 script = ExtResource("1_eojuh")
@@ -138,3 +156,11 @@ theme_override_constants/line_separation = 5
 theme_override_styles/normal = SubResource("StyleBoxFlat_sg23e")
 text = "hello
 "
+
+[node name="SinAnimator" type="Node" parent="." node_paths=PackedStringArray("_target")]
+script = ExtResource("9_vq7em")
+_animations = Array[ExtResource("10_e5sl0")]([SubResource("Resource_qb820"), SubResource("Resource_vq7em")])
+_target_property = &"rotation_degrees"
+_target = NodePath("../Look/UI/CompleteJobs")
+_aggregate_type = 3
+metadata/_custom_type_script = "uid://b2pht6kpm82gw"
