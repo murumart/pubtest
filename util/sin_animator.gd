@@ -31,7 +31,6 @@ var _floats: Array
 func _ready() -> void:
 	_aggregate_type = _aggregate_type
 	for an in _animations:
-		an.init()
 		_floats.append(0)
 
 
