@@ -1,9 +1,5 @@
-aposdmapsodmjapo<cm<pasmcäp<sdmp<osmvpeomfäps<mc<päosdmäp<somcpäsd<omcäsp<dom<pävom
+# Public testing
 
-# my games
-play them
- 
-(i dont have any yet do not actually!)
-
+This is where I'd like to playtest game mechanics
 
 june waz here
