@@ -15,6 +15,8 @@ const SAVE_PATH := "user://pubtest/colony/tiles/"
 
 var tilename: String
 @onready var tiles: TileMapLayer = $Tiles
+@export var cursor: Node2D
+@export var info: Label
 
 
 func _option_init(options := {}) -> void:
@@ -26,11 +28,30 @@ func _option_init(options := {}) -> void:
 
 
 func _ready() -> void:
-	$Camera2D/Control/BackButton.pressed.connect(func():
+	%BackButton.pressed.connect(func():
 		_save()
 		LTS.change_scene_to("res://scenes/colony/world_map.tscn")
 	)
 	tiles.clear()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		var epos: Vector2 = get_canvas_transform().affine_inverse() * event.global_position
+		var tpos := tiles.local_to_map(tiles.to_local(epos))
+
+		if cursor:
+			cursor.global_position = tpos * tiles.tile_set.tile_size
+
+		if info:
+			info.text = "Tile at " + str(tpos)
+			info.text += "\nType: " + str(TileTypes.find_key(tiles.get_cell_atlas_coords(tpos)))
+
+	if event is InputEventMouseButton:
+		var epos: Vector2 = get_canvas_transform().affine_inverse() * event.global_position
+		var tpos := tiles.local_to_map(tiles.to_local(epos))
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			print("wow you clicked the tile. good joü")
 
 
 func generate(type: Vector2i) -> void:

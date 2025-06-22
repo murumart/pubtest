@@ -30,13 +30,14 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_twq6b")
 
-[node name="WorldMap" type="TileMapLayer" parent="." node_paths=PackedStringArray("target_display", "info")]
+[node name="WorldMap" type="TileMapLayer" parent="." node_paths=PackedStringArray("target_display", "info", "drawer")]
 z_index = -1
 tile_set = SubResource("TileSet_34qnh")
 script = ExtResource("3_e85be")
 noise = SubResource("FastNoiseLite_fh0ar")
 target_display = NodePath("TargetPos")
-info = NodePath("../Camera2D/TileInfo")
+info = NodePath("../CanvasLayer/TileInfo")
+drawer = NodePath("Draw")
 
 [node name="TargetPos" type="Sprite2D" parent="WorldMap"]
 modulate = Color(1, 1, 1, 0.690196)
@@ -44,9 +45,13 @@ material = SubResource("CanvasItemMaterial_qoe1m")
 texture = ExtResource("3_ic71m")
 centered = false
 
+[node name="Draw" type="Node2D" parent="WorldMap"]
+
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("4_twq6b")
 
-[node name="TileInfo" type="Label" parent="Camera2D"]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TileInfo" type="Label" parent="CanvasLayer"]
 offset_right = 40.0
 offset_bottom = 23.0

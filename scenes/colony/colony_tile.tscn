@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://bnliuux13n0y0"]
+[gd_scene load_steps=8 format=4 uid="uid://bnliuux13n0y0"]
 
 [ext_resource type="Script" uid="uid://pipxb3uloq8y" path="res://scenes/colony/colony_tile.gd" id="1_ns7el"]
 [ext_resource type="Script" uid="uid://cihslv5rmy3se" path="res://scenes/colony/camera.gd" id="2_lcfix"]
 [ext_resource type="Texture2D" uid="uid://bwax1j0pombal" path="res://scenes/colony/tiletiles.png" id="2_lxjir"]
+[ext_resource type="Texture2D" uid="uid://b0brdy1twxtn" path="res://scenes/rpg_battle/gregd/dice/die1.png" id="4_elosl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_elosl"]
 texture = ExtResource("2_lxjir")
@@ -26,28 +27,61 @@ texture = ExtResource("2_lxjir")
 [sub_resource type="TileSet" id="TileSet_5opje"]
 sources/0 = SubResource("TileSetAtlasSource_elosl")
 
-[node name="ColonyTile" type="Node2D"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_elosl"]
+blend_mode = 1
+
+[node name="ColonyTile" type="Node2D" node_paths=PackedStringArray("cursor", "info")]
 script = ExtResource("1_ns7el")
+cursor = NodePath("Cursor")
+info = NodePath("UI/Control/TileInfo")
 
 [node name="Tiles" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD//wEAAAADAAAAAAD//wAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAD+/wIAAAAAAAAAAAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAD//wIAAAAAAAAAAAACAAIAAAAAAAAAAAACAAEAAAAAAAAAAAACAAAAAAAAAAAAAAACAP//AAAAAAAAAAACAP7/AAAAAAAAAAABAP7/AAAAAAAAAAAAAP7/AAAAAAAAAAD///7/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAADAAAAAAD/////AAAAAAAAAAAAAP//AAADAAAAAAABAP//AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD+//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAACAP3/AAAAAAAAAAA=")
 tile_set = SubResource("TileSet_5opje")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(163, 126)
+zoom = Vector2(2.105, 2.105)
 script = ExtResource("2_lcfix")
 
-[node name="Control" type="Control" parent="Camera2D"]
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -400.0
-offset_top = -299.0
-offset_right = 400.0
-offset_bottom = 298.0
+offset_left = -18.0
+offset_top = -17.0
+offset_right = 782.0
+offset_bottom = 580.0
+mouse_filter = 2
 
-[node name="BackButton" type="Button" parent="Camera2D/Control"]
+[node name="BackButton" type="Button" parent="UI/Control"]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 21.0
 offset_top = 19.0
 offset_right = 89.0
 offset_bottom = 50.0
 text = "go back"
+
+[node name="TimeButton" type="Button" parent="UI/Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 100.0
+offset_top = 18.0
+offset_right = 168.0
+offset_bottom = 49.0
+text = "advance time 1 hour"
+
+[node name="TileInfo" type="Label" parent="UI/Control"]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 80.0
+offset_right = 61.0
+offset_bottom = 103.0
+
+[node name="Cursor" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.309804)
+material = SubResource("CanvasItemMaterial_elosl")
+texture = ExtResource("4_elosl")
+centered = false
