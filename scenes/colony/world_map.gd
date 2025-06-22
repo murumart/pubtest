@@ -42,5 +42,5 @@ func _save() -> void:
 	dat.sets(dk.WORLD_MAP, world_map.savef())
 
 
-static func tile_name(pos: Vector2i) -> String:
+static func ctile_name(pos: Vector2i) -> String:
 	return "x" + str(pos.x) + "_y" + str(pos.y)

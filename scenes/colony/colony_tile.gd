@@ -13,19 +13,20 @@ const TileTypes: Dictionary[StringName, Vector2i] = {
 	TOWN_CENTRE = Vector2i(3, 0),
 	TREE = Vector2i(0, 1),
 }
+
 const SIZE := 10
 const WCOORD := Vector2i.ONE * -1
 
 const SAVE_PATH := "user://pubtest/colony/tiles/"
 
-var tilepos: Vector2i = WCOORD
+var ctile_pos: Vector2i = WCOORD
 @onready var tiles: TileMapLayer = $Tiles
 @export var cursor: Node2D
 @export var info: Label
 
 
 func _option_init(options := {}) -> void:
-	tilepos = options.get("pos", WCOORD)
+	ctile_pos = options.get("pos", WCOORD)
 	if not save_exists():
 		generate(options.get("type", Vector2i(-1, -1)))
 	else:
@@ -51,7 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if info:
 			info.text = "Tile at " + str(tpos)
 			info.text += "\nType: " + str(TileTypes.find_key(tiles.get_cell_atlas_coords(tpos)))
-			info.text += "\nColony Tile at: " + str(tilepos)
+			info.text += "\nColony Tile at: " + str(ctile_pos)
 
 	if event is InputEventMouseButton:
 		var epos: Vector2 = get_canvas_transform().affine_inverse() * event.global_position
@@ -81,7 +82,7 @@ func generate(type: Vector2i) -> void:
 
 
 func _save() -> void:
-	if tilepos == WCOORD:
+	if ctile_pos == WCOORD:
 		printerr("uuuuughhhhhh cant save man cant do it")
 		return
 	print("immm saving ti.")
@@ -92,19 +93,19 @@ func _save() -> void:
 		var type := tiles.get_cell_atlas_coords(cellpos)
 		dict[cellpos] = type
 
-	dat.gets(dk.SAVED_CTILES)[tilepos] = dict
+	dat.gets(dk.SAVED_CTILES)[ctile_pos] = dict
 
 
 func _load() -> void:
 	if not save_exists():
 		return
 	var save: Dictionary = dat.gets(dk.SAVED_CTILES)
-	for pos in save[tilepos]:
-		var type: Vector2i = save[tilepos][pos]
+	for pos in save[ctile_pos]:
+		var type: Vector2i = save[ctile_pos][pos]
 		tiles.set_cell(pos, 0, type)
 
 
 func save_exists() -> bool:
-	if tilepos == WCOORD:
+	if ctile_pos == WCOORD:
 		return false
-	return tilepos in dat.gets(dk.SAVED_CTILES)
+	return ctile_pos in dat.gets(dk.SAVED_CTILES)
