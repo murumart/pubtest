@@ -1,26 +1,31 @@
 extends Node2D
 
 const WorldMapTilemap = preload("res://scenes/colony/world_map_tilemap.gd")
-const SIZE := 10
+const WorldMap = preload("res://scenes/colony/world_map.gd")
+const dat = preload("res://scenes/colony/data.gd")
+const dk = dat.Keys
 
 const TileTypes: Dictionary[StringName, Vector2i] = {
 	GRASS = Vector2i(0, 0),
 	WATER = Vector2i(1, 0),
 	SAND = Vector2i(2, 0),
-	HOUSE = Vector2i(3, 0),
+	HOUSE = Vector2i(0, 3),
+	TOWN_CENTRE = Vector2i(3, 0),
 	TREE = Vector2i(0, 1),
 }
+const SIZE := 10
+const WCOORD := Vector2i.ONE * -1
 
 const SAVE_PATH := "user://pubtest/colony/tiles/"
 
-var tilename: String
+var tilepos: Vector2i = WCOORD
 @onready var tiles: TileMapLayer = $Tiles
 @export var cursor: Node2D
 @export var info: Label
 
 
 func _option_init(options := {}) -> void:
-	tilename = options.get("name", "")
+	tilepos = options.get("pos", WCOORD)
 	if not save_exists():
 		generate(options.get("type", Vector2i(-1, -1)))
 	else:
@@ -46,6 +51,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if info:
 			info.text = "Tile at " + str(tpos)
 			info.text += "\nType: " + str(TileTypes.find_key(tiles.get_cell_atlas_coords(tpos)))
+			info.text += "\nColony Tile at: " + str(tilepos)
 
 	if event is InputEventMouseButton:
 		var epos: Vector2 = get_canvas_transform().affine_inverse() * event.global_position
@@ -68,39 +74,37 @@ func generate(type: Vector2i) -> void:
 					tiles.set_cell(Vector2i(x, y), 0, TileTypes.TREE)
 				elif randf() < 0.1:
 					tiles.set_cell(Vector2i(x, y), 0, TileTypes.SAND)
+	var towncentre: Vector2i = dat.gets(dk.CENTRE_TILE, WCOORD)
+	if towncentre == WCOORD:
+		dat.sets(dk.CENTRE_TILE, Vector2i(4, 4))
+		tiles.set_cell(Vector2i(4, 4), 0, TileTypes.TOWN_CENTRE)
 
 
 func _save() -> void:
-	if not tilename:
+	if tilepos == WCOORD:
 		printerr("uuuuughhhhhh cant save man cant do it")
 		return
 	print("immm saving ti.")
-	if not DirAccess.dir_exists_absolute(SAVE_PATH):
-		DirAccess.make_dir_recursive_absolute(SAVE_PATH)
-	var fa := FileAccess.open(SAVE_PATH + tilename + ".tle", FileAccess.WRITE)
-	var cells := tiles.get_used_cells()
-	for cellpos in cells:
+
+	var dict := {}
+	for cellpos in tiles.get_used_cells():
 		#print("saving tiel at ", cellpos)
 		var type := tiles.get_cell_atlas_coords(cellpos)
-		fa.store_var(cellpos)
-		fa.store_var(type)
+		dict[cellpos] = type
+
+	dat.gets(dk.SAVED_CTILES)[tilepos] = dict
 
 
 func _load() -> void:
-	if not DirAccess.dir_exists_absolute(SAVE_PATH):
+	if not save_exists():
 		return
-	var fa := FileAccess.open(SAVE_PATH + tilename + ".tle", FileAccess.READ)
-	tiles.clear()
-	while fa.get_position() < fa.get_length():
-		#print("öööö")
-		var pos: Vector2i = fa.get_var()
-		var type: Vector2i = fa.get_var()
+	var save: Dictionary = dat.gets(dk.SAVED_CTILES)
+	for pos in save[tilepos]:
+		var type: Vector2i = save[tilepos][pos]
 		tiles.set_cell(pos, 0, type)
 
 
 func save_exists() -> bool:
-	if not tilename:
+	if tilepos == WCOORD:
 		return false
-	if not DirAccess.dir_exists_absolute(SAVE_PATH):
-		DirAccess.make_dir_recursive_absolute(SAVE_PATH)
-	return FileAccess.file_exists(SAVE_PATH + tilename + ".tle")
+	return tilepos in dat.gets(dk.SAVED_CTILES)

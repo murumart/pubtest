@@ -2,6 +2,8 @@ extends Control
 
 const WMM := preload("res://scenes/colony/world_map_tilemap.gd")
 const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+const dat = preload("res://scenes/colony/data.gd")
+const dk = dat.Keys
 
 const SAVE_PATH := "user://pubtest/colony/"
 const FILENAME := "worldmap.save"
@@ -29,23 +31,16 @@ func _tile_clicked(pos: Vector2i, tiletype: Vector2i, claimed: bool) -> void:
 				return
 		return
 	_save()
-	LTS.change_scene_to("res://scenes/colony/colony_tile.tscn", {name = tile_name(pos), type = tiletype})
+	LTS.change_scene_to("res://scenes/colony/colony_tile.tscn", {pos = pos, type = tiletype})
 
 
 func _load() -> void:
-	assert(DirAccess.dir_exists_absolute(SAVE_PATH))
-	var fa := FileAccess.open(SAVE_PATH + FILENAME, FileAccess.READ)
-	data = fa.get_var()
-	world_map.loadf(data["world_map"])
+	world_map.loadf(dat.gets(dk.WORLD_MAP))
 
 
 func _save() -> void:
-	if not DirAccess.dir_exists_absolute(SAVE_PATH):
-		DirAccess.make_dir_recursive_absolute(SAVE_PATH)
-	var fa := FileAccess.open(SAVE_PATH + FILENAME, FileAccess.WRITE)
-	data["world_map"] = world_map.savef()
-	fa.store_var(data)
+	dat.sets(dk.WORLD_MAP, world_map.savef())
 
 
-func tile_name(pos: Vector2i) -> String:
+static func tile_name(pos: Vector2i) -> String:
 	return "x" + str(pos.x) + "_y" + str(pos.y)
