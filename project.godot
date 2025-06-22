@@ -11,9 +11,16 @@ config_version=5
 [application]
 
 config/name="pubtest"
+config/version="1.0.0"
 run/main_scene="res://scenes/rpg_battle/gregmovie/greg_movie_battle.tscn"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Murumart"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+LTS="*res://scenes/autoload/level_transition.tscn"
 
 [display]
 

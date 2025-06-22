@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4io0niumwp70"]
+
+[ext_resource type="Script" uid="uid://cwirvg0civeui" path="res://scenes/autoload/level_transition.gd" id="1_6uq6v"]
+
+[node name="LTS" type="Node"]
+script = ExtResource("1_6uq6v")

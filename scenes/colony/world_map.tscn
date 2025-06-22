@@ -1,0 +1,52 @@
+[gd_scene load_steps=10 format=3 uid="uid://rrf7b8giufkw"]
+
+[ext_resource type="Texture2D" uid="uid://bhn2t2gphcds8" path="res://scenes/colony/worldmap.png" id="1_4tflw"]
+[ext_resource type="Script" uid="uid://ckk0b5e1lftp5" path="res://scenes/colony/world_map.gd" id="2_twq6b"]
+[ext_resource type="Script" uid="uid://cc1irm8tv5g1m" path="res://scenes/colony/world_map_tilemap.gd" id="3_e85be"]
+[ext_resource type="Texture2D" uid="uid://b0brdy1twxtn" path="res://scenes/rpg_battle/gregd/dice/die1.png" id="3_ic71m"]
+[ext_resource type="Script" uid="uid://cihslv5rmy3se" path="res://scenes/colony/camera.gd" id="4_twq6b"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e85be"]
+texture = ExtResource("1_4tflw")
+0:0/0 = 0
+1:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_34qnh"]
+custom_data_layer_0/name = "tile_type"
+custom_data_layer_0/type = 2
+sources/0 = SubResource("TileSetAtlasSource_e85be")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fh0ar"]
+frequency = 0.0732
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qoe1m"]
+
+[node name="WorldMap" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_twq6b")
+
+[node name="WorldMap" type="TileMapLayer" parent="." node_paths=PackedStringArray("target_display", "info")]
+z_index = -1
+tile_set = SubResource("TileSet_34qnh")
+script = ExtResource("3_e85be")
+noise = SubResource("FastNoiseLite_fh0ar")
+target_display = NodePath("TargetPos")
+info = NodePath("../Camera2D/TileInfo")
+
+[node name="TargetPos" type="Sprite2D" parent="WorldMap"]
+modulate = Color(1, 1, 1, 0.690196)
+material = SubResource("CanvasItemMaterial_qoe1m")
+texture = ExtResource("3_ic71m")
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("4_twq6b")
+
+[node name="TileInfo" type="Label" parent="Camera2D"]
+offset_right = 40.0
+offset_bottom = 23.0

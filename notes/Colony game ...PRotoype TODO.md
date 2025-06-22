@@ -1,0 +1,39 @@
+- [ ] world map
+	- [x] camera movement
+	- [x] tile selection
+	- [ ] claimed tiles visually different
+	- [x] claiming more tiles
+- [ ] city tile
+	- [x] camera movement
+	- [ ] interacting with tiles
+	- [ ] job selection screen
+		- [ ] choosing job
+		- [ ] choosing workers
+- [ ] rpg battle
+	- [ ] hp split among townspeople
+	- [ ] defense = buildings that people hide inside
+	- [ ] choose battling party
+		- [ ] choose 3 workers
+		- [ ] if one dies, replaced by random townsperson
+	- [ ] attacks from the party
+	- [ ] 3 enemy types
+		- [ ] x
+		- [ ] y
+		- [ ] z
+	- [ ] all people die = gameover
+- [ ] game loop
+	- [ ] get mandate at the start of the week
+	- [ ] fulfill mandate
+	- [ ] send off items at end of the week
+- [ ] buildings
+	- [ ] stat modifications
+	- [ ] areas of effect
+	- [ ] special jobs
+- [ ] ui
+	- [ ] stats display
+	- [ ] resources display
+	- [ ] job editor
+	- [ ] time pass button
+- [ ] standing
+	- [ ] different civs - number value in matrix of civs
+	- [ ] standing w/ your civ negative = gameover
