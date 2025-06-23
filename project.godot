@@ -12,7 +12,7 @@ config_version=5
 
 config/name="pubtest"
 config/version="1.0.0"
-run/main_scene="res://scenes/rpg_battle/gregmovie/greg_movie_battle.tscn"
+run/main_scene="uid://bxfs17unc3gf"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Murumart"
 config/features=PackedStringArray("4.4", "GL Compatibility")

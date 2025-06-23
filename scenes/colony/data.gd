@@ -5,6 +5,8 @@ enum Keys {
 	CENTRE_TILE,
 	SAVED_CTILES,
 	WORLD_MAP,
+	RESOURCES,
+	TIME,
 }
 
 static var data: Dictionary[Keys, Variant] = {}
@@ -12,6 +14,9 @@ static var data: Dictionary[Keys, Variant] = {}
 
 static func _static_init() -> void:
 	data[Keys.SAVED_CTILES] = {}
+	var r: Dictionary[StringName, int] = {}
+	data[Keys.RESOURCES] = r
+	data[Keys.TIME] = 18
 
 
 static func gets(k: Keys, default: Variant = null) -> Variant:

@@ -4,6 +4,7 @@ const WorldMapTilemap = preload("res://scenes/colony/world_map_tilemap.gd")
 const WorldMap = preload("res://scenes/colony/world_map.gd")
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
+const CTileUI = preload("res://scenes/colony/ctile_ui.gd")
 
 const TileTypes: Dictionary[StringName, Vector2i] = {
 	GRASS = Vector2i(0, 0),
@@ -21,8 +22,7 @@ const SAVE_PATH := "user://pubtest/colony/tiles/"
 
 var ctile_pos: Vector2i = WCOORD
 @onready var tiles: TileMapLayer = $Tiles
-@export var cursor: Node2D
-@export var info: Label
+@export var ui: CTileUI
 
 
 func _option_init(options := {}) -> void:
@@ -45,20 +45,23 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		var epos: Vector2 = get_canvas_transform().affine_inverse() * event.global_position
 		var tpos := tiles.local_to_map(tiles.to_local(epos))
-
-		if cursor:
-			cursor.global_position = tpos * tiles.tile_set.tile_size
-
-		if info:
-			info.text = "Tile at " + str(tpos)
-			info.text += "\nType: " + str(TileTypes.find_key(tiles.get_cell_atlas_coords(tpos)))
-			info.text += "\nColony Tile at: " + str(ctile_pos)
+		ui.update_cursor(tpos, self)
 
 	if event is InputEventMouseButton:
 		var epos: Vector2 = get_canvas_transform().affine_inverse() * event.global_position
 		var tpos := tiles.local_to_map(tiles.to_local(epos))
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			print("wow you clicked the tile. good joü")
+			_tile_clicked(tpos)
+
+	ui.update_resources()
+
+
+
+func _tile_clicked(pos: Vector2i) -> void:
+	var type := tiles.get_cell_atlas_coords(pos)
+	match type:
+		TileTypes.TREE:
+			print("ree")
 
 
 func generate(type: Vector2i) -> void:
