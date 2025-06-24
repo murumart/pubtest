@@ -3,15 +3,16 @@ class_name SelectionPopup extends Window
 static var _ACCEPT := func() -> void: return
 
 @onready var items: ItemList = %ItemList
+@onready var ok_button: Button = %OkButton
+@onready var cancel_button: Button = %CancelButton
 
-static var instance: SelectionPopup
+
+static func create() -> SelectionPopup:
+	var s := preload("res://util/selection_popup.tscn").instantiate()
+	return s
 
 
 func _ready() -> void:
-	if instance != null:
-		assert(false, "should not have 2 instances or more")
-		return
-	instance = self
 	reset()
 
 
@@ -30,7 +31,7 @@ func pop(params: Parameters) -> Variant:
 
 	var result: Variant = await params._result_callable.call()
 	hide()
-	reset()
+	queue_free()
 	return result
 
 
@@ -93,7 +94,7 @@ class Parameters:
 	var _input_objects: Array
 	var _title: String
 	var _size := Vector2(120, 100)
-	var _result_callable: Callable
+	var _result_callable: Callable = func() -> void: pass
 	var _select_multiple: bool
 
 

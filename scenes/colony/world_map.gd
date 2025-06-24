@@ -30,8 +30,11 @@ func _tile_clicked(pos: Vector2i, tiletype: Vector2i, claimed: bool) -> void:
 				world_map.claimed_tiles.append(pos)
 				return
 		return
-	_save()
 	LTS.change_scene_to("res://scenes/colony/colony_tile.tscn", {pos = pos, type = tiletype})
+
+
+func save_me() -> void:
+	_save()
 
 
 func _load() -> void:

@@ -6,7 +6,6 @@
 [node name="SelectionPopup" type="Window"]
 auto_translate_mode = 1
 initial_position = 1
-visible = false
 transient = true
 exclusive = true
 unresizable = true
@@ -62,7 +61,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 allow_search = false
+auto_width = true
+auto_height = true
 item_count = 3
 item_0/text = "aaaaa"
 item_1/text = "bbbbbb"
 item_2/text = "cccccc"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="OkButton" type="Button" parent="Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ok"
+
+[node name="CancelButton" type="Button" parent="Control/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"

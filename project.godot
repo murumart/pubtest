@@ -8,6 +8,10 @@
 
 config_version=5
 
+[animation]
+
+warnings/check_angle_interpolation_type_conflicting=false
+
 [application]
 
 config/name="pubtest"
@@ -22,6 +26,11 @@ config/icon="res://icon.svg"
 
 LTS="*res://scenes/autoload/level_transition.tscn"
 
+[debug]
+
+gdscript/warnings/integer_division=0
+gdscript/warnings/int_as_enum_without_match=2
+
 [display]
 
 window/size/viewport_width=800
@@ -30,6 +39,10 @@ window/size/viewport_height=600
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/bitmap_editor/plugin.cfg")
+
+[global_group]
+
+save_me="things that save themselves on scene change"
 
 [input]
 

@@ -21,7 +21,7 @@ frequency = 0.0732
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qoe1m"]
 
-[node name="WorldMap" type="Control"]
+[node name="WorldMap" type="Control" groups=["save_me"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

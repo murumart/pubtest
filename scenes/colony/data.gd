@@ -7,6 +7,7 @@ enum Keys {
 	WORLD_MAP,
 	RESOURCES,
 	TIME,
+	JOBS,
 }
 
 static var data: Dictionary[Keys, Variant] = {}
@@ -16,7 +17,8 @@ static func _static_init() -> void:
 	data[Keys.SAVED_CTILES] = {}
 	var r: Dictionary[StringName, int] = {}
 	data[Keys.RESOURCES] = r
-	data[Keys.TIME] = 18
+	data[Keys.TIME] = 18 * 60
+	print("data initted")
 
 
 static func gets(k: Keys, default: Variant = null) -> Variant:

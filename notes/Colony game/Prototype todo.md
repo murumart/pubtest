@@ -8,7 +8,8 @@
 	- [ ] interacting with tiles
 	- [ ] job selection screen
 		- [ ] choosing job
-		- [ ] choosing workers
+		- [x] choosing workers
+		- [ ] mark job-having tiles
 - [ ] rpg battle
 	- [ ] hp split among townspeople
 	- [ ] defense = buildings that people hide inside
