@@ -27,6 +27,16 @@ static func get_job(id: int) -> Job:
 	return jobs[id]
 
 
+static func cancel_job(id: int) -> void:
+	jobs[id] = null
+
+
+static func cancel_job_j(job: Job) -> void:
+	var f := jobs.find(job)
+	assert(f >= 0)
+	cancel_job(f)
+
+
 static func assign_to_job(worker_: int, job_: Variant) -> void:
 	var job: Job
 
@@ -91,6 +101,12 @@ class Job:
 		for w in workers:
 			var worker := Workers.workers[w]
 			worker.on_jobs.erase(self)
+
+
+	func remove_worker(id: int) -> void:
+		var ix := workers.find(id)
+		workers.remove_at(ix)
+		Workers.workers[id].on_jobs.erase(self)
 
 
 	func set_time(to: int) -> Job:

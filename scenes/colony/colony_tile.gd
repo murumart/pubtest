@@ -48,6 +48,11 @@ func _ready() -> void:
 	tiles.clear()
 	ui.update_active_jobs(jobs)
 	ui.active_jobs_list.mouse_entered.connect(func() -> void: ui.update_active_jobs(jobs))
+	ui.job_removal_request.connect(func(j: Jobs.Job) -> void:
+		jobs.erase(j)
+		Jobs.cancel_job_j(j)
+		ui.update_active_jobs(jobs)
+	)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -70,11 +75,13 @@ func _tile_clicked(pos: Vector2i) -> void:
 	var aval_jobs: Dictionary[String, Variant] = {}
 	match type:
 		TileTypes.TREE:
+			var overlapping := jobs.filter(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos)
+			if not overlapping.is_empty():
+				print("tile occupied")
+				ui.local_job_worker_adjust(jobs.find(overlapping[0]))
+				return
 			aval_jobs = {
 				"cut tree": (func() -> Jobs.Job:
-					if jobs.any(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos):
-						print("tile occupied")
-						return null
 					var job := Jobs.mk().set_time(60)
 					job.ctile = ctile_pos
 					job.map_tile = pos
@@ -84,9 +91,6 @@ func _tile_clicked(pos: Vector2i) -> void:
 					job.finished = Jobs.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
 					return job).call(),
 				"hug tree": (func() -> Jobs.Job:
-					if jobs.any(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos):
-						print("tile occupied")
-						return null
 					var job := Jobs.mk().set_time(1)
 					job.ctile = ctile_pos
 					job.energy_usage = 1
@@ -94,8 +98,6 @@ func _tile_clicked(pos: Vector2i) -> void:
 					job.rewards = {"love": 1}
 					return job).call(),
 			}
-			print("ree")
-			var job_names := ["cut tree", "hug tree"]
 			var sp := SelectionPopup.create()
 			ui.add_child(sp)
 			var j = await sp.pop(
