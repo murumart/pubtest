@@ -46,7 +46,7 @@ script = ExtResource("2_lcfix")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="Control" type="Control" parent="UI" node_paths=PackedStringArray("cursor", "tile_info_label", "resource_info_label", "time_info_label", "active_jobs_list")]
+[node name="Control" type="Control" parent="UI" node_paths=PackedStringArray("cursor", "tile_info_label", "resource_info_label", "time_info_label", "active_jobs_list", "workers_list")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -18.0
@@ -60,6 +60,7 @@ tile_info_label = NodePath("TileInfo")
 resource_info_label = NodePath("ScrollContainer/ResourcesInfo")
 time_info_label = NodePath("Time")
 active_jobs_list = NodePath("ActiveJobs/ActiveJobsList")
+workers_list = NodePath("WorkersButton/PanelContainer/ScrollContainer/WorkersList")
 
 [node name="BackButton" type="Button" parent="UI/Control"]
 unique_name_in_owner = true
@@ -86,6 +87,30 @@ offset_top = 80.0
 offset_right = 61.0
 offset_bottom = 103.0
 text = "ingredible"
+
+[node name="WorkersButton" type="Button" parent="UI/Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 465.0
+offset_right = 154.0
+offset_bottom = 496.0
+text = "show workersq"
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/Control/WorkersButton"]
+layout_mode = 0
+offset_left = -5.0
+offset_top = -440.0
+offset_right = 438.0
+offset_bottom = -7.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/Control/WorkersButton/PanelContainer"]
+layout_mode = 2
+
+[node name="WorkersList" type="ItemList" parent="UI/Control/WorkersButton/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="ActiveJobs" type="ScrollContainer" parent="UI/Control"]
 layout_mode = 0

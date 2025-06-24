@@ -1,5 +1,7 @@
 extends Control
 
+const Workers = preload("res://scenes/colony/workers.gd")
+
 signal time_pass_request(amt: int)
 
 const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
@@ -14,6 +16,7 @@ const Jobs = preload("res://scenes/colony/jobs.gd")
 @export var resource_info_label: Label
 @export var time_info_label: Label
 @export var active_jobs_list: ItemList
+@export var workers_list: ItemList
 
 
 func _ready() -> void:
@@ -23,6 +26,12 @@ func _ready() -> void:
 	)
 	%TimeButton.pressed.connect(func():
 		time_pass_request.emit(1 * 60)
+	)
+	%WorkersButton.pressed.connect(func():
+		var wl := $WorkersButton/PanelContainer
+		wl.visible = !wl.visible
+		if wl.visible:
+			update_workers_list()
 	)
 
 
@@ -54,3 +63,10 @@ func update_active_jobs(jobs: Array[Jobs.Job]) -> void:
 			title += " at " + str(job.map_tile)
 		var ix := active_jobs_list.add_item(title)
 		active_jobs_list.set_item_metadata(ix, job)
+
+
+func update_workers_list() -> void:
+	workers_list.clear()
+	for worker in Workers.workers:
+		var ix := workers_list.add_item(worker.name)
+		workers_list.set_item_tooltip(ix, worker.info(Input.is_action_pressed("ctrl")))

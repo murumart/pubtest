@@ -26,4 +26,14 @@ static void pass_time(int amount);
 Jobs need to be progressed! everywhere in the player's world as time passes.
 
 # Workers
-Workers are the people in your colony. You need them to do jobs and to do anything, really. They're abstracted away as a table, pretty much, at least in the prototype.
+Workers are the people in your colony. You need them to do jobs (anything at all). They're abstracted away as a "table", at least in the prototype.
+
+```js
+class Worker:
+	var name: String
+	var skills: Dictionary[String, int]
+	var attributes: Dictionary[String, int]
+	var energy: int
+	var living_ctile: Vector2i
+	var living_maptile: Vector2i
+```

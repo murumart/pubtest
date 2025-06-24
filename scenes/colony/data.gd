@@ -8,6 +8,7 @@ enum Keys {
 	RESOURCES,
 	TIME,
 	JOBS,
+	WORKERS,
 }
 
 static var data: Dictionary[Keys, Variant] = {}

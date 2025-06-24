@@ -1,6 +1,7 @@
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
 const Jobs = preload("res://scenes/colony/jobs.gd")
+const Workers = preload("res://scenes/colony/workers.gd")
 
 static var resources: Dictionary[StringName, int]
 static var time: int:
@@ -12,6 +13,7 @@ static var time: int:
 
 static func _static_init() -> void:
 	resources = get_data_resources()
+	incri("food", 30)
 
 
 static func get_data_resources() -> Dictionary[StringName, int]:
@@ -28,3 +30,4 @@ static func incri(name: StringName, amt: int = 1) -> void:
 static func pass_time(amt: int) -> void:
 	time -= amt
 	Jobs.pass_time(amt)
+	Workers.pass_time(amt)
