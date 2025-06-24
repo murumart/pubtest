@@ -7,7 +7,7 @@
 	- [x] camera movement
 	- [ ] interacting with tiles
 	- [ ] job selection screen
-		- [ ] choosing job
+		- [x] choosing job
 		- [x] choosing workers
 		- [ ] mark job-having tiles
 - [ ] rpg battle
@@ -34,7 +34,7 @@
 	- [ ] stats display
 	- [ ] resources display
 	- [ ] job editor
-	- [ ] time pass button
+	- [x] time pass button
 - [ ] standing
 	- [ ] different civs - number value in matrix of civs
 	- [ ] standing w/ your civ negative = gameover

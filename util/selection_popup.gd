@@ -1,6 +1,8 @@
 class_name SelectionPopup extends Window
 
-static var _ACCEPT := func() -> void: return
+signal index_return(i: int)
+
+static var _ACCEPT := func() -> void: pass
 
 @onready var items: ItemList = %ItemList
 @onready var ok_button: Button = %OkButton
@@ -13,6 +15,11 @@ static func create() -> SelectionPopup:
 
 
 func _ready() -> void:
+	items.item_clicked.connect(func(a: int, __1, __2) -> void:
+		index_return.emit(a)
+	)
+	ok_button.pressed.connect(func() -> void: index_return.emit(-2))
+	cancel_button.pressed.connect(func() -> void: index_return.emit(-1))
 	reset()
 
 
@@ -24,6 +31,9 @@ func pop(params: Parameters) -> Variant:
 	title = p._title if p._title else ""
 
 	_populate_list(p)
+
+	ok_button.visible = p._show_ok
+	cancel_button.visible = p._show_cancel
 
 	transient = true
 	exclusive = true
@@ -51,11 +61,9 @@ func _populate_list(p: Parameters) -> void:
 
 func wait_item_result() -> Variant:
 	while true:
-		var clicked: Array = await items.item_clicked
-		var index: int = clicked[0]
-		var mouse: int = clicked[2]
+		var index: int = await index_return
 
-		if mouse != MOUSE_BUTTON_LEFT: continue
+		if index < 0: return index
 
 		return items.get_item_metadata(index)
 	assert(false, "reached end of await_result?")
@@ -96,6 +104,8 @@ class Parameters:
 	var _size := Vector2(120, 100)
 	var _result_callable: Callable = func() -> void: pass
 	var _select_multiple: bool
+	var _show_ok: bool
+	var _show_cancel: bool
 
 
 	func set_inputs(labels: Array, objects: Array) -> Parameters:
@@ -130,4 +140,10 @@ class Parameters:
 
 	func set_select_multiple(selmul: bool) -> Parameters:
 		_select_multiple = selmul
+		return self
+
+
+	func set_ok_cancel(ok: bool, cancel: bool) -> Parameters:
+		_show_ok = ok
+		_show_cancel = cancel
 		return self

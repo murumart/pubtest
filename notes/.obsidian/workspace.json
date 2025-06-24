@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Colony game/Jobs and workers systems.md",
+                "file": "Colony game/Prototype todo.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Jobs and workers systems"
+              "title": "Prototype todo"
             }
           }
         ]
@@ -170,8 +170,8 @@
   },
   "active": "836ff9f56f3944b8",
   "lastOpenFiles": [
-    "Colony game/Prototype todo.md",
     "Colony game/Jobs and workers systems.md",
+    "Colony game/Prototype todo.md",
     "Colony game",
     "Welcome.md"
   ]

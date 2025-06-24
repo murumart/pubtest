@@ -33,6 +33,23 @@ func _ready() -> void:
 		if wl.visible:
 			update_workers_list()
 	)
+	active_jobs_list.item_clicked.connect((
+		func(ix: int) -> void:
+			var job: Jobs.Job = active_jobs_list.get_item_metadata(ix)
+			var sp := SelectionPopup.create()
+			add_child(sp)
+			var available_workers := Workers.get_available_ixes()
+			var worker: int = await sp.pop(sp.Parameters.new()
+				.set_title("add worker")
+				.set_inputs(Array(available_workers).map(func(a: int) -> String:
+					return Workers.workers[a].name), available_workers)
+				.set_result_callable(sp.wait_item_result)
+				.set_ok_cancel(false, true)
+			)
+			print("owke ", worker)
+			if worker >= 0:
+				Jobs.assign_to_job(worker, job)
+	).unbind(2))
 
 
 func update_cursor(tpos: Vector2i, tile: ColonyTile) -> void:
@@ -53,6 +70,7 @@ func update_resources() -> void:
 
 
 func update_active_jobs(jobs: Array[Jobs.Job]) -> void:
+	print("updating jobs list..")
 	active_jobs_list.clear()
 	for job in jobs:
 		# ignore finished jos
@@ -63,9 +81,11 @@ func update_active_jobs(jobs: Array[Jobs.Job]) -> void:
 			title += " at " + str(job.map_tile)
 		var ix := active_jobs_list.add_item(title)
 		active_jobs_list.set_item_metadata(ix, job)
+		active_jobs_list.set_item_tooltip(ix, job.info())
 
 
 func update_workers_list() -> void:
+	print("updating workers..")
 	workers_list.clear()
 	for worker in Workers.workers:
 		var ix := workers_list.add_item(worker.name)

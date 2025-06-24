@@ -34,6 +34,16 @@ static func _static_init() -> void:
 		workers.append(w)
 
 
+static func get_available_ixes() -> PackedInt64Array:
+	var ixes := PackedInt64Array()
+
+	for i in workers.size():
+		if workers[i].on_jobs.is_empty():
+			ixes.append(i)
+
+	return ixes
+
+
 static func pass_time(amt: int) -> void:
 	for i in range(workers.size() - 1, -1, -1):
 		var worker := workers[i]
@@ -59,10 +69,12 @@ class Worker:
 	var since_last_eat: int
 	var living_ctile: Vector2i = Vector2i.ONE * -1
 	var living_maptile: Vector2i = Vector2i.ONE * -1
+	var on_jobs: Array[Jobs.Job]
 
 
 	func info(extra: bool) -> String:
 		var txt := "worker " + name + "\nhp: %s/%s" % [snappedf(hp, 0.1), attributes["max hp"]] + "\nenergy: %s/%s" % [energy, attributes["max energy"]]
+		txt += "\nworks %s jobs" % on_jobs.size()
 		if not extra:
 			txt += "\ntop skills:"
 			var sorted := skills.keys()

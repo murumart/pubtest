@@ -7,6 +7,7 @@ const dk = dat.Keys
 const Jobs = preload("res://scenes/colony/jobs.gd")
 const CTileUI = preload("res://scenes/colony/ctile_ui.gd")
 const Resources = preload("res://scenes/colony/resources.gd")
+const Workers = preload("res://scenes/colony/workers.gd")
 
 const TileTypes: Dictionary[StringName, Vector2i] = {
 	GRASS = Vector2i(0, 0),
@@ -46,6 +47,7 @@ func _ready() -> void:
 	)
 	tiles.clear()
 	ui.update_active_jobs(jobs)
+	ui.active_jobs_list.mouse_entered.connect(func() -> void: ui.update_active_jobs(jobs))
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -65,39 +67,48 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _tile_clicked(pos: Vector2i) -> void:
 	var type := tiles.get_cell_atlas_coords(pos)
+	var aval_jobs: Dictionary[String, Variant] = {}
 	match type:
 		TileTypes.TREE:
+			aval_jobs = {
+				"cut tree": (func() -> Jobs.Job:
+					if jobs.any(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos):
+						print("tile occupied")
+						return null
+					var job := Jobs.mk().set_time(60)
+					job.ctile = ctile_pos
+					job.map_tile = pos
+					job.rewards = {"wood": 10}
+					job.energy_usage = 35
+					job.skill_reductions = {"woodcutting": 4}
+					job.finished = Jobs.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
+					return job).call(),
+				"hug tree": (func() -> Jobs.Job:
+					if jobs.any(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos):
+						print("tile occupied")
+						return null
+					var job := Jobs.mk().set_time(1)
+					job.ctile = ctile_pos
+					job.energy_usage = 1
+					job.map_tile = pos
+					job.rewards = {"love": 1}
+					return job).call(),
+			}
 			print("ree")
 			var job_names := ["cut tree", "hug tree"]
 			var sp := SelectionPopup.create()
 			ui.add_child(sp)
-			var job_str: String = await sp.pop(
+			var j = await sp.pop(
 				sp.Parameters.new()
-					.set_inputs(job_names, job_names)
+					.set_inputs_dt(aval_jobs)
 					.set_title("select job")
-					.set_result_callable(sp.wait_item_result))
-			if job_str == "cut tree":
-				if jobs.any(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos):
-					print("tile occupied")
-					return
-				var job := Jobs.mk().set_time(60)
-				job.ctile = ctile_pos
-				job.map_tile = pos
-				job.rewards = {"wood": 10}
-				job.finished = Jobs.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
+					.set_result_callable(sp.wait_item_result)
+					.set_ok_cancel(false, true))
+			var job: Jobs.Job = j if not j is int else null
+			if job != null:
 				Jobs.add(job)
 				jobs.append(job)
 				print("added jop to " + str(pos))
-			elif job_str == "hug tree":
-				if jobs.any(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos):
-					print("tile occupied")
-					return
-				var job := Jobs.mk().set_time(1)
-				job.ctile = ctile_pos
-				job.map_tile = pos
-				job.rewards = {"love": 1}
-				Jobs.add(job)
-				jobs.append(job)
 			ui.update_active_jobs(jobs)
 
 
@@ -117,8 +128,15 @@ func generate(type: Vector2i) -> void:
 					tiles.set_cell(Vector2i(x, y), 0, TileTypes.SAND)
 	var towncentre: Vector2i = dat.gets(dk.CENTRE_TILE, WCOORD)
 	if towncentre == WCOORD:
+		# first tile that is generated gets the town centre
 		dat.sets(dk.CENTRE_TILE, Vector2i(4, 4))
 		tiles.set_cell(Vector2i(4, 4), 0, TileTypes.TOWN_CENTRE)
+		# all initial workers live in the town centre at first
+		for w in Workers.workers:
+			if w.living_ctile == WCOORD:
+				w.living_ctile = ctile_pos
+			if w.living_maptile == WCOORD:
+				w.living_maptile = Vector2i(4, 4)
 
 
 func _save() -> void:
