@@ -11,6 +11,7 @@ const FILENAME := "worldmap.save"
 var data := {}
 
 @onready var world_map: WMM = $WorldMap
+@onready var camera_2d: Camera2D = $Camera2D
 
 
 func _option_init(opt: Dictionary) -> void:
@@ -20,6 +21,9 @@ func _option_init(opt: Dictionary) -> void:
 		_save()
 	else:
 		_load()
+	camera_2d.global_position = Vector2(WMM.SIZE, WMM.SIZE) * 16 * 0.5
+	var z := 32.0 / WMM.SIZE
+	camera_2d.zoom = Vector2(z, z)
 
 
 func _tile_clicked(pos: Vector2i, tiletype: Vector2i, claimed: bool) -> void:

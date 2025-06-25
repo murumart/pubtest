@@ -69,20 +69,32 @@ static func increment_day() -> void:
 		match living_tile:
 			TileTypes.HOUSE: replenishment = 0.75
 			TileTypes.TOWN_CENTRE: replenishment = 0.7
-		w.energy = mini(w.attributes["max energy"], w.energy + w.attributes["max energy"] * replenishment)
+		w.energy = mini(w.attributes["max energy"], int(w.energy + w.attributes["max energy"] * replenishment))
 
 
 class Worker:
 	var name: String
-	var skills: Dictionary[String, int]
-	var experience: Dictionary[String, int]
-	var attributes: Dictionary[String, int]
+	var skills: Dictionary[StringName, int]
+	var experience: Dictionary[StringName, float]
+	var attributes: Dictionary[StringName, int]
 	var energy: int
 	var hp: float
 	var since_last_eat: int
 	var living_ctile: Vector2i = Vector2i.ONE * -1
 	var living_maptile: Vector2i = Vector2i.ONE * -1
 	var on_jobs: Array[Jobs.Job]
+
+
+	func gain_xp(skill: StringName, amt: float) -> void:
+		experience.set(skill, experience.get(skill, 0.0) + amt)
+
+
+	func try_levelup() -> void:
+		for skill in experience:
+			while experience[skill] > skills.get(skill, 0) * 10:
+				experience[skill] -= skills.get(skill, 0) * 10
+				skills[skill] = skills.get(skill, 0) + 1
+				print("worker " + name + " leveled up " + skill + " to " + str(skills[skill]))
 
 
 	func info(extra: bool) -> String:
@@ -100,6 +112,11 @@ class Worker:
 			sorted.sort_custom(func(k: String, l: String) -> bool: return skills[k] > skills[l])
 			for i in sorted.size():
 				txt += "\n    " + sorted[i] + ": " + str(skills[sorted[i]])
+			txt += "\nexperience:"
+			sorted = experience.keys()
+			sorted.sort_custom(func(k: String, l: String) -> bool: return experience[k] > experience[l])
+			for i in sorted.size():
+				txt += "\n    " + sorted[i] + ": " + str(experience[sorted[i]])
 
 			txt += "\nattributes:"
 			for at in attributes:

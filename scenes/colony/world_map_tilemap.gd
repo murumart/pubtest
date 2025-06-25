@@ -14,7 +14,7 @@ const TileTypes: Dictionary[StringName, Vector2i] = {
 	SEA = Vector2i(1, 0)
 }
 
-const SIZE := 10
+const SIZE := 20
 
 @export var _noise: FastNoiseLite
 static var noise: FastNoiseLite

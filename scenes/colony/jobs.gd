@@ -71,6 +71,25 @@ static func pass_time(amt: int) -> void:
 		var time_req := job.get_time_req()
 		if time_req == -1:
 			continue
+
+		var of_full := maxf(0.0, mini(time_req, job.used_time + amt) - job.used_time) / float(time_req)
+		#print("we passed %s mins of time on job taking %s minutes (%s minutes done already before this), which is %s%% of its full time required." % [amt, time_req, job.used_time, of_full * 100])
+		var useful_workers := job.workers.size()
+
+		for w in job.workers:
+			var worker := Workers.workers[w]
+			if worker.energy <= 0:
+				print("worker " + worker.name + " won't do work becasue too tired baby.")
+				useful_workers -= 1
+				continue
+
+			var enuse := job.get_energy_usage(worker) / useful_workers
+			worker.energy = maxi(0, worker.energy - enuse * of_full)
+
+			for sp in job.skill_rewards:
+				worker.gain_xp(sp, job.skill_rewards[sp] * of_full)
+		if useful_workers <= 0:
+			continue
 		job.used_time += amt
 		if job.used_time >= time_req:
 			job.finish()
@@ -82,11 +101,12 @@ class Job:
 
 	var title: String
 	# input resources are removed from main resources on creation
-	var input_resources: Dictionary[String, int]
-	var tools_required: Dictionary[String, int]
-	var rewards: Dictionary[String, int]
-	var skill_reductions: Dictionary[String, float]
-	var skill_rewards: Dictionary[String, int]
+	var input_resources: Dictionary[StringName, int]
+	var tools_required: Dictionary[StringName, int]
+	var rewards: Dictionary[StringName, int]
+	## each worker with appropriate skill subtracts their skill lvl * reduction from required time
+	var skill_reductions: Dictionary[StringName, float]
+	var skill_rewards: Dictionary[StringName, int]
 	var used_time: int # increases as job is completed
 	var max_time: int
 	var energy_usage: int
@@ -204,6 +224,16 @@ class Job:
 			txt += "\nrewards:"
 			for rw in rewards:
 				txt += "\n    " + rw + ": " + str(rewards[rw])
+		if extra:
+			txt += "\nbase energy usage: " + str(energy_usage)
+			if not skill_reductions.is_empty():
+				txt += "\nskill reductions:"
+				for rw in skill_reductions:
+					txt += "\n    " + rw + ": " + str(skill_reductions[rw])
+			if not skill_rewards.is_empty():
+				txt += "\nskill rewards:"
+				for rw in skill_rewards:
+					txt += "\n    " + rw + ": " + str(skill_rewards[rw])
 		return txt
 
 
@@ -218,11 +248,13 @@ class JobError extends Job:
 
 
 class DoableJob extends Job:
+
 	func finish() -> void:
 		finished.call()
 		for rew in rewards:
 			Resources.incri(rew, rewards[rew])
 		for w in workers:
 			var worker := Workers.workers[w]
-			worker.energy -= roundi(get_energy_usage(worker) / float(workers.size()))
+			worker.try_levelup()
+			#worker.energy -= roundi(get_energy_usage(worker) / float(workers.size()))
 		free_workers()

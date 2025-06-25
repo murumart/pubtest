@@ -34,5 +34,5 @@ func get_current_scene() -> Node:
 	return get_tree().root.get_child(-1)
 
 
-func enter_battle(info, options := {}) -> void:
+func enter_battle(_info, _options := {}) -> void:
 	pass

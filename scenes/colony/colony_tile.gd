@@ -83,6 +83,8 @@ func _tile_clicked(pos: Vector2i) -> void:
 	var overlapping := jobs.filter(func(j: Jobs.Job) -> bool:
 		return is_instance_valid(j) and j.map_tile == pos)
 	match type:
+		WCOORD:
+			return
 		TileTypes.TREE:
 			if await if_overlap_adjust_jobs(pos, overlapping):
 				return
@@ -130,7 +132,7 @@ static func replace_tile(
 		set_tile(where_far, where_close, with)
 
 
-func if_overlap_adjust_jobs(pos: Vector2i, overlapping: Array) -> bool:
+func if_overlap_adjust_jobs(_pos: Vector2i, overlapping: Array) -> bool:
 	if not overlapping.is_empty():
 		print("tile occupied")
 		await ui.local_job_worker_adjust(overlapping[0])
@@ -141,7 +143,6 @@ func if_overlap_adjust_jobs(pos: Vector2i, overlapping: Array) -> bool:
 
 func generate(_type: Vector2i) -> void:
 	var noise := WorldMapTilemap.noise
-	const wmt := WorldMapTilemap.TileTypes
 	var tile: Vector2i
 
 	for y in SIZE:

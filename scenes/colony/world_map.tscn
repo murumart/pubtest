@@ -17,7 +17,7 @@ custom_data_layer_0/type = 2
 sources/0 = SubResource("TileSetAtlasSource_e85be")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ic71m"]
-frequency = 0.0111
+frequency = 0.0079
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qoe1m"]
 
@@ -48,7 +48,7 @@ centered = false
 [node name="Draw" type="Node2D" parent="WorldMap"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(95, 76)
+position = Vector2(224, 168)
 zoom = Vector2(1.79, 1.79)
 script = ExtResource("4_twq6b")
 
