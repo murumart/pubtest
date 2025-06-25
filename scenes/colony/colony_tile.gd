@@ -94,7 +94,8 @@ func _tile_clicked(pos: Vector2i) -> void:
 			var overlapping := jobs.filter(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos)
 			if not overlapping.is_empty():
 				print("tile occupied")
-				ui.local_job_worker_adjust(jobs.find(overlapping[0]))
+				await ui.local_job_worker_adjust(jobs.find(overlapping[0]))
+				ui.update_active_jobs(jobs)
 				return
 			aval_jobs = {
 				"cut tree": (func() -> Jobs.Job:

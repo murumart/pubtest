@@ -7,6 +7,7 @@ static var _ACCEPT := func() -> void: pass
 @onready var items: ItemList = %ItemList
 @onready var ok_button: Button = %OkButton
 @onready var cancel_button: Button = %CancelButton
+@onready var title_label: Label = %TitleLabel
 
 
 static func create() -> SelectionPopup:
@@ -29,6 +30,7 @@ func pop(params: Parameters) -> Variant:
 
 	var p := params
 	title = p._title if p._title else ""
+	title_label.text = title
 
 	_populate_list(p)
 
@@ -53,6 +55,8 @@ func _populate_list(p: Parameters) -> void:
 
 		items.add_item(label, null, true)
 		items.set_item_metadata(i, object)
+		if not p._input_tooltips.is_empty():
+			items.set_item_tooltip(i, p._input_tooltips[i])
 	if p._select_multiple:
 		items.select_mode = ItemList.SELECT_MULTI
 		items.add_item("okay")
@@ -100,6 +104,7 @@ class Parameters:
 
 	var _input_labels: PackedStringArray
 	var _input_objects: Array
+	var _input_tooltips: PackedStringArray
 	var _title: String
 	var _size := Vector2(120, 100)
 	var _result_callable: Callable = func() -> void: pass
@@ -112,6 +117,12 @@ class Parameters:
 		assert(labels.size() == objects.size(), "inconsistent label and object lists")
 		_input_labels = PackedStringArray(labels)
 		_input_objects = objects
+		return self
+
+
+	func set_tooltips(tooltips: Array) -> Parameters:
+		assert(tooltips.size() == _input_labels.size(), "inconsistent tooltip and object lists")
+		_input_tooltips = PackedStringArray(tooltips)
 		return self
 
 

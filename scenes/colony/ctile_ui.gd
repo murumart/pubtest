@@ -58,6 +58,8 @@ func local_job_worker_adjust(ix: int) -> void:
 			.set_title("add worker")
 			.set_inputs(Array(available_workers).map(func(a: int) -> String:
 				return Workers.workers[a].name), available_workers)
+			.set_tooltips(Array(available_workers).map(func(a: int) -> String:
+				return Workers.workers[a].info(false)))
 			.set_result_callable(sp.wait_item_result)
 			.set_ok_cancel(false, true)
 		)
@@ -69,6 +71,8 @@ func local_job_worker_adjust(ix: int) -> void:
 			.set_title("remove worker")
 			.set_inputs(Array(job.workers).map(func(a: int) -> String:
 				return Workers.workers[a].name), Array(job.workers))
+			.set_tooltips(Array(job.workers).map(func(a: int) -> String:
+				return Workers.workers[a].info(false)))
 			.set_result_callable(sp.wait_item_result)
 			.set_ok_cancel(false, true)
 		)
@@ -104,10 +108,7 @@ func update_active_jobs(jobs: Array[Jobs.Job]) -> void:
 		# ignore finished jos
 		if job not in Jobs.jobs or not is_instance_valid(job):
 			continue
-		var title := "job"
-		if job.map_tile != Vector2i.ONE * -1:
-			title += " at " + str(job.map_tile)
-		var ix := active_jobs_list.add_item(title)
+		var ix := active_jobs_list.add_item(job.shortinfo())
 		active_jobs_list.set_item_metadata(ix, job)
 		active_jobs_list.set_item_tooltip(ix, job.info())
 

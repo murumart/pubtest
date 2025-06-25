@@ -105,6 +105,7 @@ class Job:
 
 	func remove_worker(id: int) -> void:
 		var ix := workers.find(id)
+		used_time = clampi(used_time - get_time_req() / workers.size(), 0, max_time)
 		workers.remove_at(ix)
 		Workers.workers[id].on_jobs.erase(self)
 
@@ -142,6 +143,15 @@ class Job:
 		return maxi(1, roundi(energy_usage - reduction))
 
 
+	func shortinfo() -> String:
+		var txt := "job"
+		if map_tile != Vector2i.ONE * -1:
+			txt += " at " + str(map_tile)
+		if not workers.is_empty():
+			txt += " (%s/%s)" % [used_time, get_time_req()]
+		return txt
+
+
 	func info(extra: bool = false) -> String:
 		var txt := ""
 		var trdc := get_time_req()
@@ -149,7 +159,7 @@ class Job:
 		if workers.is_empty():
 			txt += "no workers assigned"
 		else:
-			txt += "%s/%s" % [trdc - used_time, trdc]
+			txt += "%s/%s" % [used_time, trdc]
 			txt += "\nworkers: "
 			for w in workers:
 				txt += Workers.workers[w].name
