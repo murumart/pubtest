@@ -15,8 +15,11 @@ const TileTypes: Dictionary[StringName, Vector2i] = {
 	WATER = Vector2i(1, 0),
 	SAND = Vector2i(2, 0),
 	HOUSE = Vector2i(0, 3),
+	CAMPFIRE = Vector2i(0, 2),
 	TOWN_CENTRE = Vector2i(3, 0),
 	TREE = Vector2i(0, 1),
+	PEBBLES = Vector2i(1, 1),
+	BOULDER = Vector2i(2, 1),
 }
 
 const SIZE := 10
@@ -77,16 +80,21 @@ func _unhandled_input(event: InputEvent) -> void:
 func _tile_clicked(pos: Vector2i) -> void:
 	var type := tiles.get_cell_atlas_coords(pos)
 	var aval_jobs: Dictionary[String, Jobs.Job] = {}
+	var overlapping := jobs.filter(func(j: Jobs.Job) -> bool:
+		return is_instance_valid(j) and j.map_tile == pos)
 	match type:
 		TileTypes.TREE:
-			var overlapping := jobs.filter(func(j: Jobs.Job) -> bool:
-				return is_instance_valid(j) and j.map_tile == pos)
-			if not overlapping.is_empty():
-				print("tile occupied")
-				await ui.local_job_worker_adjust(jobs.find(overlapping[0]))
-				ui.update_active_jobs(jobs)
+			if await if_overlap_adjust_jobs(pos, overlapping):
 				return
 			aval_jobs.merge(CtileJobs.get_tree_jobs(pos, ctile_pos))
+		TileTypes.PEBBLES:
+			if await if_overlap_adjust_jobs(pos, overlapping):
+				return
+			aval_jobs.merge(CtileJobs.get_pebble_jobs(pos, ctile_pos))
+		TileTypes.GRASS, TileTypes.SAND:
+			if await if_overlap_adjust_jobs(pos, overlapping):
+				return
+			aval_jobs.merge(CtileJobs.get_building_jobs(pos, ctile_pos))
 
 	var sp := SelectionPopup.create()
 	ui.add_child(sp)
@@ -96,6 +104,7 @@ func _tile_clicked(pos: Vector2i) -> void:
 			SOL.vfx("damage_number", Vector2(pos) * 16, {text = job.title})
 			return
 		jobs.append(job)
+		await ui.local_job_worker_adjust(job)
 		ui.update_active_jobs(jobs)
 
 
@@ -111,20 +120,53 @@ static func set_tile(cpos: Vector2i, mappos: Vector2i, to: Vector2i) -> void:
 	get_tiles(cpos)[mappos] = to
 
 
-func generate(type: Vector2i) -> void:
+static func replace_tile(
+	what: Vector2i,
+	with: Vector2i,
+	where_close: Vector2i,
+	where_far: Vector2i
+) -> void:
+	if get_tile(where_far, where_close) == what:
+		set_tile(where_far, where_close, with)
+
+
+func if_overlap_adjust_jobs(pos: Vector2i, overlapping: Array) -> bool:
+	if not overlapping.is_empty():
+		print("tile occupied")
+		await ui.local_job_worker_adjust(overlapping[0])
+		ui.update_active_jobs(jobs)
+		return true
+	return false
+
+
+func generate(_type: Vector2i) -> void:
+	var noise := WorldMapTilemap.noise
 	const wmt := WorldMapTilemap.TileTypes
-	if type == wmt.SEA:
-		for y in SIZE:
-			for x in SIZE:
-				tiles.set_cell(Vector2i(x, y), 0, TileTypes.WATER)
-	else:
-		for y in SIZE:
-			for x in SIZE:
-				tiles.set_cell(Vector2i(x, y), 0, TileTypes.GRASS)
+	var tile: Vector2i
+
+	for y in SIZE:
+		for x in SIZE:
+			var wpos := ctile_pos * WorldMapTilemap.SIZE + Vector2i(x, y)
+			var nval := noise.get_noise_2d(wpos.x, wpos.y)
+			if nval < 0:
+				tile = TileTypes.WATER
+			elif nval < 0.04:
+				tile = TileTypes.SAND
+			else:
+				tile = TileTypes.GRASS
+
+			if tile == TileTypes.GRASS:
 				if randf() < 0.1:
-					tiles.set_cell(Vector2i(x, y), 0, TileTypes.TREE)
+					tile = TileTypes.TREE
 				elif randf() < 0.1:
-					tiles.set_cell(Vector2i(x, y), 0, TileTypes.SAND)
+					tile = TileTypes.SAND
+				elif randf() < 0.1:
+					tile = TileTypes.PEBBLES
+				elif randf() < 0.05:
+					tile = TileTypes.BOULDER
+
+			tiles.set_cell(Vector2i(x, y), 0, tile)
+
 	var towncentre: Vector2i = dat.gets(dk.CENTRE_TILE, WCOORD)
 	if towncentre == WCOORD:
 		# first tile that is generated gets the town centre

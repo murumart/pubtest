@@ -16,8 +16,8 @@ custom_data_layer_0/name = "tile_type"
 custom_data_layer_0/type = 2
 sources/0 = SubResource("TileSetAtlasSource_e85be")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_fh0ar"]
-frequency = 0.0732
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ic71m"]
+frequency = 0.0111
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qoe1m"]
 
@@ -34,7 +34,7 @@ script = ExtResource("2_twq6b")
 z_index = -1
 tile_set = SubResource("TileSet_34qnh")
 script = ExtResource("3_e85be")
-noise = SubResource("FastNoiseLite_fh0ar")
+_noise = SubResource("FastNoiseLite_ic71m")
 target_display = NodePath("TargetPos")
 info = NodePath("../CanvasLayer/TileInfo")
 drawer = NodePath("Draw")
@@ -48,6 +48,8 @@ centered = false
 [node name="Draw" type="Node2D" parent="WorldMap"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(95, 76)
+zoom = Vector2(1.79, 1.79)
 script = ExtResource("4_twq6b")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

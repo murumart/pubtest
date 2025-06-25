@@ -35,10 +35,12 @@ func _ready() -> void:
 		if wl.visible:
 			update_workers_list()
 	)
-	active_jobs_list.item_clicked.connect((local_job_worker_adjust).unbind(2))
+	active_jobs_list.item_clicked.connect(func(ix: int, __1, __2):
+		local_job_worker_adjust(active_jobs_list.get_item_metadata(ix))
+	)
 
 
-func local_job_worker_adjust(ix: int) -> void:
+func local_job_worker_adjust(job: Jobs.Job) -> void:
 	var sp := SelectionPopup.create()
 	add_child(sp)
 	var choice: int = await sp.pop(sp.Parameters.new()
@@ -50,7 +52,6 @@ func local_job_worker_adjust(ix: int) -> void:
 
 	sp = SelectionPopup.create()
 	add_child(sp)
-	var job: Jobs.Job = active_jobs_list.get_item_metadata(ix)
 
 	if choice == 0:
 		var available_workers := Workers.get_available_ixes()

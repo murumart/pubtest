@@ -1,5 +1,7 @@
 extends TileMapLayer
 
+const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+
 signal tile_clicked(pos: Vector2i, tiletype: Vector2i, claimed: bool)
 
 enum SaveKey {
@@ -8,13 +10,14 @@ enum SaveKey {
 }
 
 const TileTypes: Dictionary[StringName, Vector2i] = {
-		LAND = Vector2i(0, 0),
-		SEA = Vector2i(1, 0)
+	LAND = Vector2i(0, 0),
+	SEA = Vector2i(1, 0)
 }
 
 const SIZE := 10
 
-@export var noise: FastNoiseLite
+@export var _noise: FastNoiseLite
+static var noise: FastNoiseLite
 @export var target_display: Node2D
 @export var info: Label
 @export var drawer: CanvasItem
@@ -23,6 +26,7 @@ var claimed_tiles: Array[Vector2i]
 
 
 func _ready() -> void:
+	noise = _noise
 	if drawer:
 		drawer.draw.connect(func() -> void:
 			for tile in get_used_cells():
@@ -32,14 +36,19 @@ func _ready() -> void:
 
 
 func generate() -> void:
-		for y in SIZE:
-				for x in SIZE:
-						set_cell(Vector2i(x, y), 0, TileTypes.LAND)
-						if noise.get_noise_2d(x, y) < 0:
-								set_cell(Vector2i(x, y), 0, TileTypes.SEA)
-		for y in range(SIZE / 2 - 1, SIZE / 2 + 1):
-			for x in range(SIZE / 2 - 1, SIZE / 2 + 1):
-				claimed_tiles.append(Vector2i(x, y))
+	noise.seed = randi()
+	for y in SIZE:
+		for x in SIZE:
+			var sum := 0.0
+			for yy in ColonyTile.SIZE: for xx in ColonyTile.SIZE:
+				sum += noise.get_noise_2d(x * SIZE + xx, y * SIZE + yy)
+
+			set_cell(Vector2i(x, y), 0, TileTypes.LAND)
+			if sum / (ColonyTile.SIZE**2) < 0:
+				set_cell(Vector2i(x, y), 0, TileTypes.SEA)
+	for y in range(SIZE / 2 - 1, SIZE / 2 + 1):
+		for x in range(SIZE / 2 - 1, SIZE / 2 + 1):
+			claimed_tiles.append(Vector2i(x, y))
 
 
 func savef() -> Dictionary:

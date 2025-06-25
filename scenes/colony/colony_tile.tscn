@@ -40,8 +40,8 @@ tile_map_data = PackedByteArray("AAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD//wEAAAADAAA
 tile_set = SubResource("TileSet_5opje")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(163, 126)
-zoom = Vector2(2.105, 2.105)
+position = Vector2(89, 90)
+zoom = Vector2(2.555, 2.555)
 script = ExtResource("2_lcfix")
 
 [node name="UI" type="CanvasLayer" parent="."]

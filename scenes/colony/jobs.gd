@@ -226,13 +226,3 @@ class DoableJob extends Job:
 			var worker := Workers.workers[w]
 			worker.energy -= roundi(get_energy_usage(worker) / float(workers.size()))
 		free_workers()
-
-
-static func replace_tile(
-	what: Vector2i,
-	with: Vector2i,
-	where_close: Vector2i,
-	where_far: Vector2i
-) -> void:
-	if dat.gets(dk.SAVED_CTILES)[where_far][where_close] == what:
-		dat.gets(dk.SAVED_CTILES)[where_far][where_close] = with

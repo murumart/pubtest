@@ -38,7 +38,7 @@ static func get_tree_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[Stri
 		job.skill_reductions = {"woodcutting": 4}
 		job.skill_rewards = {"woodcutting": 1}
 		job.tools_required = {"axe": 1}
-		job.finished = Jobs.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
+		job.finished = ColonyTile.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
 		d["chop tree"] = job
 	if true:
 		var job := Jobs.mk("gather seeds").csttime(60 * 1.6).cstloc(ctile_pos, pos)
@@ -54,5 +54,46 @@ static func get_tree_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[Stri
 		job.rewards = {"love": 1}
 		job.skill_rewards = {"loving": 1}
 		d["hug tree"] = job
+
+	return d
+
+
+static func get_pebble_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
+	var d: Dictionary[String, Job]
+
+	if true:
+		var job := Jobs.mk("gather pebbles").csttime(30).cstloc(ctile_pos, pos)
+		job.energy_usage = 20
+		job.rewards = {"hard rock": 2}
+		job.skill_reductions = {"gathering": 5}
+		job.skill_rewards = {"gathering": 1}
+		job.finished = func() -> void:
+			if randf() < 0.5:
+				ColonyTile.replace_tile(TileTypes.PEBBLES, TileTypes.GRASS, pos, ctile_pos)
+		d["gather pebbles"] = job
+
+	return d
+
+
+static func get_building_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
+	var d: Dictionary[String, Job]
+
+	if true:
+		var job := Jobs.mk("build campfire").csttime(60 * 1.2).cstloc(ctile_pos, pos)
+		job.energy_usage = 35
+		job.input_resources = {"wood": 8, "hard rock": 3}
+		job.skill_reductions = {"construction": 10}
+		job.skill_rewards = {"construction": 1}
+		job.finished = ColonyTile.set_tile.bind(ctile_pos, pos, TileTypes.CAMPFIRE)
+		d["build campfire"] = job
+	if true:
+		var job := Jobs.mk("build house").csttime(60 * 14).cstloc(ctile_pos, pos)
+		job.energy_usage = 180
+		job.input_resources = {"wood": 30, "hard rock": 5}
+		job.skill_reductions = {"construction": 10}
+		job.skill_rewards = {"construction": 10}
+		job.tools_required = {"axe": 1}
+		job.finished = ColonyTile.set_tile.bind(ctile_pos, pos, TileTypes.HOUSE)
+		d["build house"] = job
 
 	return d
