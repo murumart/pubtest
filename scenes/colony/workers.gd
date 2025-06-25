@@ -4,6 +4,7 @@ const Jobs = preload("res://scenes/colony/jobs.gd")
 const Resources = preload("res://scenes/colony/resources.gd")
 const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
+const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 
 static var workers: Array[Worker] = []
 
@@ -94,7 +95,7 @@ class Worker:
 			while experience[skill] > skills.get(skill, 0) * 10:
 				experience[skill] -= skills.get(skill, 0) * 10
 				skills[skill] = skills.get(skill, 0) + 1
-				print("worker " + name + " leveled up " + skill + " to " + str(skills[skill]))
+				ColonyMain.loge("worker " + name + " leveled up " + skill + " to " + str(skills[skill]))
 
 
 	func info(extra: bool) -> String:

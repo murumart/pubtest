@@ -5,6 +5,7 @@ const TileTypes = ColonyTile.TileTypes
 const Resources = preload("res://scenes/colony/resources.gd")
 const Workers = preload("res://scenes/colony/workers.gd")
 const Jobs = preload("res://scenes/colony/jobs.gd")
+const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 
 static var jobs: Array[DoableJob]
 
@@ -79,7 +80,7 @@ static func pass_time(amt: int) -> void:
 		for w in job.workers:
 			var worker := Workers.workers[w]
 			if worker.energy <= 0:
-				print("worker " + worker.name + " won't do work becasue too tired baby.")
+				ColonyMain.loge("worker " + worker.name + " won't do work becasue too tired baby.")
 				useful_workers -= 1
 				continue
 

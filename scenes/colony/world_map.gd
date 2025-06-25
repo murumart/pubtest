@@ -4,6 +4,7 @@ const WMM := preload("res://scenes/colony/world_map_tilemap.gd")
 const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
+const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 
 const SAVE_PATH := "user://pubtest/colony/"
 const FILENAME := "worldmap.save"
@@ -30,7 +31,7 @@ func _tile_clicked(pos: Vector2i, tiletype: Vector2i, claimed: bool) -> void:
 	if not claimed:
 		for cmd in world_map.claimed_tiles:
 			if cmd.distance_squared_to(pos) <= 2:
-				print("you claimed this tile!!! wow!!!")
+				ColonyMain.loge("you claimed this tile!!! wow!!!")
 				world_map.claimed_tiles.append(pos)
 				return
 		return

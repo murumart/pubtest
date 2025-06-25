@@ -2,6 +2,7 @@ const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
 const Jobs = preload("res://scenes/colony/jobs.gd")
 const Workers = preload("res://scenes/colony/workers.gd")
+const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 
 const DAY_TIME := 60 * 18
 
@@ -22,6 +23,7 @@ static var day: int:
 static func _static_init() -> void:
 	resources = get_data_resources()
 	time = DAY_TIME
+	day = 1
 	incri("food", 30)
 	incri("axe", 1)
 
@@ -49,6 +51,7 @@ static func pass_time(amt: int) -> void:
 static func increment_day() -> void:
 	day += 1
 	Workers.increment_day()
+	ColonyMain.loge("it's a new day (" + str(day) + ")")
 
 
 static func get_time_str() -> String:

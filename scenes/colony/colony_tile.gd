@@ -134,7 +134,6 @@ static func replace_tile(
 
 func if_overlap_adjust_jobs(_pos: Vector2i, overlapping: Array) -> bool:
 	if not overlapping.is_empty():
-		print("tile occupied")
 		await ui.local_job_worker_adjust(overlapping[0])
 		ui.update_active_jobs(jobs)
 		return true
