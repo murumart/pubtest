@@ -79,7 +79,8 @@ func _tile_clicked(pos: Vector2i) -> void:
 	var aval_jobs: Dictionary[String, Jobs.Job] = {}
 	match type:
 		TileTypes.TREE:
-			var overlapping := jobs.filter(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos)
+			var overlapping := jobs.filter(func(j: Jobs.Job) -> bool:
+				return is_instance_valid(j) and j.map_tile == pos)
 			if not overlapping.is_empty():
 				print("tile occupied")
 				await ui.local_job_worker_adjust(jobs.find(overlapping[0]))
@@ -91,6 +92,9 @@ func _tile_clicked(pos: Vector2i) -> void:
 	ui.add_child(sp)
 	var job := await CtileJobs.select_job(sp, aval_jobs)
 	if job != null:
+		if job is Jobs.JobError:
+			SOL.vfx("damage_number", Vector2(pos) * 16, {text = job.title})
+			return
 		jobs.append(job)
 		ui.update_active_jobs(jobs)
 

@@ -4,10 +4,6 @@ extends CanvasLayer
 
 signal fade_finished
 
-const SCREEN_SIZE := Vector2(160, 120)
-const HALF_SCREEN_SIZE := Vector2(80, 60)
-const SCREEN_CENTER := HALF_SCREEN_SIZE
-
 @export var show_fps := false
 var fps_label: Label
 
@@ -48,7 +44,7 @@ func fade_screen(start: Color, end: Color, time := 1.0, options := {}) -> void:
 			child.queue_free()
 	var tw := create_tween()
 	var rect := ColorRect.new()
-	rect.size = SCREEN_SIZE
+	rect.size = get_window().get_size_with_decorations()
 	rect.color = start
 	screen_fade_order.add_child(rect)
 	tw.tween_property(rect, "color", end, time)
@@ -107,7 +103,7 @@ func vfx(nomen: StringName, pos := Vector2(), options := {}) -> Node:
 	# this solution was found after much testing.
 	# not perfect...
 	if not "global_position" in parent:
-		effect.global_position = pos + SCREEN_SIZE / 2.0
+		effect.global_position = pos + get_window().get_size_with_decorations() / 2.0
 	else:
 		effect.global_position = pos
 

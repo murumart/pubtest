@@ -17,7 +17,11 @@ static func select_job(sp: SelectionPopup, aval_jobs: Dictionary) -> Job:
 			.set_result_callable(sp.wait_item_result)
 			.set_ok_cancel(false, true))
 	var job: Jobs.Job = j if not j is int else null
-	if job != null and job.can_register():
+	if job != null:
+		job = job.can_register()
+		if job is not Jobs.DoableJob:
+			print("jobv error: " + job.title)
+			return job
 		Jobs.add(job)
 		print("added jop to " + str(job.map_tile))
 		return job
@@ -33,6 +37,7 @@ static func get_tree_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[Stri
 		job.energy_usage = 35
 		job.skill_reductions = {"woodcutting": 4}
 		job.skill_rewards = {"woodcutting": 1}
+		job.tools_required = {"axe": 1}
 		job.finished = Jobs.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
 		d["chop tree"] = job
 	if true:
@@ -41,6 +46,7 @@ static func get_tree_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[Stri
 		job.energy_usage = 12
 		job.skill_reductions = {"arborist": 5}
 		job.skill_rewards = {"arborist": 2}
+		job.tools_required = {"scissors": 1}
 		d["gather seeds"] = job
 	if true:
 		var job := Jobs.mk("hug tree").csttime(1).cstloc(ctile_pos, pos)

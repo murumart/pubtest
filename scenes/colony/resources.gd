@@ -23,6 +23,7 @@ static func _static_init() -> void:
 	resources = get_data_resources()
 	time = DAY_TIME
 	incri("food", 30)
+	incri("axe", 1)
 
 
 static func get_data_resources() -> Dictionary[StringName, int]:

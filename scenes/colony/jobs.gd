@@ -4,8 +4,9 @@ const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
 const Resources = preload("res://scenes/colony/resources.gd")
 const Workers = preload("res://scenes/colony/workers.gd")
+const Jobs = preload("res://scenes/colony/jobs.gd")
 
-static var jobs: Array[Job]
+static var jobs: Array[DoableJob]
 
 
 static func _static_init() -> void:
@@ -15,12 +16,18 @@ static func _static_init() -> void:
 
 
 static func mk(title: String = "") -> Job:
-	var j := Job.new()
+	var j := DoableJob.new()
 	j.title = title
 	return j
 
 
-static func add(job: Job) -> int:
+static func err(title: String) -> JobError:
+	var j := JobError.new()
+	j.title = title
+	return j
+
+
+static func add(job: DoableJob) -> int:
 	for inp in job.input_resources:
 		Resources.incri(inp, -job.input_resources[inp])
 	jobs.append(job)
@@ -44,11 +51,11 @@ static func cancel_job_j(job: Job) -> void:
 
 
 static func assign_to_job(worker_: int, job_: Variant) -> void:
-	var job: Job
+	var job: DoableJob
 
 	if job_ is int:
 		job = jobs[job_]
-	elif job_ is Job:
+	elif job_ is DoableJob:
 		job = job_
 	else: assert(false, "invalid job")
 
@@ -76,6 +83,7 @@ class Job:
 	var title: String
 	# input resources are removed from main resources on creation
 	var input_resources: Dictionary[String, int]
+	var tools_required: Dictionary[String, int]
 	var rewards: Dictionary[String, int]
 	var skill_reductions: Dictionary[String, float]
 	var skill_rewards: Dictionary[String, int]
@@ -90,21 +98,14 @@ class Job:
 	var registred := false
 
 
-	func can_register() -> bool:
+	func can_register() -> Job:
 		for inp in input_resources:
-			if Resources.resources[inp] < input_resources[inp]:
-				return false
-		return true
-
-
-	func finish() -> void:
-		finished.call()
-		for rew in rewards:
-			Resources.incri(rew, rewards[rew])
-		for w in workers:
-			var worker := Workers.workers[w]
-			worker.energy -= roundi(get_energy_usage(worker) / float(workers.size()))
-		free_workers()
+			if Resources.resources.get(inp, 0) < input_resources[inp]:
+				return Jobs.err("not enough resources")
+		for t in tools_required:
+			if Resources.resources.get(t, 0) < tools_required[t]:
+				return Jobs.err("missing tools")
+		return self
 
 
 	func cancel() -> void:
@@ -188,6 +189,13 @@ class Job:
 					txt += Workers.workers[w].name
 					if w != workers[-1]: txt += ", "
 
+		if not tools_required.is_empty():
+			txt += "\nrequired tools:"
+			for tool in tools_required:
+				var amt := tools_required[tool]
+				txt += "\n    " + tool
+				if amt > 1:
+					txt += ": " + str(amt)
 		if not input_resources.is_empty():
 			txt += "\ninput resources:"
 			for ir in input_resources:
@@ -197,6 +205,27 @@ class Job:
 			for rw in rewards:
 				txt += "\n    " + rw + ": " + str(rewards[rw])
 		return txt
+
+
+	func finish() -> void:
+		assert(false, "Unimplemented!")
+
+
+class JobError extends Job:
+
+	func finish() -> void:
+		assert(false, "Error! " + title)
+
+
+class DoableJob extends Job:
+	func finish() -> void:
+		finished.call()
+		for rew in rewards:
+			Resources.incri(rew, rewards[rew])
+		for w in workers:
+			var worker := Workers.workers[w]
+			worker.energy -= roundi(get_energy_usage(worker) / float(workers.size()))
+		free_workers()
 
 
 static func replace_tile(
