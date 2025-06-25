@@ -29,7 +29,6 @@ var ctile_type: Vector2i
 var jobs: Array[Jobs.Job]:
 	get:
 		jobs = jobs.filter(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j != null)
-		print("jobs acccessed: ", jobs)
 		return jobs
 @onready var tiles: TileMapLayer = $Tiles
 @export var ui: CTileUI

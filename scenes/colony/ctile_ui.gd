@@ -91,6 +91,20 @@ func update_cursor(tpos: Vector2i, tile: ColonyTile) -> void:
 	tile_info_label.text += "\nType: " + str(TileTypes.find_key(tile.tiles.get_cell_atlas_coords(tpos))).to_lower()
 	tile_info_label.text += "\nColony Tile at: " + str(tile.ctile_pos)
 
+	var jobshere := tile.jobs.filter(func(j: Jobs.Job) -> bool:
+		return j.ctile == tile.ctile_pos and j.map_tile == tpos)
+	if not jobshere.is_empty():
+		tile_info_label.text += "\nJobs:"
+		for j in jobshere:
+			tile_info_label.text += "\n    " + j.shortinfo()
+
+	var workershere := Workers.workers.filter(func(w: Workers.Worker) -> bool:
+		return w.living_ctile == tile.ctile_pos and w.living_maptile == tpos)
+	if not workershere.is_empty():
+		tile_info_label.text += "\nWorkers:"
+		for w in workershere:
+			tile_info_label.text += "\n    " + w.name
+
 
 func update_resources() -> void:
 	var txt := ""

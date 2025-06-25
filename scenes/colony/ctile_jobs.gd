@@ -28,7 +28,7 @@ static func get_tree_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[Stri
 	var d: Dictionary[String, Job]
 
 	if true:
-		var job := Jobs.mk().csttime(60).cstloc(ctile_pos, pos)
+		var job := Jobs.mk("chop tree").csttime(60).cstloc(ctile_pos, pos)
 		job.rewards = {"wood": 10}
 		job.energy_usage = 35
 		job.skill_reductions = {"woodcutting": 4}
@@ -36,14 +36,14 @@ static func get_tree_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[Stri
 		job.finished = Jobs.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
 		d["chop tree"] = job
 	if true:
-		var job := Jobs.mk().csttime(60 * 1.6).cstloc(ctile_pos, pos)
+		var job := Jobs.mk("gather seeds").csttime(60 * 1.6).cstloc(ctile_pos, pos)
 		job.rewards = {"seedling": 3}
 		job.energy_usage = 12
 		job.skill_reductions = {"arborist": 5}
 		job.skill_rewards = {"arborist": 2}
 		d["gather seeds"] = job
 	if true:
-		var job := Jobs.mk().csttime(1).cstloc(ctile_pos, pos)
+		var job := Jobs.mk("hug tree").csttime(1).cstloc(ctile_pos, pos)
 		job.energy_usage = 1
 		job.rewards = {"love": 1}
 		job.skill_rewards = {"loving": 1}

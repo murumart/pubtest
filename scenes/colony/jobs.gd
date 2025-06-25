@@ -14,8 +14,10 @@ static func _static_init() -> void:
 	print("jobs initted")
 
 
-static func mk() -> Job:
-	return Job.new()
+static func mk(title: String = "") -> Job:
+	var j := Job.new()
+	j.title = title
+	return j
 
 
 static func add(job: Job) -> int:
@@ -71,6 +73,7 @@ static func pass_time(amt: int) -> void:
 class Job:
 	var finished: Callable = func() -> void: pass
 
+	var title: String
 	# input resources are removed from main resources on creation
 	var input_resources: Dictionary[String, int]
 	var rewards: Dictionary[String, int]
@@ -163,7 +166,7 @@ class Job:
 
 
 	func shortinfo() -> String:
-		var txt := "job"
+		var txt := "job" if not title else title
 		if map_tile != Vector2i.ONE * -1:
 			txt += " at " + str(map_tile)
 		if not workers.is_empty():
@@ -172,7 +175,7 @@ class Job:
 
 
 	func info(extra: bool = false) -> String:
-		var txt := ""
+		var txt := title + " "
 		if registred:
 			var trdc := get_time_req()
 			txt += "completion: "
