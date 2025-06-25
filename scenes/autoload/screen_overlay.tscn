@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2dvhq1ryqfab"]
+
+[ext_resource type="Script" uid="uid://dep1he5a8gs3e" path="res://scenes/autoload/screen_overlay.gd" id="1_s8jnh"]
+
+[node name="SOL" type="CanvasLayer"]
+script = ExtResource("1_s8jnh")
+
+[node name="ScreenFadeOrderer" type="Node2D" parent="."]
+z_index = 11

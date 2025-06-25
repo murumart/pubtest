@@ -25,6 +25,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 LTS="*res://scenes/autoload/level_transition.tscn"
+SOL="*res://scenes/autoload/screen_overlay.tscn"
+SND="*res://scenes/autoload/sound.gd"
 
 [debug]
 
