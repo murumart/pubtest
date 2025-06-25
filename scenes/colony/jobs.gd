@@ -19,7 +19,10 @@ static func mk() -> Job:
 
 
 static func add(job: Job) -> int:
+	for inp in job.input_resources:
+		Resources.incri(inp, -job.input_resources[inp])
 	jobs.append(job)
+	job.registred = true
 	return jobs.size() - 1
 
 
@@ -28,6 +31,7 @@ static func get_job(id: int) -> Job:
 
 
 static func cancel_job(id: int) -> void:
+	jobs[id].registred = false
 	jobs[id] = null
 
 
@@ -71,6 +75,7 @@ class Job:
 	var input_resources: Dictionary[String, int]
 	var rewards: Dictionary[String, int]
 	var skill_reductions: Dictionary[String, float]
+	var skill_rewards: Dictionary[String, int]
 	var used_time: int # increases as job is completed
 	var max_time: int
 	var energy_usage: int
@@ -79,6 +84,14 @@ class Job:
 	var map_tile: Vector2i = Vector2i.ONE * -1
 	## job's world map tile (colony tile) position, if applicable
 	var ctile: Vector2i = Vector2i.ONE * -1
+	var registred := false
+
+
+	func can_register() -> bool:
+		for inp in input_resources:
+			if Resources.resources[inp] < input_resources[inp]:
+				return false
+		return true
 
 
 	func finish() -> void:
@@ -110,9 +123,15 @@ class Job:
 		Workers.workers[id].on_jobs.erase(self)
 
 
-	func set_time(to: int) -> Job:
+	func csttime(to: int) -> Job:
 		max_time = to
 		used_time = 0
+		return self
+
+
+	func cstloc(cpos: Vector2i, mappos: Vector2i) -> Job:
+		ctile = cpos
+		map_tile = mappos
 		return self
 
 
@@ -154,25 +173,26 @@ class Job:
 
 	func info(extra: bool = false) -> String:
 		var txt := ""
-		var trdc := get_time_req()
-		txt += "completion: "
-		if workers.is_empty():
-			txt += "no workers assigned"
-		else:
-			txt += "%s/%s" % [used_time, trdc]
-			txt += "\nworkers: "
-			for w in workers:
-				txt += Workers.workers[w].name
-				if w != workers[-1]: txt += ", "
+		if registred:
+			var trdc := get_time_req()
+			txt += "completion: "
+			if workers.is_empty():
+				txt += "no workers assigned"
+			else:
+				txt += "%s/%s" % [used_time, trdc]
+				txt += "\nworkers: "
+				for w in workers:
+					txt += Workers.workers[w].name
+					if w != workers[-1]: txt += ", "
 
-		if not rewards.is_empty():
-			txt += "\nrewards:"
-			for rw in rewards:
-				txt += "\n    " + rw + ": " + str(rewards[rw])
 		if not input_resources.is_empty():
 			txt += "\ninput resources:"
 			for ir in input_resources:
 				txt += "\n    " + ir + ": " + str(input_resources[ir])
+		if not rewards.is_empty():
+			txt += "\nrewards:"
+			for rw in rewards:
+				txt += "\n    " + rw + ": " + str(rewards[rw])
 		return txt
 
 

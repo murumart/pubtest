@@ -75,6 +75,7 @@ static func increment_day() -> void:
 class Worker:
 	var name: String
 	var skills: Dictionary[String, int]
+	var experience: Dictionary[String, int]
 	var attributes: Dictionary[String, int]
 	var energy: int
 	var hp: float

@@ -8,6 +8,7 @@ const Jobs = preload("res://scenes/colony/jobs.gd")
 const CTileUI = preload("res://scenes/colony/ctile_ui.gd")
 const Resources = preload("res://scenes/colony/resources.gd")
 const Workers = preload("res://scenes/colony/workers.gd")
+const CtileJobs = preload("res://scenes/colony/ctile_jobs.gd")
 
 const TileTypes: Dictionary[StringName, Vector2i] = {
 	GRASS = Vector2i(0, 0),
@@ -74,6 +75,27 @@ func _unhandled_input(event: InputEvent) -> void:
 	ui.update_resources()
 
 
+func _tile_clicked(pos: Vector2i) -> void:
+	var type := tiles.get_cell_atlas_coords(pos)
+	var aval_jobs: Dictionary[String, Jobs.Job] = {}
+	match type:
+		TileTypes.TREE:
+			var overlapping := jobs.filter(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos)
+			if not overlapping.is_empty():
+				print("tile occupied")
+				await ui.local_job_worker_adjust(jobs.find(overlapping[0]))
+				ui.update_active_jobs(jobs)
+				return
+			aval_jobs.merge(CtileJobs.get_tree_jobs(pos, ctile_pos))
+
+	var sp := SelectionPopup.create()
+	ui.add_child(sp)
+	var job := await CtileJobs.select_job(sp, aval_jobs)
+	if job != null:
+		jobs.append(job)
+		ui.update_active_jobs(jobs)
+
+
 static func get_tiles(cpos: Vector2i) -> Dictionary:
 	return dat.gets(dk.SAVED_CTILES)[cpos]
 
@@ -84,51 +106,6 @@ static func get_tile(cpos: Vector2i, mappos: Vector2i) -> Vector2i:
 
 static func set_tile(cpos: Vector2i, mappos: Vector2i, to: Vector2i) -> void:
 	get_tiles(cpos)[mappos] = to
-
-
-func _tile_clicked(pos: Vector2i) -> void:
-	var type := tiles.get_cell_atlas_coords(pos)
-	var aval_jobs: Dictionary[String, Variant] = {}
-	match type:
-		TileTypes.TREE:
-			var overlapping := jobs.filter(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j.map_tile == pos)
-			if not overlapping.is_empty():
-				print("tile occupied")
-				await ui.local_job_worker_adjust(jobs.find(overlapping[0]))
-				ui.update_active_jobs(jobs)
-				return
-			aval_jobs = {
-				"cut tree": (func() -> Jobs.Job:
-					var job := Jobs.mk().set_time(60)
-					job.ctile = ctile_pos
-					job.map_tile = pos
-					job.rewards = {"wood": 10}
-					job.energy_usage = 35
-					job.skill_reductions = {"woodcutting": 4}
-					job.finished = Jobs.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
-					return job).call(),
-				"hug tree": (func() -> Jobs.Job:
-					var job := Jobs.mk().set_time(1)
-					job.ctile = ctile_pos
-					job.energy_usage = 1
-					job.map_tile = pos
-					job.rewards = {"love": 1}
-					return job).call(),
-			}
-			var sp := SelectionPopup.create()
-			ui.add_child(sp)
-			var j = await sp.pop(
-				sp.Parameters.new()
-					.set_inputs_dt(aval_jobs)
-					.set_title("select job")
-					.set_result_callable(sp.wait_item_result)
-					.set_ok_cancel(false, true))
-			var job: Jobs.Job = j if not j is int else null
-			if job != null:
-				Jobs.add(job)
-				jobs.append(job)
-				print("added jop to " + str(pos))
-			ui.update_active_jobs(jobs)
 
 
 func generate(type: Vector2i) -> void:
