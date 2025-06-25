@@ -97,3 +97,50 @@ static func get_building_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[
 		d["build house"] = job
 
 	return d
+
+
+static func get_cooking_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
+	var d: Dictionary[String, Job]
+
+	if true:
+		var job := Jobs.mk("cook fish").csttime(30).cstloc(ctile_pos, pos)
+		job.energy_usage = 15
+		job.input_resources = {"fish": 5} # TODO tags that can use any available resource
+		job.rewards = {"food": 5}
+		job.skill_reductions = {"cooking": 2}
+		job.skill_rewards = {"cooking": 1}
+		d["cook fish"] = job
+
+	return d
+
+
+static func get_fishing_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
+	var d: Dictionary[String, Job]
+
+	if true:
+		var job := Jobs.mk("fish barehanded").csttime(30).cstloc(ctile_pos, pos)
+		job.energy_usage = 35
+		job.rewards = {"fish": 1}
+		job.skill_reductions = {"fishing": 1}
+		job.skill_rewards = {"fishing": 5}
+		d["fish barehanded"] = job
+
+	if true:
+		var job := Jobs.mk("fish with spears").csttime(30).cstloc(ctile_pos, pos)
+		job.energy_usage = 30
+		job.rewards = {"fish": 2}
+		job.tools_required = {"spear": 1} # TODO maybe make tools owned by a job so you require multiple to do it
+		job.skill_reductions = {"fishing": 2}
+		job.skill_rewards = {"fishing": 2}
+		d["fish with spears"] = job
+
+	if true:
+		var job := Jobs.mk("fish with pole").csttime(30).cstloc(ctile_pos, pos)
+		job.energy_usage = 15
+		job.rewards = {"fish": 5}
+		job.tools_required = {"fishing pole": 1}
+		job.skill_reductions = {"fishing": 5}
+		job.skill_rewards = {"fishing": 1}
+		d["fish with pole"] = job
+
+	return d

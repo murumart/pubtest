@@ -1,11 +1,18 @@
 - [ ] world map
 	- [x] camera movement
 	- [x] tile selection
-	- [ ] claimed tiles visually different
+	- [x] claimed tiles visually different
 	- [x] claiming more tiles
+	- [ ] standing with civs and nature
 - [ ] city tile
 	- [x] camera movement
-	- [ ] interacting with tiles
+	- [x] interacting with tiles
+		- [ ] interacting with houses:
+			- [ ] option to move resident here
+		- [ ] building houses:
+			- [ ] register living space. new workers can come
+		- [ ] interacting with town centre:
+		- [ ] trade with parent
 	- [ ] job selection screen
 		- [x] choosing job
 		- [x] choosing workers
@@ -27,7 +34,7 @@
 	- [ ] fulfill mandate
 	- [ ] send off items at end of the week
 - [ ] buildings
-	- [ ] stat modifications
+	- [ ] stat modifications (can be done using the job getting functions... pass in extra context)
 	- [ ] areas of effect
 	- [ ] special jobs
 - [ ] ui

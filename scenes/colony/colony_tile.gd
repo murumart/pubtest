@@ -97,6 +97,14 @@ func _tile_clicked(pos: Vector2i) -> void:
 			if await if_overlap_adjust_jobs(pos, overlapping):
 				return
 			aval_jobs.merge(CtileJobs.get_building_jobs(pos, ctile_pos))
+		TileTypes.WATER:
+			if await if_overlap_adjust_jobs(pos, overlapping):
+				return
+			aval_jobs.merge(CtileJobs.get_fishing_jobs(pos, ctile_pos))
+		TileTypes.CAMPFIRE:
+			if await if_overlap_adjust_jobs(pos, overlapping):
+				return
+			aval_jobs.merge(CtileJobs.get_cooking_jobs(pos, ctile_pos))
 
 	var sp := SelectionPopup.create()
 	ui.add_child(sp)

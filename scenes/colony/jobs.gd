@@ -30,7 +30,11 @@ static func err(title: String) -> JobError:
 
 static func add(job: DoableJob) -> int:
 	for inp in job.input_resources:
+		assert(Resources.resources.get(inp, 0) >= job.input_resources[inp])
 		Resources.incri(inp, -job.input_resources[inp])
+	for inp in job.tools_required:
+		assert(Resources.resources.get(inp, 0) >= job.tools_required[inp])
+		Resources.incri(inp, -job.tools_required[inp])
 	jobs.append(job)
 	job.registred = true
 	return jobs.size() - 1
@@ -42,6 +46,8 @@ static func get_job(id: int) -> Job:
 
 static func cancel_job(id: int) -> void:
 	jobs[id].registred = false
+	jobs[id].return_materials()
+	jobs[id].return_tools()
 	jobs[id] = null
 
 
@@ -187,6 +193,16 @@ class Job:
 		return maxi(1, roundi(energy_usage - reduction))
 
 
+	func return_tools() -> void:
+		for t in tools_required:
+			Resources.incri(t, tools_required[t])
+
+
+	func return_materials() -> void:
+		for m in input_resources:
+			Resources.incri(m, input_resources[m])
+
+
 	func shortinfo() -> String:
 		var txt := "job" if not title else title
 		if map_tile != Vector2i.ONE * -1:
@@ -258,4 +274,5 @@ class DoableJob extends Job:
 			var worker := Workers.workers[w]
 			worker.try_levelup()
 			#worker.energy -= roundi(get_energy_usage(worker) / float(workers.size()))
+		return_tools()
 		free_workers()

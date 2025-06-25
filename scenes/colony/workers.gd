@@ -92,7 +92,7 @@ class Worker:
 
 	func try_levelup() -> void:
 		for skill in experience:
-			while experience[skill] > skills.get(skill, 0) * 10:
+			while experience[skill] >= skills.get(skill, 0) * 10:
 				experience[skill] -= skills.get(skill, 0) * 10
 				skills[skill] = skills.get(skill, 0) + 1
 				ColonyMain.loge("worker " + name + " leveled up " + skill + " to " + str(skills[skill]))
