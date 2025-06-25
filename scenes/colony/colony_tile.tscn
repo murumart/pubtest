@@ -78,7 +78,20 @@ offset_left = 100.0
 offset_top = 18.0
 offset_right = 168.0
 offset_bottom = 49.0
-text = "advance time 1 hour"
+text = "advance time"
+
+[node name="TextEdit" type="LineEdit" parent="UI/Control/TimeButton"]
+layout_mode = 0
+offset_left = 115.0
+offset_top = -2.0
+offset_right = 205.0
+offset_bottom = 32.0
+text = "60"
+placeholder_text = "howmuch"
+context_menu_enabled = false
+emoji_menu_enabled = false
+virtual_keyboard_type = 2
+middle_mouse_paste_enabled = false
 
 [node name="TileInfo" type="Label" parent="UI/Control"]
 layout_mode = 0

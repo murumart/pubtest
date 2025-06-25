@@ -25,7 +25,11 @@ const SAVE_PATH := "user://pubtest/colony/tiles/"
 
 var ctile_pos: Vector2i = WCOORD
 var ctile_type: Vector2i
-var jobs: Array[Jobs.Job]
+var jobs: Array[Jobs.Job]:
+	get:
+		jobs = jobs.filter(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j != null)
+		print("jobs acccessed: ", jobs)
+		return jobs
 @onready var tiles: TileMapLayer = $Tiles
 @export var ui: CTileUI
 
@@ -68,6 +72,18 @@ func _unhandled_input(event: InputEvent) -> void:
 			_tile_clicked(tpos)
 
 	ui.update_resources()
+
+
+static func get_tiles(cpos: Vector2i) -> Dictionary:
+	return dat.gets(dk.SAVED_CTILES)[cpos]
+
+
+static func get_tile(cpos: Vector2i, mappos: Vector2i) -> Vector2i:
+	return get_tiles(cpos)[mappos]
+
+
+static func set_tile(cpos: Vector2i, mappos: Vector2i, to: Vector2i) -> void:
+	get_tiles(cpos)[mappos] = to
 
 
 func _tile_clicked(pos: Vector2i) -> void:

@@ -15,7 +15,7 @@ var fps_label: Label
 
 
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	#Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	if show_fps:
 		fps_label = Label.new()
 		add_ui_child(fps_label, 120, false)

@@ -3,10 +3,14 @@ const FILENAME := "save"
 
 enum Keys {
 	CENTRE_TILE,
+
 	SAVED_CTILES,
 	WORLD_MAP,
 	RESOURCES,
+
 	TIME,
+	DAY,
+
 	JOBS,
 	WORKERS,
 }
@@ -18,7 +22,6 @@ static func _static_init() -> void:
 	data[Keys.SAVED_CTILES] = {}
 	var r: Dictionary[StringName, int] = {}
 	data[Keys.RESOURCES] = r
-	data[Keys.TIME] = 18 * 60
 	print("data initted")
 
 

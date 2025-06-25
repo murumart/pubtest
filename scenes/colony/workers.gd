@@ -2,6 +2,8 @@ const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
 const Jobs = preload("res://scenes/colony/jobs.gd")
 const Resources = preload("res://scenes/colony/resources.gd")
+const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+const TileTypes = ColonyTile.TileTypes
 
 static var workers: Array[Worker] = []
 
@@ -58,6 +60,16 @@ static func pass_time(amt: int) -> void:
 				worker.since_last_eat = 0
 			elif worker.since_last_eat > feeding_time * 2:
 				worker.hp -= amt / 50.0
+
+
+static func increment_day() -> void:
+	for w in workers:
+		var replenishment := 0.5
+		var living_tile: Vector2i = ColonyTile.get_tile(w.living_ctile, w.living_maptile)
+		match living_tile:
+			TileTypes.HOUSE: replenishment = 0.75
+			TileTypes.TOWN_CENTRE: replenishment = 0.7
+		w.energy = mini(w.attributes["max energy"], w.energy + w.attributes["max energy"] * replenishment)
 
 
 class Worker:

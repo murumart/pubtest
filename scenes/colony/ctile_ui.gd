@@ -26,7 +26,8 @@ func _ready() -> void:
 		LTS.change_scene_to("res://scenes/colony/world_map.tscn")
 	)
 	%TimeButton.pressed.connect(func():
-		time_pass_request.emit(1 * 60)
+		var amt := int(%TimeButton.get_child(0).text)
+		time_pass_request.emit(amt)
 	)
 	%WorkersButton.pressed.connect(func():
 		var wl := $WorkersButton/PanelContainer
@@ -93,7 +94,7 @@ func update_resources() -> void:
 		txt += str(k) + ": " + str(res.resources[k]) + "\n"
 	resource_info_label.text = txt
 
-	time_info_label.text = "Time: " + str(res.time)
+	time_info_label.text = "Time: " + str(res.time) + " (%s)" % res.get_time_str() + "\nDay: " + str(res.day)
 
 
 func update_active_jobs(jobs: Array[Jobs.Job]) -> void:

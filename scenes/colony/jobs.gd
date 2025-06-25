@@ -87,7 +87,7 @@ class Job:
 			Resources.incri(rew, rewards[rew])
 		for w in workers:
 			var worker := Workers.workers[w]
-			worker.energy -= get_energy_usage(worker)
+			worker.energy -= roundi(get_energy_usage(worker) / float(workers.size()))
 		free_workers()
 
 
@@ -125,6 +125,8 @@ class Job:
 		var reduction := 0.0
 		for w in workers:
 			var worker := Workers.workers[w]
+			if worker.energy <= 0:
+				continue
 			var r := 2.0
 			for sk in skill_reductions:
 				r += worker.skills.get(sk, 0) * skill_reductions[sk]
