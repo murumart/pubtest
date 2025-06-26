@@ -32,7 +32,3 @@ func change_scene_to(path: String, options := {}) -> void:
 func get_current_scene() -> Node:
 	#return get_tree().current_scene
 	return get_tree().root.get_child(-1)
-
-
-func enter_battle(_info, _options := {}) -> void:
-	pass

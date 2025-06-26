@@ -1,10 +1,8 @@
-[gd_scene load_steps=9 format=4 uid="uid://bnliuux13n0y0"]
+[gd_scene load_steps=6 format=4 uid="uid://bnliuux13n0y0"]
 
 [ext_resource type="Script" uid="uid://pipxb3uloq8y" path="res://scenes/colony/world/colony_tile.gd" id="1_ns7el"]
 [ext_resource type="Script" uid="uid://cihslv5rmy3se" path="res://scenes/colony/camera.gd" id="2_lcfix"]
 [ext_resource type="Texture2D" uid="uid://bwax1j0pombal" path="res://scenes/colony/tiletiles.png" id="2_lxjir"]
-[ext_resource type="Script" uid="uid://csq3msda82v5t" path="res://scenes/colony/world/ctile_ui.gd" id="4_5opje"]
-[ext_resource type="Texture2D" uid="uid://b0brdy1twxtn" path="res://scenes/rpg_battle/gregd/dice/die1.png" id="4_elosl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_elosl"]
 texture = ExtResource("2_lxjir")
@@ -28,12 +26,9 @@ texture = ExtResource("2_lxjir")
 [sub_resource type="TileSet" id="TileSet_5opje"]
 sources/0 = SubResource("TileSetAtlasSource_elosl")
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_elosl"]
-blend_mode = 1
-
 [node name="ColonyTile" type="Node2D" node_paths=PackedStringArray("ui")]
 script = ExtResource("1_ns7el")
-ui = NodePath("UI/Control")
+ui = NodePath("")
 
 [node name="Tiles" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAD+/wAAAAAAAAAAAAD+/wEAAAAAAAAAAAD//wEAAAADAAAAAAD//wAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAD+/wIAAAAAAAAAAAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAD//wIAAAAAAAAAAAACAAIAAAAAAAAAAAACAAEAAAAAAAAAAAACAAAAAAAAAAAAAAACAP//AAAAAAAAAAACAP7/AAAAAAAAAAABAP7/AAAAAAAAAAAAAP7/AAAAAAAAAAD///7/AAAAAAAAAAD+//7/AAAAAAAAAAD+////AAADAAAAAAD/////AAAAAAAAAAAAAP//AAADAAAAAAABAP//AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD9//3/AAAAAAAAAAD+//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAACAP3/AAAAAAAAAAA=")
@@ -41,172 +36,6 @@ tile_set = SubResource("TileSet_5opje")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(89, 90)
+enabled = false
 zoom = Vector2(2.555, 2.555)
 script = ExtResource("2_lcfix")
-
-[node name="UI" type="CanvasLayer" parent="."]
-
-[node name="Control" type="Control" parent="UI" node_paths=PackedStringArray("cursor", "tile_info_label", "resource_info_label", "time_info_label", "active_jobs_list", "workers_list")]
-layout_mode = 3
-anchor_right = 0.977
-anchor_bottom = 0.967
-offset_left = -18.0
-offset_top = -17.0
-offset_right = 0.399963
-offset_bottom = -0.200012
-mouse_filter = 2
-script = ExtResource("4_5opje")
-cursor = NodePath("../../Cursor")
-tile_info_label = NodePath("TileInfo")
-resource_info_label = NodePath("ScrollContainer/ResourcesInfo")
-time_info_label = NodePath("Time")
-active_jobs_list = NodePath("ActiveJobs/ActiveJobsList")
-workers_list = NodePath("WorkersButton/PanelContainer/ScrollContainer/WorkersList")
-
-[node name="BackButton" type="Button" parent="UI/Control"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.026
-anchor_top = 0.032
-anchor_right = 0.111
-anchor_bottom = 0.084
-offset_left = 0.199999
-offset_top = -0.104
-offset_right = 0.199989
-offset_bottom = -0.148003
-text = "go back"
-
-[node name="TimeButton" type="Button" parent="UI/Control"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.125
-anchor_top = 0.03
-anchor_right = 0.265
-anchor_bottom = 0.082
-offset_top = 0.0900002
-offset_right = -44.0
-offset_bottom = 0.0459976
-text = "advance time"
-
-[node name="TextEdit" type="LineEdit" parent="UI/Control/TimeButton"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.83
-anchor_bottom = 1.032
-offset_left = 3.0
-offset_top = -2.0
-offset_right = 0.0399933
-offset_bottom = 0.00799751
-text = "60"
-placeholder_text = "howmuch"
-context_menu_enabled = false
-emoji_menu_enabled = false
-virtual_keyboard_type = 2
-middle_mouse_paste_enabled = false
-
-[node name="TileInfo" type="Label" parent="UI/Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.026
-anchor_top = 0.134
-anchor_right = 0.124
-anchor_bottom = 0.173
-offset_left = 0.199999
-offset_top = 0.0019989
-offset_right = -38.2
-offset_bottom = -0.281006
-text = "ingredible"
-
-[node name="WorkersButton" type="Button" parent="UI/Control"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.035
-anchor_top = 0.779
-anchor_right = 0.192
-anchor_bottom = 0.831
-offset_top = -0.0630188
-offset_right = 0.399994
-offset_bottom = -0.107025
-text = "show workersq"
-metadata/_edit_use_anchors_ = true
-
-[node name="PanelContainer" type="PanelContainer" parent="UI/Control/WorkersButton"]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_top = -14.194
-anchor_right = 3.476
-offset_left = -5.0
-offset_top = 0.0140076
-offset_right = 0.0239868
-offset_bottom = -7.0
-
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/Control/WorkersButton/PanelContainer"]
-layout_mode = 2
-
-[node name="WorkersList" type="ItemList" parent="UI/Control/WorkersButton/PanelContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ActiveJobs" type="ScrollContainer" parent="UI/Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.03
-anchor_top = 0.846
-anchor_right = 0.404
-anchor_bottom = 1.023
-offset_top = -0.0620117
-offset_right = -0.200012
-offset_bottom = 0.268982
-
-[node name="ActiveJobsList" type="ItemList" parent="UI/Control/ActiveJobs"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-allow_search = false
-
-[node name="Time" type="Label" parent="UI/Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.612
-anchor_top = 0.042
-anchor_right = 0.724
-anchor_bottom = 0.08
-offset_left = 0.399963
-offset_top = -0.0740013
-offset_right = -49.2
-offset_bottom = 0.239998
-text = "your time..."
-horizontal_alignment = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/Control"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.8
-anchor_top = 0.05
-anchor_right = 1.0
-anchor_bottom = 0.541
-offset_top = 0.15
-offset_right = 4.0
-offset_bottom = 0.0229797
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ResourcesInfo" type="Label" parent="UI/Control/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 2
-text = "roisorces..."
-horizontal_alignment = 2
-
-[node name="Cursor" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 1, 0.309804)
-material = SubResource("CanvasItemMaterial_elosl")
-texture = ExtResource("4_elosl")
-centered = false

@@ -27,6 +27,7 @@ const WCOORD := Vector2i.ONE * -1
 
 const SAVE_PATH := "user://pubtest/colony/tiles/"
 
+var focused := false
 var ctile_pos: Vector2i = WCOORD
 var ctile_type: Vector2i
 var jobs: Array[Jobs.Job]:
@@ -37,21 +38,17 @@ var jobs: Array[Jobs.Job]:
 @export var ui: CTileUI
 
 
-func _option_init(options := {}) -> void:
-	ctile_pos = options.get("pos", WCOORD)
-	ctile_type = options.get("type", WCOORD)
+func map_init(cpos: Vector2i) -> void:
+	ctile_pos = cpos
 	if not save_exists():
-		generate(ctile_type)
+		generate()
+		_save()
 	else:
 		_load()
 
 
 func _ready() -> void:
-	ui.time_pass_request.connect(func(amt: int) -> void:
-		_save()
-		Resources.pass_time(amt)
-		LTS.change_scene_to("res://scenes/colony/world/colony_tile.tscn", {pos = ctile_pos, type = ctile_type})
-	)
+
 	tiles.clear()
 	ui.update_active_jobs(jobs)
 	ui.active_jobs_list.mouse_entered.connect(func() -> void: ui.update_active_jobs(jobs))
@@ -63,15 +60,22 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	var mousepos := tiles.to_local(get_global_mouse_position())
+	var tpos := tiles.local_to_map(mousepos)
+	if tpos.x < 0 or tpos.x >= SIZE or tpos.y < 0 or tpos.y >= SIZE:
+		focused = false
+		return
+
+	if not focused:
+		ui.update_active_jobs(jobs)
+	focused = true
+
 	if event is InputEventMouseMotion:
-		var epos: Vector2 = get_canvas_transform().affine_inverse() * event.global_position
-		var tpos := tiles.local_to_map(tiles.to_local(epos))
 		ui.update_cursor(tpos, self)
 
 	if event is InputEventMouseButton:
-		var epos: Vector2 = get_canvas_transform().affine_inverse() * event.global_position
-		var tpos := tiles.local_to_map(tiles.to_local(epos))
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			get_viewport().set_input_as_handled()
 			_tile_clicked(tpos)
 
 	ui.update_resources()
@@ -148,13 +152,13 @@ func if_overlap_adjust_jobs(_pos: Vector2i, overlapping: Array) -> bool:
 	return false
 
 
-func generate(_type: Vector2i) -> void:
+func generate() -> void:
 	var noise := WorldMapTilemap.noise
 	var tile: Vector2i
 
 	for y in SIZE:
 		for x in SIZE:
-			var wpos := ctile_pos * WorldMapTilemap.SIZE + Vector2i(x, y)
+			var wpos := ctile_pos * SIZE + Vector2i(x, y)
 			var nval := noise.get_noise_2d(wpos.x, wpos.y)
 			if nval < 0:
 				tile = TileTypes.WATER

@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://rrf7b8giufkw"]
+[gd_scene load_steps=12 format=3 uid="uid://rrf7b8giufkw"]
 
 [ext_resource type="Texture2D" uid="uid://bhn2t2gphcds8" path="res://scenes/colony/worldmap.png" id="1_4tflw"]
 [ext_resource type="Script" uid="uid://ckk0b5e1lftp5" path="res://scenes/colony/world/world_map.gd" id="2_twq6b"]
 [ext_resource type="Script" uid="uid://cc1irm8tv5g1m" path="res://scenes/colony/world/world_map_tilemap.gd" id="3_e85be"]
 [ext_resource type="Texture2D" uid="uid://b0brdy1twxtn" path="res://scenes/rpg_battle/gregd/dice/die1.png" id="3_ic71m"]
 [ext_resource type="Script" uid="uid://cihslv5rmy3se" path="res://scenes/colony/camera.gd" id="4_twq6b"]
+[ext_resource type="PackedScene" uid="uid://da3eg21gnqrnr" path="res://scenes/colony/world/ctile_ui.tscn" id="6_awj5o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e85be"]
 texture = ExtResource("1_4tflw")
@@ -21,6 +22,9 @@ frequency = 0.0079
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qoe1m"]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_awj5o"]
+blend_mode = 1
+
 [node name="WorldMap" type="Control" groups=["save_me"]]
 layout_mode = 3
 anchors_preset = 15
@@ -28,10 +32,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("2_twq6b")
 
 [node name="WorldMap" type="TileMapLayer" parent="." node_paths=PackedStringArray("target_display", "info", "drawer")]
-z_index = -1
 tile_set = SubResource("TileSet_34qnh")
 script = ExtResource("3_e85be")
 _noise = SubResource("FastNoiseLite_ic71m")
@@ -47,24 +51,50 @@ centered = false
 
 [node name="Draw" type="Node2D" parent="WorldMap"]
 
+[node name="CTiles" type="Node2D" parent="."]
+
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(224, 168)
+position = Vector2(400, 300)
 script = ExtResource("4_twq6b")
+
+[node name="Cursor" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.309804)
+material = SubResource("CanvasItemMaterial_awj5o")
+texture = ExtResource("3_ic71m")
+centered = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="TileInfo" type="Label" parent="CanvasLayer"]
-offset_right = 40.0
-offset_bottom = 23.0
+anchors_preset = -1
+anchor_left = 0.029
+anchor_top = 0.035
+anchor_right = 0.122
+anchor_bottom = 0.073
+offset_left = -0.200001
+offset_right = 0.399994
+offset_bottom = 0.199997
+text = "TILE INFO"
 
 [node name="CivInfo" type="Label" parent="CanvasLayer"]
 anchors_preset = -1
-anchor_left = 0.575
-anchor_top = 0.048
-anchor_right = 0.753
-anchor_bottom = 0.23
-offset_left = -3.05176e-05
-offset_top = 0.199999
-offset_right = 4.59998
-offset_bottom = 3.0
+anchor_left = 0.416
+anchor_top = 0.825
+anchor_right = 0.6
+anchor_bottom = 1.0
+offset_left = 0.199982
+offset_top = -3.05176e-05
+offset_bottom = 7.0
+text = "CIVS INFO"
 horizontal_alignment = 2
+
+[node name="Ui" parent="CanvasLayer" node_paths=PackedStringArray("cursor") instance=ExtResource("6_awj5o")]
+anchor_right = 0.99825
+anchor_bottom = 0.998667
+offset_left = 1.0
+offset_top = -1.0
+offset_right = 0.400024
+cursor = NodePath("../../Cursor")
+metadata/_edit_use_anchors_ = true
+
+[editable path="CanvasLayer/Ui"]

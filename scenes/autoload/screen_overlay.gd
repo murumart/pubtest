@@ -23,7 +23,7 @@ func _input(_event: InputEvent) -> void:
 
 
 # when a node needs to be at the top of the world
-func add_ui_child(node: Node, custom_z_index := 0, delete_on_scene_change := true) -> void:
+func add_ui_child(node: Node, _custom_z_index := 0, delete_on_scene_change := true) -> void:
 	#var node2d := Node2D.new()
 	#add_child(node2d)
 	#node2d.z_index = custom_z_index

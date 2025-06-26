@@ -21,10 +21,6 @@ const Jobs = preload("res://scenes/colony/jobs.gd")
 
 
 func _ready() -> void:
-	%BackButton.pressed.connect(func():
-		owner._save()
-		LTS.change_scene_to("res://scenes/colony/world/world_map.tscn")
-	)
 	%TimeButton.pressed.connect(func():
 		var amt := int(%TimeButton.get_child(0).text)
 		time_pass_request.emit(amt)
@@ -86,7 +82,7 @@ func local_job_worker_adjust(job: Jobs.Job) -> void:
 
 
 func update_cursor(tpos: Vector2i, tile: ColonyTile) -> void:
-	cursor.global_position = tpos * tile.tiles.tile_set.tile_size
+	cursor.global_position = (tpos + tile.SIZE * tile.ctile_pos) * tile.tiles.tile_set.tile_size
 
 	tile_info_label.text = "Tile at " + str(tpos)
 	tile_info_label.text += "\nType: " + str(TileTypes.find_key(tile.tiles.get_cell_atlas_coords(tpos))).to_lower()
@@ -102,7 +98,7 @@ func update_cursor(tpos: Vector2i, tile: ColonyTile) -> void:
 	var workershere := Workers.workers.filter(func(w: Workers.Worker) -> bool:
 		return w.living_ctile == tile.ctile_pos and w.living_maptile == tpos)
 	if not workershere.is_empty():
-		tile_info_label.text += "\nWorkers:"
+		tile_info_label.text += "\nResidents:"
 		for w in workershere:
 			tile_info_label.text += "\n    " + w.name
 

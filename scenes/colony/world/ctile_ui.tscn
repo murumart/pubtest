@@ -1,0 +1,147 @@
+[gd_scene load_steps=2 format=3 uid="uid://da3eg21gnqrnr"]
+
+[ext_resource type="Script" uid="uid://csq3msda82v5t" path="res://scenes/colony/world/ctile_ui.gd" id="1_c7bvc"]
+
+[node name="Control" type="Control" node_paths=PackedStringArray("tile_info_label", "resource_info_label", "time_info_label", "active_jobs_list", "workers_list")]
+layout_mode = 3
+anchor_right = 0.977
+anchor_bottom = 0.967
+offset_left = -18.0
+offset_top = -17.0
+offset_right = 0.399963
+offset_bottom = -0.200012
+mouse_filter = 2
+script = ExtResource("1_c7bvc")
+tile_info_label = NodePath("TileInfo")
+resource_info_label = NodePath("ScrollContainer/ResourcesInfo")
+time_info_label = NodePath("Time")
+active_jobs_list = NodePath("ActiveJobs/ActiveJobsList")
+workers_list = NodePath("WorkersButton/PanelContainer/ScrollContainer/WorkersList")
+
+[node name="TimeButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.125
+anchor_top = 0.03
+anchor_right = 0.265
+anchor_bottom = 0.082
+offset_top = 0.0900002
+offset_right = -44.0
+offset_bottom = 0.0459976
+text = "advance time"
+
+[node name="TextEdit" type="LineEdit" parent="TimeButton"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.83
+anchor_bottom = 1.032
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 0.0399933
+offset_bottom = 0.00799751
+text = "60"
+placeholder_text = "howmuch"
+context_menu_enabled = false
+emoji_menu_enabled = false
+virtual_keyboard_type = 2
+middle_mouse_paste_enabled = false
+
+[node name="TileInfo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.026
+anchor_top = 0.134
+anchor_right = 0.124
+anchor_bottom = 0.173
+offset_left = 0.199999
+offset_top = 0.0019989
+offset_right = -38.2
+offset_bottom = -0.281006
+text = "ingredible"
+
+[node name="WorkersButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.035
+anchor_top = 0.779
+anchor_right = 0.192
+anchor_bottom = 0.831
+offset_top = -0.0630188
+offset_right = 0.399994
+offset_bottom = -0.107025
+text = "show workersq"
+metadata/_edit_use_anchors_ = true
+
+[node name="PanelContainer" type="PanelContainer" parent="WorkersButton"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -14.194
+anchor_right = 3.476
+offset_left = -5.0
+offset_top = 0.0140076
+offset_right = 0.0239868
+offset_bottom = -7.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="WorkersButton/PanelContainer"]
+layout_mode = 2
+
+[node name="WorkersList" type="ItemList" parent="WorkersButton/PanelContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ActiveJobs" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.03
+anchor_top = 0.846
+anchor_right = 0.404
+anchor_bottom = 1.023
+offset_top = -0.0620117
+offset_right = -0.200012
+offset_bottom = 0.268982
+
+[node name="ActiveJobsList" type="ItemList" parent="ActiveJobs"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+allow_search = false
+
+[node name="Time" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.612
+anchor_top = 0.042
+anchor_right = 0.724
+anchor_bottom = 0.08
+offset_left = 0.399963
+offset_top = -0.0740013
+offset_right = -49.2
+offset_bottom = 0.239998
+text = "your time..."
+horizontal_alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_top = 0.05
+anchor_right = 1.0
+anchor_bottom = 0.541
+offset_top = 0.15
+offset_right = 4.0
+offset_bottom = 0.0229797
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResourcesInfo" type="Label" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+text = "roisorces..."
+horizontal_alignment = 2
