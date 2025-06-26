@@ -36,13 +36,13 @@
 	- [ ] fulfill mandate
 	- [ ] send off items at end of the week
 - [ ] buildings
-	- [ ] stat modifications (can be done using the job getting functions... pass in extra context)
-	- [ ] areas of effect
+	- [ ] stat modifications 
+	- [ ] areas of effect (can be done using the job getting functions... pass in extra context)
 	- [ ] special jobs
 - [ ] ui
 	- [ ] stats display
-	- [ ] resources display
-	- [ ] job editor
+	- [x] resources display
+	- [x] job editor
 	- [x] time pass button
 - [ ] standing
 	- [ ] different civs - number value in matrix of civs
