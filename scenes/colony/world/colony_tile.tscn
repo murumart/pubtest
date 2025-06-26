@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=4 uid="uid://bnliuux13n0y0"]
 
-[ext_resource type="Script" uid="uid://pipxb3uloq8y" path="res://scenes/colony/colony_tile.gd" id="1_ns7el"]
+[ext_resource type="Script" uid="uid://pipxb3uloq8y" path="res://scenes/colony/world/colony_tile.gd" id="1_ns7el"]
 [ext_resource type="Script" uid="uid://cihslv5rmy3se" path="res://scenes/colony/camera.gd" id="2_lcfix"]
 [ext_resource type="Texture2D" uid="uid://bwax1j0pombal" path="res://scenes/colony/tiletiles.png" id="2_lxjir"]
-[ext_resource type="Script" uid="uid://csq3msda82v5t" path="res://scenes/colony/ctile_ui.gd" id="4_5opje"]
+[ext_resource type="Script" uid="uid://csq3msda82v5t" path="res://scenes/colony/world/ctile_ui.gd" id="4_5opje"]
 [ext_resource type="Texture2D" uid="uid://b0brdy1twxtn" path="res://scenes/rpg_battle/gregd/dice/die1.png" id="4_elosl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_elosl"]

@@ -4,7 +4,7 @@ const Jobs = preload("res://scenes/colony/jobs.gd")
 const Job = Jobs.Job
 const Resources = preload("res://scenes/colony/resources.gd")
 const Workers = preload("res://scenes/colony/workers.gd")
-const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
 
 
@@ -129,7 +129,7 @@ static func get_fishing_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[S
 		var job := Jobs.mk("fish with spears").csttime(30).cstloc(ctile_pos, pos)
 		job.energy_usage = 30
 		job.rewards = {"fish": 2}
-		job.tools_required = {"spear": 1} # TODO maybe make tools owned by a job so you require multiple to do it
+		job.tools_required = {"spear": 1}
 		job.skill_reductions = {"fishing": 2}
 		job.skill_rewards = {"fishing": 2}
 		d["fish with spears"] = job

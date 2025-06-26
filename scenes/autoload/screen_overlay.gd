@@ -24,14 +24,14 @@ func _input(_event: InputEvent) -> void:
 
 # when a node needs to be at the top of the world
 func add_ui_child(node: Node, custom_z_index := 0, delete_on_scene_change := true) -> void:
-	var node2d := Node2D.new()
-	add_child(node2d)
-	node2d.z_index = custom_z_index
+	#var node2d := Node2D.new()
+	#add_child(node2d)
+	#node2d.z_index = custom_z_index
 	# remove them on scene change since they are no longer attached to their
 	# original scenes
 	if delete_on_scene_change:
-		node2d.add_to_group("free_on_scene_change")
-	node2d.add_child(node)
+		node.add_to_group("free_on_scene_change")
+	add_child(node)
 
 
 func move_ui_child(child: Node, position: int) -> void:

@@ -5,7 +5,7 @@ const Workers = preload("res://scenes/colony/workers.gd")
 signal time_pass_request(amt: int)
 signal job_removal_request(job: Jobs.Job)
 
-const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
@@ -23,7 +23,7 @@ const Jobs = preload("res://scenes/colony/jobs.gd")
 func _ready() -> void:
 	%BackButton.pressed.connect(func():
 		owner._save()
-		LTS.change_scene_to("res://scenes/colony/world_map.tscn")
+		LTS.change_scene_to("res://scenes/colony/world/world_map.tscn")
 	)
 	%TimeButton.pressed.connect(func():
 		var amt := int(%TimeButton.get_child(0).text)

@@ -2,7 +2,7 @@ const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
 const Jobs = preload("res://scenes/colony/jobs.gd")
 const Resources = preload("res://scenes/colony/resources.gd")
-const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
 const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 

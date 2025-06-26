@@ -1,6 +1,6 @@
 extends TileMapLayer
 
-const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 
 signal tile_clicked(pos: Vector2i, tiletype: Vector2i, claimed: bool)
 

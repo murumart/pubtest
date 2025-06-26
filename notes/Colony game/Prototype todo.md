@@ -9,6 +9,7 @@
 	- [x] interacting with tiles
 		- [ ] interacting with houses:
 			- [ ] option to move resident here
+			- [ ] option to have someone sleep here for energy
 		- [ ] building houses:
 			- [ ] register living space. new workers can come
 		- [ ] interacting with town centre:

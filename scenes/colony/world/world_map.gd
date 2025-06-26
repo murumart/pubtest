@@ -1,10 +1,11 @@
 extends Control
 
-const WMM := preload("res://scenes/colony/world_map_tilemap.gd")
-const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+const WMM := preload("res://scenes/colony/world/world_map_tilemap.gd")
+const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
 const ColonyMain = preload("res://scenes/colony/colony_main.gd")
+const Civs = preload("res://scenes/colony/civs.gd")
 
 const SAVE_PATH := "user://pubtest/colony/"
 const FILENAME := "worldmap.save"
@@ -13,6 +14,18 @@ var data := {}
 
 @onready var world_map: WMM = $WorldMap
 @onready var camera_2d: Camera2D = $Camera2D
+@onready var civ_info: Label = $CanvasLayer/CivInfo
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	civ_info.text = "Standing with Civs:"
+	var myciv := Civs.civs[0]
+	for i in Civs.civs.size():
+		var stnding: int = myciv.standing.get(i, 0)
+		civ_info.text += "\n" + Civs.civs[i].name + ": " + str(stnding)
+		# game over condition
+		if i == 0 and stnding < 0:
+			LTS.change_scene_to("res://scenes/colony/game_over.tscn")
 
 
 func _option_init(opt: Dictionary) -> void:
@@ -35,7 +48,7 @@ func _tile_clicked(pos: Vector2i, tiletype: Vector2i, claimed: bool) -> void:
 				world_map.claimed_tiles.append(pos)
 				return
 		return
-	LTS.change_scene_to("res://scenes/colony/colony_tile.tscn", {pos = pos, type = tiletype})
+	LTS.change_scene_to("res://scenes/colony/world/colony_tile.tscn", {pos = pos, type = tiletype})
 
 
 func save_me() -> void:

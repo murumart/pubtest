@@ -1,14 +1,14 @@
 extends Node2D
 
-const WorldMapTilemap = preload("res://scenes/colony/world_map_tilemap.gd")
-const WorldMap = preload("res://scenes/colony/world_map.gd")
+const WorldMapTilemap = preload("res://scenes/colony/world/world_map_tilemap.gd")
+const WorldMap = preload("res://scenes/colony/world/world_map.gd")
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
 const Jobs = preload("res://scenes/colony/jobs.gd")
-const CTileUI = preload("res://scenes/colony/ctile_ui.gd")
+const CTileUI = preload("res://scenes/colony/world/ctile_ui.gd")
 const Resources = preload("res://scenes/colony/resources.gd")
 const Workers = preload("res://scenes/colony/workers.gd")
-const CtileJobs = preload("res://scenes/colony/ctile_jobs.gd")
+const CtileJobs = preload("res://scenes/colony/world/ctile_jobs.gd")
 
 const TileTypes: Dictionary[StringName, Vector2i] = {
 	GRASS = Vector2i(0, 0),
@@ -50,7 +50,7 @@ func _ready() -> void:
 	ui.time_pass_request.connect(func(amt: int) -> void:
 		_save()
 		Resources.pass_time(amt)
-		LTS.change_scene_to("res://scenes/colony/colony_tile.tscn", {pos = ctile_pos, type = ctile_type})
+		LTS.change_scene_to("res://scenes/colony/world/colony_tile.tscn", {pos = ctile_pos, type = ctile_type})
 	)
 	tiles.clear()
 	ui.update_active_jobs(jobs)

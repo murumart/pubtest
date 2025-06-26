@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://rrf7b8giufkw"]
 
 [ext_resource type="Texture2D" uid="uid://bhn2t2gphcds8" path="res://scenes/colony/worldmap.png" id="1_4tflw"]
-[ext_resource type="Script" uid="uid://ckk0b5e1lftp5" path="res://scenes/colony/world_map.gd" id="2_twq6b"]
-[ext_resource type="Script" uid="uid://cc1irm8tv5g1m" path="res://scenes/colony/world_map_tilemap.gd" id="3_e85be"]
+[ext_resource type="Script" uid="uid://ckk0b5e1lftp5" path="res://scenes/colony/world/world_map.gd" id="2_twq6b"]
+[ext_resource type="Script" uid="uid://cc1irm8tv5g1m" path="res://scenes/colony/world/world_map_tilemap.gd" id="3_e85be"]
 [ext_resource type="Texture2D" uid="uid://b0brdy1twxtn" path="res://scenes/rpg_battle/gregd/dice/die1.png" id="3_ic71m"]
 [ext_resource type="Script" uid="uid://cihslv5rmy3se" path="res://scenes/colony/camera.gd" id="4_twq6b"]
 
@@ -49,7 +49,6 @@ centered = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(224, 168)
-zoom = Vector2(1.79, 1.79)
 script = ExtResource("4_twq6b")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -57,3 +56,15 @@ script = ExtResource("4_twq6b")
 [node name="TileInfo" type="Label" parent="CanvasLayer"]
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="CivInfo" type="Label" parent="CanvasLayer"]
+anchors_preset = -1
+anchor_left = 0.575
+anchor_top = 0.048
+anchor_right = 0.753
+anchor_bottom = 0.23
+offset_left = -3.05176e-05
+offset_top = 0.199999
+offset_right = 4.59998
+offset_bottom = 3.0
+horizontal_alignment = 2

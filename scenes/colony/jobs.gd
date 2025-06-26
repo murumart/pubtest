@@ -1,6 +1,6 @@
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
-const ColonyTile = preload("res://scenes/colony/colony_tile.gd")
+const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
 const Resources = preload("res://scenes/colony/resources.gd")
 const Workers = preload("res://scenes/colony/workers.gd")
@@ -149,7 +149,8 @@ class Job:
 
 	func remove_worker(id: int) -> void:
 		var ix := workers.find(id)
-		used_time = clampi(used_time - get_time_req() / workers.size(), 0, max_time)
+		# energy is removed and xp gained gradually, no need to undo work
+		#used_time = clampi(used_time - get_time_req() / workers.size(), 0, max_time)
 		workers.remove_at(ix)
 		Workers.workers[id].on_jobs.erase(self)
 
@@ -169,9 +170,11 @@ class Job:
 	func get_time_req() -> int:
 		if workers.is_empty():
 			return -1
-		for res in input_resources:
-			if Resources.resources.get(res, 0) < input_resources[res]:
-				return -1
+
+		# input resources stored in job on acceptance
+		#for res in input_resources:
+			#if Resources.resources.get(res, 0) < input_resources[res]:
+				#return -1
 
 		var reduction := 0.0
 		for w in workers:
