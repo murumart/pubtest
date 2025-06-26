@@ -77,8 +77,8 @@ func local_job_worker_adjust(job: Jobs.Job) -> void:
 			job.remove_worker(worker)
 			print("removed worker")
 	elif choice == 2:
+		#print("filimng " + str(job) + " for removal btw jobs looks like this: " + str(Jobs.jobs))
 		job_removal_request.emit(job)
-		job.cancel()
 
 
 func update_cursor(tpos: Vector2i, tile: ColonyTile) -> void:
@@ -113,7 +113,6 @@ func update_resources() -> void:
 
 
 func update_active_jobs(jobs: Array[Jobs.Job]) -> void:
-	print("updating jobs list..")
 	active_jobs_list.clear()
 	for job in jobs:
 		# ignore finished jos

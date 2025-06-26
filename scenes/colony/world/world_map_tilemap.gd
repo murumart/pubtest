@@ -44,9 +44,10 @@ func generate() -> void:
 	noise.seed = randi()
 	for y in SIZE:
 		for x in SIZE:
-			var sum := 0.0
-			for yy in ColonyTile.SIZE: for xx in ColonyTile.SIZE:
-				sum += noise.get_noise_2d(x * ColonyTile.SIZE + xx, y * ColonyTile.SIZE + yy)
+
+			var sum := noise.get_noise_2d(
+				x * ColonyTile.SIZE + ColonyTile.SIZE * 0.5,
+				y * ColonyTile.SIZE + ColonyTile.SIZE * 0.5)
 
 			set_cell(Vector2i(x, y), 0, TileTypes.LAND)
 			if sum / (ColonyTile.SIZE**2) < 0:

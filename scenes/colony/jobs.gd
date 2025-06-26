@@ -7,7 +7,10 @@ const Workers = preload("res://scenes/colony/workers.gd")
 const Jobs = preload("res://scenes/colony/jobs.gd")
 const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 
-static var jobs: Array[DoableJob]
+static var jobs: Array[DoableJob]#:
+	#get:
+	#	print("accessed jobs: ", jobs)
+	#	return jobs
 
 
 static func _static_init() -> void:
@@ -45,13 +48,16 @@ static func get_job(id: int) -> Job:
 
 
 static func cancel_job(id: int) -> void:
+	print("...cancellig jbo ix " + str(id))
 	jobs[id].registred = false
 	jobs[id].return_materials()
 	jobs[id].return_tools()
+	jobs[id].free_workers()
 	jobs[id] = null
 
 
 static func cancel_job_j(job: Job) -> void:
+	print("...cancellig jbo " + str(job))
 	var f := jobs.find(job)
 	assert(f >= 0)
 	cancel_job(f)
@@ -133,12 +139,6 @@ class Job:
 			if Resources.resources.get(t, 0) < tools_required[t]:
 				return Jobs.err("missing tools")
 		return self
-
-
-	func cancel() -> void:
-		for inp in input_resources:
-			Resources.incri(inp, input_resources[inp])
-		free_workers()
 
 
 	func free_workers() -> void:
@@ -261,10 +261,18 @@ class Job:
 		assert(false, "Unimplemented!")
 
 
+	func _to_string() -> String:
+		return "job(" + shortinfo() + ")"
+
+
 class JobError extends Job:
 
 	func finish() -> void:
 		assert(false, "Error! " + title)
+
+
+	func _to_string() -> String:
+		return "joberror(" + title + ")"
 
 
 class DoableJob extends Job:
@@ -279,3 +287,7 @@ class DoableJob extends Job:
 			#worker.energy -= roundi(get_energy_usage(worker) / float(workers.size()))
 		return_tools()
 		free_workers()
+
+
+	func _to_string() -> String:
+		return "doablejob(" + shortinfo() + " #" + str(hash(self)) +  ")"

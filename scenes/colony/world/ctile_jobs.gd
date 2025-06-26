@@ -6,7 +6,7 @@ const Resources = preload("res://scenes/colony/resources.gd")
 const Workers = preload("res://scenes/colony/workers.gd")
 const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
-
+const Civs = preload("res://scenes/colony/civs.gd")
 
 static func select_job(sp: SelectionPopup, aval_jobs: Dictionary) -> Job:
 	var j = await sp.pop(
@@ -38,7 +38,9 @@ static func get_tree_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[Stri
 		job.skill_reductions = {"woodcutting": 4}
 		job.skill_rewards = {"woodcutting": 1}
 		job.tools_required = {"axe": 1}
-		job.finished = ColonyTile.replace_tile.bind(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
+		job.finished = func() -> void:
+			ColonyTile.replace_tile(TileTypes.TREE, TileTypes.GRASS, pos, ctile_pos)
+			Civs.civs[1].change_standing(0, -1)
 		d["chop tree"] = job
 	if true:
 		var job := Jobs.mk("gather seeds").csttime(60 * 1.6).cstloc(ctile_pos, pos)

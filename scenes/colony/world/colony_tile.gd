@@ -23,7 +23,7 @@ const TileTypes: Dictionary[StringName, Vector2i] = {
 }
 
 const SIZE := 10
-const WCOORD := Vector2i.ONE * -1
+const WCOORD := -Vector2i.ONE
 
 const SAVE_PATH := "user://pubtest/colony/tiles/"
 
@@ -54,7 +54,6 @@ func _ready() -> void:
 	ui.active_jobs_list.mouse_entered.connect(func() -> void: ui.update_active_jobs(jobs))
 	ui.job_removal_request.connect(func(j: Jobs.Job) -> void:
 		jobs.erase(j)
-		Jobs.cancel_job_j(j)
 		ui.update_active_jobs(jobs)
 	)
 
@@ -162,7 +161,7 @@ func generate() -> void:
 			var nval := noise.get_noise_2d(wpos.x, wpos.y)
 			if nval < 0:
 				tile = TileTypes.WATER
-			elif nval < 0.04:
+			elif nval < 0.01:
 				tile = TileTypes.SAND
 			else:
 				tile = TileTypes.GRASS
@@ -174,7 +173,7 @@ func generate() -> void:
 					tile = TileTypes.SAND
 				elif randf() < 0.1:
 					tile = TileTypes.PEBBLES
-				elif randf() < 0.05:
+				elif randf() < 0.01:
 					tile = TileTypes.BOULDER
 
 			tiles.set_cell(Vector2i(x, y), 0, tile)

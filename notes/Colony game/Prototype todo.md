@@ -14,6 +14,7 @@
 			- [ ] register living space. new workers can come
 		- [ ] interacting with town centre:
 		- [ ] trade with parent
+		- [ ] assigning workers to jobs: consider distance from worker's residence
 	- [ ] job selection screen
 		- [x] choosing job
 		- [x] choosing workers

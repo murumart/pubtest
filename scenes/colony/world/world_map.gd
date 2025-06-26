@@ -8,6 +8,7 @@ const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 const Civs = preload("res://scenes/colony/civs.gd")
 const CtileUi = preload("res://scenes/colony/world/ctile_ui.gd")
 const Resources = preload("res://scenes/colony/resources.gd")
+const Jobs = preload("res://scenes/colony/jobs.gd")
 
 const SAVE_PATH := "user://pubtest/colony/"
 const FILENAME := "worldmap.save"
@@ -30,6 +31,9 @@ func _ready() -> void:
 			loaded_ctiles[pos].free()
 			load_tile(pos)
 		#LTS.change_scene_to("res://scenes/colony/world/colony_tile.tscn", {pos = ctile_pos, type = ctile_type})
+	)
+	ui.job_removal_request.connect(func(j: Jobs.Job) -> void:
+		Jobs.cancel_job_j(j)
 	)
 	for t in Civs.civs[0].claimed_tiles:
 		load_tile(t)
@@ -59,14 +63,16 @@ func _option_init(opt: Dictionary) -> void:
 
 
 func _tile_clicked(pos: Vector2i, tiletype: Vector2i, claimed: bool) -> void:
+	var acceptable := false
 	if not claimed:
 		for cmd in Civs.civs[0].claimed_tiles:
 			if cmd.distance_squared_to(pos) <= 2:
 				ColonyMain.loge("you claimed this tile!!! wow!!!")
 				Civs.civs[0].lay_claim(pos)
+				acceptable = true
 				break
 	#LTS.change_scene_to("res://scenes/colony/world/colony_tile.tscn", {pos = pos, type = tiletype})
-	if not is_instance_valid(loaded_ctiles.get(pos, null)):
+	if claimed or not is_instance_valid(loaded_ctiles.get(pos, null)) and acceptable:
 		load_tile(pos)
 
 
