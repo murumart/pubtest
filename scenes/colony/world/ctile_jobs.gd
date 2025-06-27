@@ -52,6 +52,7 @@ static func get_tree_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[Stri
 		d["gather seeds"] = job
 	if true:
 		var job := Jobs.mk("hug tree").csttime(1).cstloc(ctile_pos, pos)
+		job.worker_limit = 1
 		job.energy_usage = 1
 		job.rewards = {"love": 1}
 		job.skill_rewards = {"loving": 1}
@@ -95,7 +96,9 @@ static func get_building_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[
 		job.skill_reductions = {"construction": 10}
 		job.skill_rewards = {"construction": 10}
 		job.tools_required = {"axe": 1}
-		job.finished = ColonyTile.set_tile.bind(ctile_pos, pos, TileTypes.HOUSE)
+		job.finished = func() -> void:
+			ColonyTile.set_tile(ctile_pos, pos, TileTypes.HOUSE)
+			Workers.create_residence(ctile_pos, pos, 3)
 		d["build house"] = job
 
 	return d
@@ -144,5 +147,24 @@ static func get_fishing_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[S
 		job.skill_reductions = {"fishing": 5}
 		job.skill_rewards = {"fishing": 1}
 		d["fish with pole"] = job
+
+	return d
+
+
+static func get_residence_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
+	var d: Dictionary[String, Job]
+
+	var residence := Workers.residences.get(ctile_pos * ColonyTile.SIZE + pos, null) as Workers.Residence
+	assert(residence != null)
+	if residence.residents.size() < residence.capacity:
+		var job := Jobs.mk("move resident here").csttime(1).cstloc(ctile_pos, pos)
+		job.energy_usage = 1
+		job.worker_limit = 1
+		job.skill_reductions = {"moving": 2}
+		job.skill_rewards = {"moving": 2}
+		job.finished = func() -> void:
+			var worker := Workers.workers[job.workers[0]]
+			Workers.move_residence(worker, worker.residence, residence)
+		d["move resident here"] = job
 
 	return d

@@ -40,6 +40,7 @@ static func add(job: DoableJob) -> int:
 		Resources.incri(inp, -job.tools_required[inp])
 	jobs.append(job)
 	job.registred = true
+	job.reg_index = jobs.size() - 1
 	return jobs.size() - 1
 
 
@@ -50,6 +51,7 @@ static func get_job(id: int) -> Job:
 static func cancel_job(id: int) -> void:
 	print("...cancellig jbo ix " + str(id))
 	jobs[id].registred = false
+	jobs[id].reg_index = -1
 	jobs[id].return_materials()
 	jobs[id].return_tools()
 	jobs[id].free_workers()
@@ -72,6 +74,7 @@ static func assign_to_job(worker_: int, job_: Variant) -> void:
 		job = job_
 	else: assert(false, "invalid job")
 
+	assert(job.worker_limit < 0 or job.workers.size() < job.worker_limit)
 	job.workers.append(worker_)
 	Workers.workers[worker_].on_jobs.append(job)
 
@@ -123,12 +126,14 @@ class Job:
 	var used_time: int # increases as job is completed
 	var max_time: int
 	var energy_usage: int
+	var worker_limit: int = -1
 	var workers: PackedInt64Array
 	## job's position on colony map tile, if applicable
 	var map_tile: Vector2i = Vector2i.ONE * -1
 	## job's world map tile (colony tile) position, if applicable
 	var ctile: Vector2i = Vector2i.ONE * -1
 	var registred := false
+	var reg_index := -1
 
 
 	func can_register() -> Job:

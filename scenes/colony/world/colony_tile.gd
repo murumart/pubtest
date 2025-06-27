@@ -85,29 +85,22 @@ func _tile_clicked(pos: Vector2i) -> void:
 	var aval_jobs: Dictionary[String, Jobs.Job] = {}
 	var overlapping := jobs.filter(func(j: Jobs.Job) -> bool:
 		return is_instance_valid(j) and j.map_tile == pos)
-	match type:
-		WCOORD:
-			return
-		TileTypes.TREE:
-			if await if_overlap_adjust_jobs(pos, overlapping):
-				return
-			aval_jobs.merge(CtileJobs.get_tree_jobs(pos, ctile_pos))
-		TileTypes.PEBBLES:
-			if await if_overlap_adjust_jobs(pos, overlapping):
-				return
-			aval_jobs.merge(CtileJobs.get_pebble_jobs(pos, ctile_pos))
-		TileTypes.GRASS, TileTypes.SAND:
-			if await if_overlap_adjust_jobs(pos, overlapping):
-				return
-			aval_jobs.merge(CtileJobs.get_building_jobs(pos, ctile_pos))
-		TileTypes.WATER:
-			if await if_overlap_adjust_jobs(pos, overlapping):
-				return
-			aval_jobs.merge(CtileJobs.get_fishing_jobs(pos, ctile_pos))
-		TileTypes.CAMPFIRE:
-			if await if_overlap_adjust_jobs(pos, overlapping):
-				return
-			aval_jobs.merge(CtileJobs.get_cooking_jobs(pos, ctile_pos))
+	if type == WCOORD:
+		return
+	if await if_overlap_adjust_jobs(pos, overlapping):
+		return
+	if type == TileTypes.TREE:
+		aval_jobs.merge(CtileJobs.get_tree_jobs(pos, ctile_pos))
+	elif type == TileTypes.PEBBLES:
+		aval_jobs.merge(CtileJobs.get_pebble_jobs(pos, ctile_pos))
+	elif type in [TileTypes.GRASS, TileTypes.SAND]:
+		aval_jobs.merge(CtileJobs.get_building_jobs(pos, ctile_pos))
+	elif type == TileTypes.WATER:
+		aval_jobs.merge(CtileJobs.get_fishing_jobs(pos, ctile_pos))
+	elif type == TileTypes.CAMPFIRE:
+		aval_jobs.merge(CtileJobs.get_cooking_jobs(pos, ctile_pos))
+	elif type in [TileTypes.HOUSE, TileTypes.TOWN_CENTRE]:
+		aval_jobs.merge(CtileJobs.get_residence_jobs(pos, ctile_pos))
 
 	var sp := SelectionPopup.create()
 	ui.add_child(sp)
@@ -193,15 +186,15 @@ func _save() -> void:
 	if ctile_pos == WCOORD:
 		printerr("uuuuughhhhhh cant save man cant do it")
 		return
-	print("immm saving ti.")
 
 	var dict := {}
 	for cellpos in tiles.get_used_cells():
 		#print("saving tiel at ", cellpos)
 		var type := tiles.get_cell_atlas_coords(cellpos)
 		dict[cellpos] = type
-	dict["jobs"] = jobs.map(func(j: Jobs.Job) -> int: return Jobs.jobs.find(j))
+	dict["jobs"] = jobs.map(func(j: Jobs.Job) -> int: return j.reg_index)
 
+	print("immm saving ti.")
 	dat.gets(dk.SAVED_CTILES)[ctile_pos] = dict
 
 

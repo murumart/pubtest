@@ -100,8 +100,10 @@ static func move_residence(target: Worker, from: Residence, to: Residence) -> vo
 		from.residents.erase(target)
 	assert(to.residents.size() < to.capacity)
 	to.residents.append(target)
+	target.residence = to
 	target.living_ctile = to.ctile
 	target.living_maptile = to.maptile
+	ColonyMain.loge("worker " + target.name + " moved from " + str(from) + " to " + str(to))
 
 
 class Worker:
@@ -164,3 +166,7 @@ class Residence:
 	var maptile: Vector2i
 	var capacity: int
 	var residents: Array[Worker]
+
+
+	func _to_string() -> String:
+		return "residence at c%s m%s" % [ctile, maptile]

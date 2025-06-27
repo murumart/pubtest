@@ -50,6 +50,15 @@ func local_job_worker_adjust(job: Jobs.Job) -> void:
 	add_child(sp)
 
 	if choice == 0:
+		var worker_fits := job.worker_limit < 0 or job.worker_limit > job.workers.size()
+		if not worker_fits:
+			await sp.pop(sp.Parameters.new()
+				.set_title("Job has enough workers assigned")
+				.set_inputs([], [])
+				.set_ok_cancel(true, false)
+				.set_result_callable(sp.wait_item_result)
+			)
+			return
 		var available_workers := Workers.get_available_ixes()
 		var worker: int = await sp.pop(sp.Parameters.new()
 			.set_title("add worker")
@@ -84,7 +93,7 @@ func local_job_worker_adjust(job: Jobs.Job) -> void:
 func update_cursor(tpos: Vector2i, tile: ColonyTile) -> void:
 	cursor.global_position = (tpos + tile.SIZE * tile.ctile_pos) * tile.tiles.tile_set.tile_size
 
-	tile_info_label.text = "Tile at " + str(tpos)
+	tile_info_label.text = "Tile at " + str(tpos) + " %s" % (tpos + tile.SIZE * tile.ctile_pos)
 	tile_info_label.text += "\nType: " + str(TileTypes.find_key(tile.tiles.get_cell_atlas_coords(tpos))).to_lower()
 	tile_info_label.text += "\nColony Tile at: " + str(tile.ctile_pos)
 

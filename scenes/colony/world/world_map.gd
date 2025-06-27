@@ -95,6 +95,8 @@ func _load() -> void:
 
 func _save() -> void:
 	dat.sets(dk.WORLD_MAP, world_map.savef())
+	for pos in loaded_ctiles:
+		loaded_ctiles[pos]._save()
 
 
 static func ctile_name(pos: Vector2i) -> String:
