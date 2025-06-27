@@ -183,12 +183,10 @@ func generate() -> void:
 		# first tile that is generated gets the town centre
 		dat.sets(dk.CENTRE_TILE, Vector2i(4, 4))
 		tiles.set_cell(Vector2i(4, 4), 0, TileTypes.TOWN_CENTRE)
+		var residence := Workers.create_residence(ctile_pos, Vector2i(4, 4), 3)
 		# all initial workers live in the town centre at first
 		for w in Workers.workers:
-			if w.living_ctile == WCOORD:
-				w.living_ctile = ctile_pos
-			if w.living_maptile == WCOORD:
-				w.living_maptile = Vector2i(4, 4)
+			Workers.move_residence(w, null, residence)
 
 
 func _save() -> void:

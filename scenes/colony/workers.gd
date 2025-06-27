@@ -6,11 +6,13 @@ const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
 const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 
-static var workers: Array[Worker] = []
+static var workers: Array[Worker]
+static var residences: Dictionary[Vector2i, Residence]
 
 
 static func _static_init() -> void:
 	dat.sets(dk.WORKERS, workers)
+	dat.sets(dk.RESIDENCES, residences)
 	if true:
 		var w := Worker.new()
 		w.name = "jaalgus"
@@ -73,6 +75,35 @@ static func increment_day() -> void:
 		w.energy = mini(w.attributes["max energy"], int(w.energy + w.attributes["max energy"] * replenishment))
 
 
+static func create_residence(ctile: Vector2i, maptile: Vector2i, capacity: int) -> Residence:
+	var ix := ctile * ColonyTile.SIZE + maptile
+	assert(ix not in residences)
+	var r := Residence.new()
+	r.ctile = ctile
+	r.maptile = maptile
+	r.capacity = capacity
+	residences[ix] = r
+	return r
+
+
+static func remove_residence(ctile: Vector2i, maptile: Vector2i) -> void:
+	var ix := ctile * ColonyTile.SIZE + maptile
+	assert(residences[ix].residents.is_empty())
+	residences.erase(ix)
+
+
+static func move_residence(target: Worker, from: Residence, to: Residence) -> void:
+	target.living_ctile = ColonyTile.WCOORD
+	target.living_maptile = ColonyTile.WCOORD
+	if from != null:
+		assert(target in from.residents)
+		from.residents.erase(target)
+	assert(to.residents.size() < to.capacity)
+	to.residents.append(target)
+	target.living_ctile = to.ctile
+	target.living_maptile = to.maptile
+
+
 class Worker:
 	var name: String
 	var skills: Dictionary[StringName, int]
@@ -84,6 +115,7 @@ class Worker:
 	var living_ctile: Vector2i = Vector2i.ONE * -1
 	var living_maptile: Vector2i = Vector2i.ONE * -1
 	var on_jobs: Array[Jobs.Job]
+	var residence: Residence
 
 
 	func gain_xp(skill: StringName, amt: float) -> void:
@@ -125,3 +157,10 @@ class Worker:
 			txt += "\n%s minutes since last ate" % since_last_eat
 			txt += "\nliving at %s in %s" % [living_maptile, living_ctile]
 		return txt
+
+
+class Residence:
+	var ctile: Vector2i
+	var maptile: Vector2i
+	var capacity: int
+	var residents: Array[Worker]

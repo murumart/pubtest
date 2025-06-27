@@ -95,11 +95,10 @@ func update_cursor(tpos: Vector2i, tile: ColonyTile) -> void:
 		for j in jobshere:
 			tile_info_label.text += "\n    " + j.shortinfo()
 
-	var workershere := Workers.workers.filter(func(w: Workers.Worker) -> bool:
-		return w.living_ctile == tile.ctile_pos and w.living_maptile == tpos)
-	if not workershere.is_empty():
+	var workershere: Workers.Residence = Workers.residences.get(tile.ctile_pos * tile.SIZE + tpos, null)
+	if workershere != null:
 		tile_info_label.text += "\nResidents:"
-		for w in workershere:
+		for w in workershere.residents:
 			tile_info_label.text += "\n    " + w.name
 
 
