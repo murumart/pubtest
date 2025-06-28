@@ -15,7 +15,7 @@ static func _static_init() -> void:
 	dat.sets(dk.RESIDENCES, residences)
 	if true:
 		var w := Worker.new()
-		w.name = "jaalgus"
+		w.name = Worker.random_name()
 		w.skills = {"woodcutting": 2}
 		w.attributes = {"max hp": 10, "max energy": 100}
 		w.hp = w.attributes["max hp"]
@@ -23,7 +23,7 @@ static func _static_init() -> void:
 		workers.append(w)
 	if true:
 		var w := Worker.new()
-		w.name = "gangus"
+		w.name = Worker.random_name()
 		w.skills = {"crafting": 2}
 		w.attributes = {"max hp": 10, "max energy": 80}
 		w.hp = w.attributes["max hp"]
@@ -31,7 +31,7 @@ static func _static_init() -> void:
 		workers.append(w)
 	if true:
 		var w := Worker.new()
-		w.name = "franking"
+		w.name = Worker.random_name()
 		w.skills = {"franking": 4}
 		w.attributes = {"max hp": 4, "max energy": 100}
 		w.hp = w.attributes["max hp"]
@@ -73,6 +73,25 @@ static func increment_day() -> void:
 			TileTypes.HOUSE: replenishment = 0.75
 			TileTypes.TOWN_CENTRE: replenishment = 0.7
 		w.energy = mini(w.attributes["max energy"], int(w.energy + w.attributes["max energy"] * replenishment))
+	for r in residences:
+		var residence := residences[r]
+		if residence.capacity > residence.residents.size():
+			var w := Worker.new()
+			w.name = Worker.random_name()
+
+			w.skills = {}
+			const SKILLZ := [&"woodcutting", &"mining", &"cooking", &"crafting", &"fishing", &"construction"]
+			for i in randi_range(1, 5):
+				var skilln: StringName = SKILLZ.pick_random()
+				w.skills[skilln] = maxi(1, randfn(2, 4))
+
+			w.attributes = {"max hp": int(randfn(10, 2)), "max energy": int(randfn(100, 7))}
+			w.hp = w.attributes["max hp"]
+			w.energy = w.attributes["max energy"]
+			workers.append(w)
+			ColonyMain.loge("worker " + w.name + " joined the colony")
+			move_residence(w, null, residence)
+			return
 
 
 static func create_residence(ctile: Vector2i, maptile: Vector2i, capacity: int) -> Residence:
@@ -159,6 +178,17 @@ class Worker:
 			txt += "\n%s minutes since last ate" % since_last_eat
 			txt += "\nliving at %s in %s" % [living_maptile, living_ctile]
 		return txt
+
+
+	static func random_name() -> String:
+		const syls := [
+			["gla", "gun", "ger", "fra", "ble", "a", "a", "a", "a", "e", "e", "e", "i", "i", "i", "o", "o", "o", "ban", "sla", "san", "gua", "pa", "gar", "", "", "glee"],
+			["bun", "gun", "lun", "sun", "sus", "lus", "ala", "ele", "lele", "bolo", "golo", "lol", "l", "kin"],
+			["gus", "", "sus", "mets", "gus", "gus", "g"]
+		]
+		var n: String = syls[0].pick_random() + syls[1].pick_random() + syls[2].pick_random()
+		n[0] = n[0].to_upper()
+		return n
 
 
 class Residence:
