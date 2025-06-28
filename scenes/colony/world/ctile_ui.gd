@@ -2,15 +2,16 @@ extends Control
 
 const Workers = preload("res://scenes/colony/workers.gd")
 
-signal time_pass_request(amt: int)
-signal job_removal_request(job: Jobs.Job)
-
 const ColonyTile = preload("res://scenes/colony/world/colony_tile.gd")
 const TileTypes = ColonyTile.TileTypes
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
 const res = preload("res://scenes/colony/resources.gd")
 const Jobs = preload("res://scenes/colony/jobs.gd")
+const Resources = preload("res://scenes/colony/resources.gd")
+
+signal time_pass_request(amt: int)
+signal job_removal_request(job: Jobs.Job)
 
 @export var cursor: Node2D
 @export var tile_info_label: Label
@@ -30,6 +31,12 @@ func _ready() -> void:
 		wl.visible = !wl.visible
 		if wl.visible:
 			update_workers_list()
+	)
+	%MandateButton.pressed.connect(func():
+		var wl := $MandateButton/PanelContainer
+		wl.visible = !wl.visible
+		if wl.visible:
+			mandate()
 	)
 	active_jobs_list.item_clicked.connect(func(ix: int, __1, __2):
 		local_job_worker_adjust(active_jobs_list.get_item_metadata(ix))
@@ -137,3 +144,9 @@ func update_workers_list() -> void:
 	for worker in Workers.workers:
 		var ix := workers_list.add_item(worker.name)
 		workers_list.set_item_tooltip(ix, worker.info(Input.is_action_pressed("ctrl")))
+
+
+func mandate() -> void:
+	var mandate_description: RichTextLabel = $MandateButton/PanelContainer/ScrollContainer/MandateDescription
+	var mandate := Resources.mandates.back() as Resources.Mandate
+	mandate_description.text = mandate.get_description()

@@ -13,6 +13,7 @@ static var jobs: Array[DoableJob]#:
 	#	return jobs
 
 
+
 static func _static_init() -> void:
 	dat.sets(dk.JOBS, jobs)
 	jobs = dat.gets(dk.JOBS)
