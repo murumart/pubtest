@@ -93,6 +93,8 @@ func _tile_clicked(pos: Vector2i) -> void:
 		aval_jobs.merge(CtileJobs.get_tree_jobs(pos, ctile_pos))
 	elif type == TileTypes.PEBBLES:
 		aval_jobs.merge(CtileJobs.get_pebble_jobs(pos, ctile_pos))
+	elif type == TileTypes.BOULDER:
+		aval_jobs.merge(CtileJobs.get_boulder_jobs(pos, ctile_pos))
 	elif type in [TileTypes.GRASS, TileTypes.SAND]:
 		aval_jobs.merge(CtileJobs.get_building_jobs(pos, ctile_pos))
 	elif type == TileTypes.WATER:

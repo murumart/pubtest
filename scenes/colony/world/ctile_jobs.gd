@@ -78,6 +78,23 @@ static func get_pebble_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[St
 	return d
 
 
+static func get_boulder_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
+	var d: Dictionary[String, Job]
+
+	if true:
+		var job := Jobs.mk("mine hard rock").csttime(40).cstloc(ctile_pos, pos)
+		job.energy_usage = 40
+		job.tools_required = {"pickaxe": 1}
+		job.rewards = {"hard rock": 12}
+		job.skill_reductions = {"mining": 3}
+		job.skill_rewards = {"mining": 1}
+		job.finished = func() -> void:
+			ColonyTile.set_tile(ctile_pos, pos, TileTypes.GRASS if randf() < 0.5 else TileTypes.PEBBLES)
+		d["mine hard rock"] = job
+
+	return d
+
+
 static func get_building_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
 	var d: Dictionary[String, Job]
 

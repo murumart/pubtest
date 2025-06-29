@@ -82,10 +82,23 @@ static func _mandates() -> void:
 		mandate.fulfill()
 		ColonyMain.loge("A mandate was fulfilled.")
 		Civs.civs[0].change_standing(0, 5)
-	var m := Mandate.new()
-	m.required_resources = {"wood": 200}
-	m.reward_resources = {"pickaxe": 1, "axe": 1}
-	mandates.append(m)
+	match day:
+		7:
+			var m := Mandate.new()
+			m.required_resources = {"hard rock": 200}
+			m.reward_resources = {"fishing pole": 2}
+			mandates.append(m)
+		14:
+			var m := Mandate.new()
+			m.required_resources = {"fish": 300}
+			m.reward_resources = {"fishing pole": 2}
+			mandates.append(m)
+		21:
+			assert(false)
+		28:
+			assert(false)
+
+
 
 
 class Mandate:
