@@ -43,7 +43,7 @@ static func get_available_ixes() -> PackedInt64Array:
 	var ixes := PackedInt64Array()
 
 	for i in workers.size():
-		if workers[i].on_jobs.is_empty() and not workers[i].dead:
+		if workers[i].on_jobs.is_empty() and not workers[i].dead and workers[i].energy > 0:
 			ixes.append(i)
 
 	return ixes
@@ -76,6 +76,9 @@ static func pass_time(amt: int) -> void:
 				if worker.hp <= 0.0:
 					ColonyMain.loge("worker " + worker.name + " starved to death!")
 					worker_die(i)
+		# resting
+		if worker.on_jobs.is_empty():
+			worker.energy = clampi(roundi(worker.energy + amt * 0.025), 0, worker.attributes.get("max energy"))
 
 
 static func increment_day() -> void:
@@ -88,7 +91,7 @@ static func increment_day() -> void:
 		w.energy = mini(w.attributes["max energy"], int(w.energy + w.attributes["max energy"] * replenishment))
 	for r in residences:
 		var residence := residences[r]
-		if residence.capacity > residence.residents.size():
+		if residence.capacity > residence.residents.size() and randf() < 0.75:
 			var w := Worker.new()
 			w.name = Worker.random_name()
 
@@ -109,6 +112,8 @@ static func increment_day() -> void:
 			ColonyMain.loge("worker " + w.name + " joined the colony")
 			move_residence(w, null, residence)
 			return
+	if workers.all(func(a: Worker) -> bool: return not is_instance_valid(a) or a.dead):
+		LTS.change_scene_to("res://scenes/colony/game_over.tscn")
 
 
 static func create_residence(ctile: Vector2i, maptile: Vector2i, capacity: int) -> Residence:
@@ -200,10 +205,19 @@ class Worker:
 		return txt
 
 
+	func title() -> String:
+		var t := name
+		if dead:
+			t += " (dead)"
+		else:
+			t += " e(%s/%s)" % [energy, attributes["max energy"]]
+		return t
+
+
 	static func random_name() -> String:
 		const syls := [
-			["gla", "gun", "ger", "fra", "ble", "a", "a", "a", "a", "e", "e", "e", "i", "i", "i", "o", "o", "o", "ban", "sla", "san", "gua", "pa", "gar", "", "", "glee"],
-			["bun", "gun", "lun", "sun", "sus", "lus", "ala", "ele", "lele", "bolo", "olo", "lol", "l", "kin"],
+			["gla", "gun", "ger", "gre", "fra", "ble", "a", "a", "a", "a", "e", "e", "e", "i", "i", "i", "o", "o", "o", "ban", "sla", "san", "gua", "pa", "gar", "", "", "glee", "kur"],
+			["bun", "gun", "lun", "sun", "sus", "lus", "ala", "ele", "lele", "bolo", "olo", "olon", "lol", "l", "kin", "g", "wa"],
 			["gus", "", "sus", "mets", "gus", "gus", "g"]
 		]
 		var n: String = syls[0].pick_random() + syls[1].pick_random() + syls[2].pick_random()

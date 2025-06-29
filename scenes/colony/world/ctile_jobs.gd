@@ -66,6 +66,7 @@ static func get_pebble_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[St
 
 	if true:
 		var job := Jobs.mk("gather pebbles").csttime(30).cstloc(ctile_pos, pos)
+		job.description = "pebbles may remain on the ground 50% of the time"
 		job.energy_usage = 20
 		job.rewards = {"hard rock": 2}
 		job.skill_reductions = {"gathering": 5}
@@ -83,6 +84,7 @@ static func get_boulder_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[S
 
 	if true:
 		var job := Jobs.mk("mine hard rock").csttime(40).cstloc(ctile_pos, pos)
+		job.description = "pebbles may remain on the ground 50% of the time"
 		job.energy_usage = 40
 		job.tools_required = {"pickaxe": 1}
 		job.rewards = {"hard rock": 12}
@@ -117,6 +119,22 @@ static func get_building_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[
 			ColonyTile.set_tile(ctile_pos, pos, TileTypes.HOUSE)
 			Workers.create_residence(ctile_pos, pos, 3)
 		d["build house"] = job
+
+	return d
+
+
+static func get_planting_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
+	var d: Dictionary[String, Job]
+
+	if true:
+		var job := Jobs.mk("plant tree").csttime(10).cstloc(ctile_pos, pos)
+		job.energy_usage = 15
+		job.input_resources = {"seedling": 1}
+		job.skill_reductions = {"planting": 2}
+		job.skill_rewards = {"planting": 1}
+		job.finished = func() -> void:
+			ColonyTile.set_tile(ctile_pos, pos, TileTypes.TREE)
+		d["plant tree"] = job
 
 	return d
 
@@ -175,6 +193,7 @@ static func get_residence_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary
 	assert(residence != null)
 	if residence.residents.size() < residence.capacity:
 		var job := Jobs.mk("move resident here").csttime(1).cstloc(ctile_pos, pos)
+		job.description = "move the assigned worker to this residence once the job finishes."
 		job.energy_usage = 1
 		job.worker_limit = 1
 		job.skill_reductions = {"moving": 2}
@@ -183,5 +202,39 @@ static func get_residence_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary
 			var worker := Workers.workers[job.workers[0]]
 			Workers.move_residence(worker, worker.residence, residence)
 		d["move resident here"] = job
+
+	return d
+
+
+static func get_house_jobs(pos: Vector2i, ctile_pos: Vector2i) -> Dictionary[String, Job]:
+	var d: Dictionary[String, Job]
+
+	if true:
+		var job := Jobs.mk("eat food").csttime(5).cstloc(ctile_pos, pos)
+		job.description = "worker replenishes 25% energy by eating food."
+		job.worker_limit = 1
+		job.skill_reductions = {"eating": 2}
+		job.skill_rewards = {"eating": 2}
+		job.input_resources = {"food": 1}
+
+		job.finished = func() -> void:
+			var worker := Workers.workers[job.workers[0]]
+			Resources.incri("food", -(worker.attributes.get("ravenosity", 1) - 1))
+			worker.energy = minf(worker.energy + worker.attributes.get("max energy", 100) * 0.25, worker.attributes.get("max energy", 100))
+			worker.since_last_eat = 0
+		d["eat food"] = job
+
+	if true:
+		var job := Jobs.mk("sleep").csttime(8 * 60).cstloc(ctile_pos, pos)
+		job.description = "worker replenishes 75% energy by sleeping"
+		job.worker_limit = 1
+		job.skill_reductions = {"sleeping": 2}
+		job.skill_rewards = {"sleeping": 2}
+
+		job.finished = func() -> void:
+			var worker := Workers.workers[job.workers[0]]
+			worker.energy = minf(worker.energy + worker.attributes.get("max energy", 100) * 0.75, worker.attributes.get("max energy", 100))
+
+		d["sleep"] = job
 
 	return d

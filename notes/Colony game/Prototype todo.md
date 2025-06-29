@@ -8,17 +8,24 @@
 	- [x] camera movement
 	- [x] interacting with tiles
 		- [ ] interacting with houses:
-			- [ ] option to move resident here
+			- [x] option to move resident here
 			- [ ] option to have someone sleep here for energy
-		- [ ] building houses:
-			- [ ] register living space. new workers can come
+		- [x] building houses:
+			- [x] register living space. new workers can come
 		- [ ] interacting with town centre:
 		- [ ] trade with parent
 		- [ ] assigning workers to jobs: consider distance from worker's residence
 	- [ ] job selection screen
 		- [x] choosing job
 		- [x] choosing workers
-		- [ ] mark job-having tiles
+		- [x] mark job-having tiles
+		- [x] show energy level in worker lists next to name
+		- [x] add PASSIVE energy REGEN
+		- [x] add EATING job
+		- [x] sort people based on skill in selection (display skill in menu title)
+		- [x] also filter out dead people
+		- [ ] game over when everyon is dead
+		- [ ] some way to gain hp
 - [ ] rpg battle
 	- [ ] hp split among townspeople
 	- [ ] defense = buildings that people hide inside
@@ -47,3 +54,4 @@
 - [ ] standing
 	- [ ] different civs - number value in matrix of civs
 	- [ ] standing w/ your civ negative = gameover
+	- [ ] game over state!!

@@ -43,7 +43,7 @@ func _unhandled_input(_event: InputEvent) -> void:
 	civ_info.text = "Standing with Civs:"
 	var myciv := Civs.civs[0]
 	for i in Civs.civs.size():
-		var stnding: int = myciv.standing.get(i, 0)
+		var stnding: int = Civs.civs[i].standing.get(0, 0)
 		civ_info.text += "\n" + Civs.civs[i].name + ": " + str(stnding)
 		# game over condition
 		if i == 0 and stnding < 0:

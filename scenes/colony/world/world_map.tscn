@@ -18,7 +18,6 @@ custom_data_layer_0/type = 2
 sources/0 = SubResource("TileSetAtlasSource_e85be")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ic71m"]
-frequency = 0.0079
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qoe1m"]
 

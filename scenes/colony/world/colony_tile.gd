@@ -97,17 +97,21 @@ func _tile_clicked(pos: Vector2i) -> void:
 		return
 	if type == TileTypes.TREE:
 		aval_jobs.merge(CtileJobs.get_tree_jobs(pos, ctile_pos))
-	elif type == TileTypes.PEBBLES:
+	if type == TileTypes.PEBBLES:
 		aval_jobs.merge(CtileJobs.get_pebble_jobs(pos, ctile_pos))
-	elif type == TileTypes.BOULDER:
+	if type == TileTypes.BOULDER:
 		aval_jobs.merge(CtileJobs.get_boulder_jobs(pos, ctile_pos))
-	elif type in [TileTypes.GRASS, TileTypes.SAND]:
+	if type in [TileTypes.GRASS, TileTypes.SAND]:
 		aval_jobs.merge(CtileJobs.get_building_jobs(pos, ctile_pos))
-	elif type == TileTypes.WATER:
+	if type == TileTypes.GRASS:
+		aval_jobs.merge(CtileJobs.get_planting_jobs(pos, ctile_pos))
+	if type == TileTypes.WATER:
 		aval_jobs.merge(CtileJobs.get_fishing_jobs(pos, ctile_pos))
-	elif type == TileTypes.CAMPFIRE:
+	if type == TileTypes.CAMPFIRE:
 		aval_jobs.merge(CtileJobs.get_cooking_jobs(pos, ctile_pos))
-	elif type in [TileTypes.HOUSE, TileTypes.TOWN_CENTRE]:
+	if type == TileTypes.HOUSE:
+		aval_jobs.merge(CtileJobs.get_house_jobs(pos, ctile_pos))
+	if type in [TileTypes.HOUSE, TileTypes.TOWN_CENTRE]:
 		aval_jobs.merge(CtileJobs.get_residence_jobs(pos, ctile_pos))
 
 	var sp := SelectionPopup.create()

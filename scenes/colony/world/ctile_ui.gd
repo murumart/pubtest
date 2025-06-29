@@ -36,7 +36,7 @@ func _ready() -> void:
 		var wl := $MandateButton/PanelContainer
 		wl.visible = !wl.visible
 		if wl.visible:
-			mandate()
+			mandate_mandate()
 	)
 	active_jobs_list.item_clicked.connect(func(ix: int, __1, __2):
 		local_job_worker_adjust(active_jobs_list.get_item_metadata(ix))
@@ -56,6 +56,13 @@ func local_job_worker_adjust(job: Jobs.Job) -> void:
 	sp = SelectionPopup.create()
 	add_child(sp)
 
+	var most_useful_skills := job.skill_reductions.keys()
+	most_useful_skills.sort_custom(func(a: StringName, b: StringName) -> bool:
+		return job.skill_reductions[a] > job.skill_reductions[b]
+	)
+	var most_useful_skill: StringName = most_useful_skills[0] if not most_useful_skills.is_empty() else &""
+	print("jop most useful skill: ", most_useful_skill)
+
 	if choice == 0:
 		var worker_fits := job.worker_limit < 0 or job.worker_limit > job.workers.size()
 		if not worker_fits:
@@ -66,11 +73,15 @@ func local_job_worker_adjust(job: Jobs.Job) -> void:
 				.set_result_callable(sp.wait_item_result)
 			)
 			return
-		var available_workers := Workers.get_available_ixes()
+		var available_workers := Array(Workers.get_available_ixes())
+		if most_useful_skill:
+			available_workers.sort_custom(func(a: int, b: int) -> bool:
+				return Workers.workers[a].skills.get(most_useful_skill, 0) > Workers.workers[b].skills.get(most_useful_skill, 0)
+			)
 		var worker: int = await sp.pop(sp.Parameters.new()
-			.set_title("add worker")
+			.set_title("add worker" + ("" if not most_useful_skill else " (" + most_useful_skill + ")"))
 			.set_inputs(Array(available_workers).map(func(a: int) -> String:
-				return Workers.workers[a].name), available_workers)
+				return Workers.workers[a].title()), available_workers)
 			.set_tooltips(Array(available_workers).map(func(a: int) -> String:
 				return Workers.workers[a].info(false)))
 			.set_result_callable(sp.wait_item_result)
@@ -83,7 +94,7 @@ func local_job_worker_adjust(job: Jobs.Job) -> void:
 		var worker: int = await sp.pop(sp.Parameters.new()
 			.set_title("remove worker")
 			.set_inputs(Array(job.workers).map(func(a: int) -> String:
-				return Workers.workers[a].name), Array(job.workers))
+				return Workers.workers[a].title()), Array(job.workers))
 			.set_tooltips(Array(job.workers).map(func(a: int) -> String:
 				return Workers.workers[a].info(false)))
 			.set_result_callable(sp.wait_item_result)
@@ -142,11 +153,11 @@ func update_workers_list() -> void:
 	print("updating workers..")
 	workers_list.clear()
 	for worker in Workers.workers:
-		var ix := workers_list.add_item(worker.name)
+		var ix := workers_list.add_item(worker.title())
 		workers_list.set_item_tooltip(ix, worker.info(Input.is_action_pressed("ctrl")))
 
 
-func mandate() -> void:
+func mandate_mandate() -> void:
 	var mandate_description: RichTextLabel = $MandateButton/PanelContainer/ScrollContainer/MandateDescription
 	var mandate := Resources.mandates.back() as Resources.Mandate
 	mandate_description.text = mandate.get_description()

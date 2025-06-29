@@ -77,7 +77,7 @@ static func _mandates() -> void:
 	var mandate := mandates[mandates.size() - 1]
 	if not mandate.can_fulfill():
 		ColonyMain.loge("You failed to fulfill a mandate.")
-		Civs.civs[0].change_standing(0, -5)
+		Civs.civs[0].change_standing(0, -6)
 	else:
 		mandate.fulfill()
 		ColonyMain.loge("A mandate was fulfilled.")

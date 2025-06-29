@@ -117,6 +117,7 @@ class Job:
 	var finished: Callable = func() -> void: pass
 
 	var title: String
+	var description: String
 	# input resources are removed from main resources on creation
 	var input_resources: Dictionary[StringName, int]
 	var tools_required: Dictionary[StringName, int]
@@ -223,6 +224,8 @@ class Job:
 
 	func info(extra: bool = false) -> String:
 		var txt := title + " "
+		if description:
+			txt += "\n" + description + "\n"
 		if registred:
 			var trdc := get_time_req()
 			txt += "completion: "

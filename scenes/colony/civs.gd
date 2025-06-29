@@ -1,5 +1,6 @@
 const dat = preload("res://scenes/colony/data.gd")
 const dk = dat.Keys
+const Civs = preload("res://scenes/colony/civs.gd")
 
 static var civs: Array[Civ]
 
@@ -28,6 +29,9 @@ class Civ:
 		if not with in standing:
 			standing[with] = 0
 		standing[with] += by
+		# lol
+		if Civs.civs[0] == self and with == 0 and standing[with] < 0:
+			LTS.change_scene_to("res://scenes/colony/game_over.tscn")
 
 
 	func lay_claim(tile: Vector2i) -> void:
