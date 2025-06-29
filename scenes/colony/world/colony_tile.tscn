@@ -38,3 +38,5 @@ position = Vector2(89, 90)
 enabled = false
 zoom = Vector2(2.555, 2.555)
 script = ExtResource("2_lcfix")
+
+[node name="DrawJobs" type="Node2D" parent="."]

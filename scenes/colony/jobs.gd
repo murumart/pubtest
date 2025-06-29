@@ -185,7 +185,7 @@ class Job:
 		var reduction := 0.0
 		for w in workers:
 			var worker := Workers.workers[w]
-			if worker.energy <= 0:
+			if worker.energy <= 0 or worker.dead:
 				continue
 			var r := 2.0
 			for sk in skill_reductions:

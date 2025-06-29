@@ -43,10 +43,19 @@ static func get_available_ixes() -> PackedInt64Array:
 	var ixes := PackedInt64Array()
 
 	for i in workers.size():
-		if workers[i].on_jobs.is_empty():
+		if workers[i].on_jobs.is_empty() and not workers[i].dead:
 			ixes.append(i)
 
 	return ixes
+
+
+static func worker_die(ix: int) -> void:
+	var worker := workers[ix]
+	worker.residence.residents.erase(worker)
+	for j in worker.on_jobs:
+		j.remove_worker(ix)
+	worker.hp = -1.0
+	ColonyMain.loge("worker " + worker.name + " is dead.")
 
 
 static func pass_time(amt: int) -> void:
@@ -62,7 +71,11 @@ static func pass_time(amt: int) -> void:
 				Resources.incri("food", -ravenosity)
 				worker.since_last_eat = 0
 			elif worker.since_last_eat > feeding_time * 2:
+				ColonyMain.loge("worker " + worker.name + " is starving!")
 				worker.hp -= amt / 50.0
+				if worker.hp <= 0.0:
+					ColonyMain.loge("worker " + worker.name + " starved to death!")
+					worker_die(i)
 
 
 static func increment_day() -> void:
@@ -88,6 +101,10 @@ static func increment_day() -> void:
 			w.attributes = {"max hp": int(randfn(10, 2)), "max energy": int(randfn(100, 7))}
 			w.hp = w.attributes["max hp"]
 			w.energy = w.attributes["max energy"]
+			if randf() < 0.25:
+				w.attributes["feeding time"] = maxi(1, randfn(18 * 60, 6 * 60))
+			if randf() < 0.25:
+				w.attributes["ravenosity"] = maxi(1, randfn(1, 2))
 			workers.append(w)
 			ColonyMain.loge("worker " + w.name + " joined the colony")
 			move_residence(w, null, residence)
@@ -137,6 +154,9 @@ class Worker:
 	var living_maptile: Vector2i = Vector2i.ONE * -1
 	var on_jobs: Array[Jobs.Job]
 	var residence: Residence
+	var dead: bool:
+		get:
+			return hp <= 0.0
 
 
 	func gain_xp(skill: StringName, amt: float) -> void:
@@ -183,7 +203,7 @@ class Worker:
 	static func random_name() -> String:
 		const syls := [
 			["gla", "gun", "ger", "fra", "ble", "a", "a", "a", "a", "e", "e", "e", "i", "i", "i", "o", "o", "o", "ban", "sla", "san", "gua", "pa", "gar", "", "", "glee"],
-			["bun", "gun", "lun", "sun", "sus", "lus", "ala", "ele", "lele", "bolo", "golo", "lol", "l", "kin"],
+			["bun", "gun", "lun", "sun", "sus", "lus", "ala", "ele", "lele", "bolo", "olo", "lol", "l", "kin"],
 			["gus", "", "sus", "mets", "gus", "gus", "g"]
 		]
 		var n: String = syls[0].pick_random() + syls[1].pick_random() + syls[2].pick_random()

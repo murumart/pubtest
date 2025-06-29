@@ -33,9 +33,11 @@ var ctile_type: Vector2i
 var jobs: Array[Jobs.Job]:
 	get:
 		jobs = jobs.filter(func(j: Jobs.Job) -> bool: return is_instance_valid(j) and j != null)
+		if is_instance_valid(draw_jobs): draw_jobs.queue_redraw()
 		return jobs
 @onready var tiles: TileMapLayer = $Tiles
 @export var ui: CTileUI
+@onready var draw_jobs: Node2D = $DrawJobs
 
 
 func map_init(cpos: Vector2i) -> void:
@@ -55,6 +57,10 @@ func _ready() -> void:
 	ui.job_removal_request.connect(func(j: Jobs.Job) -> void:
 		jobs.erase(j)
 		ui.update_active_jobs(jobs)
+	)
+	draw_jobs.draw.connect(func() -> void:
+		for j in jobs:
+			draw_jobs.draw_rect(Rect2(j.map_tile * 16, Vector2(16, 16)), Color(Color.RED, 0.5), false, 1)
 	)
 
 
