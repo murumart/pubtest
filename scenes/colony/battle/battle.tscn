@@ -1,4 +1,10 @@
-[gd_scene format=3 uid="uid://cugsbdsv1epyt"]
+[gd_scene load_steps=6 format=3 uid="uid://cugsbdsv1epyt"]
+
+[ext_resource type="Texture2D" uid="uid://bbrg0t85x1ygj" path="res://scenes/rpg_battle/gregd/fight_sprite.png" id="1_1oovu"]
+[ext_resource type="Script" uid="uid://d1irhobcxu6bt" path="res://scenes/colony/battle/battle.gd" id="1_8kyvr"]
+[ext_resource type="Script" uid="uid://d0baqliod151m" path="res://scenes/colony/battle/enemy.gd" id="2_nfq61"]
+[ext_resource type="PackedScene" uid="uid://bmt82xf1jk8lk" path="res://scenes/colony/battle/actor_info.tscn" id="3_nfq61"]
+[ext_resource type="Script" uid="uid://cg2e7idkfb5mk" path="res://scenes/colony/battle/party_member.gd" id="4_r5xwk"]
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -9,3 +15,138 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_8kyvr")
+
+[node name="Enemies" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Eenmy1" type="TextureRect" parent="Enemies"]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.275
+anchor_top = 0.362
+anchor_right = 0.4
+anchor_bottom = 0.637
+offset_top = -0.200012
+offset_bottom = -0.200012
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_1oovu")
+flip_h = true
+script = ExtResource("2_nfq61")
+metadata/_edit_use_anchors_ = true
+
+[node name="Eenmy2" type="TextureRect" parent="Enemies"]
+modulate = Color(0, 1, 1, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.437
+anchor_top = 0.362
+anchor_right = 0.562
+anchor_bottom = 0.637
+offset_left = 0.399994
+offset_top = 0.299988
+offset_right = 0.399963
+offset_bottom = 0.299988
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_1oovu")
+script = ExtResource("2_nfq61")
+metadata/_edit_use_anchors_ = true
+
+[node name="Eenmy3" type="TextureRect" parent="Enemies"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.544
+anchor_top = 0.36
+anchor_right = 0.669
+anchor_bottom = 0.635
+offset_left = -0.200012
+offset_top = -1.52588e-05
+offset_right = -0.200012
+offset_bottom = -3.05176e-05
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_1oovu")
+script = ExtResource("2_nfq61")
+metadata/_edit_use_anchors_ = true
+
+[node name="Party" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Greg" type="Node" parent="Party"]
+script = ExtResource("4_r5xwk")
+
+[node name="ActorActions" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.19
+anchor_top = 0.798
+anchor_right = 0.51
+anchor_bottom = 0.99
+offset_left = -1.52588e-05
+offset_top = 0.199982
+offset_right = -3.05176e-05
+offset_bottom = -6.10352e-05
+metadata/_edit_use_anchors_ = true
+
+[node name="StrikeButton" type="Button" parent="ActorActions"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0273438
+anchor_top = 0.026087
+anchor_right = 0.25
+anchor_bottom = 0.226087
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Strike"
+metadata/_edit_use_anchors_ = true
+
+[node name="ActButton" type="Button" parent="ActorActions"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0351562
+anchor_top = 0.347826
+anchor_right = 0.284656
+anchor_bottom = 0.617739
+offset_right = 0.127998
+offset_bottom = -0.0400009
+text = "Act"
+metadata/_edit_use_anchors_ = true
+
+[node name="GuardButton" type="Button" parent="ActorActions"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0273438
+anchor_top = 0.66087
+anchor_right = 0.25
+anchor_bottom = 0.86087
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Guard"
+metadata/_edit_use_anchors_ = true
+
+[node name="MemberInfo" parent="ActorActions" instance=ExtResource("3_nfq61")]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.301
+anchor_top = 0.043
+anchor_right = 0.953
+anchor_bottom = 1.0
+offset_left = -0.0560074
+offset_top = 0.0549998
+offset_right = 0.0319824
+offset_bottom = -4.0

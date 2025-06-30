@@ -21,5 +21,6 @@ func _play_pressed() -> void:
 
 static func loge(msg: String) -> void:
 	msg = str(Resources.day) + " " + Resources.get_time_str() + ": " + msg
-	log_label.text = msg + "\n" + log_label.text
+	if is_instance_valid(log_label):
+		log_label.text = msg + "\n" + log_label.text
 	print("LOGGED: ", msg)

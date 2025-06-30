@@ -6,5 +6,7 @@
 # vscode
 .vscode/
 
+.exports
+
 # thanks vim
 *.swp
