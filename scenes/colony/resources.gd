@@ -5,6 +5,7 @@ const Workers = preload("res://scenes/colony/workers.gd")
 const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 const Resources = preload("res://scenes/colony/resources.gd")
 const Civs = preload("res://scenes/colony/civs.gd")
+const Battle = preload("res://scenes/colony/battle/battle.gd")
 
 const DAY_TIME := 60 * 18
 const MANDATE_EVERY := 7
@@ -61,6 +62,12 @@ static func pass_time(amt: int) -> void:
 
 static func increment_day() -> void:
 	day += 1
+	if Civs.civs[1].standing.get(0, 0) <= -10:
+		# do nature battle..............................
+		var battle: Battle = load("res://scenes/colony/battle/battle.tscn").instantiate()
+		SOL.add_ui_child(battle)
+		await battle.battle_finished
+		battle.queue_free()
 	Workers.increment_day()
 	ColonyMain.loge("it's a new day (" + str(day) + ")")
 	if day % MANDATE_EVERY == 0:

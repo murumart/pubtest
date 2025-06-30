@@ -13,17 +13,24 @@ const Jobs = preload("res://scenes/colony/jobs.gd")
 const SAVE_PATH := "user://pubtest/colony/"
 const FILENAME := "worldmap.save"
 
-var data := {}
-var loaded_ctiles: Dictionary[Vector2i, ColonyTile]
+@export var day_color_gradient: Gradient
 
 @onready var world_map: WMM = $WorldMap
 @onready var camera_2d: Camera2D = $Camera2D
 @onready var civ_info: Label = $CanvasLayer/CivInfo
 @onready var ctiles: Node2D = $CTiles
 @onready var ui: CtileUi = $CanvasLayer/Ui
+@onready var canvas_modulate: CanvasModulate = $CanvasModulate
+
+var data := {}
+var loaded_ctiles: Dictionary[Vector2i, ColonyTile]
 
 
 func _ready() -> void:
+	$CanvasLayer.remove_child(civ_info)
+	SOL.add_ui_child(civ_info)
+	$CanvasLayer.remove_child(ui)
+	SOL.add_ui_child(ui)
 	ui.time_pass_request.connect(func(amt: int) -> void:
 		_save()
 		Resources.pass_time(amt)
@@ -48,6 +55,7 @@ func _unhandled_input(_event: InputEvent) -> void:
 		# game over condition
 		if i == 0 and stnding < 0:
 			LTS.change_scene_to("res://scenes/colony/game_over.tscn")
+	canvas_modulate.color = day_color_gradient.sample(remap(Resources.time, Resources.DAY_TIME, 0, 0, 1))
 
 
 func _option_init(opt: Dictionary) -> void:

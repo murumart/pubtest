@@ -8,6 +8,7 @@ const Workers = preload("res://scenes/colony/workers.gd")
 const Worker = Workers.Worker
 
 signal action_chosen(callalbe: Callable)
+signal battle_finished
 
 @onready var enemies: Node = %Enemies
 @onready var party: Node = %Party
@@ -48,6 +49,7 @@ func _ready() -> void:
 		await party_turn()
 		if get_targets(enemies).is_empty():
 			ColonyMain.loge("party won!!!")
+			finish()
 			break
 		await enemy_turn()
 		if get_targets(party).is_empty():
@@ -55,7 +57,6 @@ func _ready() -> void:
 			await get_tree().create_timer(1.0).timeout
 			LTS.change_scene_to("res://scenes/colony/game_over.tscn")
 			break
-
 
 
 func _option_init(options: Dictionary) -> void:
@@ -112,4 +113,8 @@ func get_targets(which_group: Node) -> Array:
 
 
 func finish() -> void:
-	pass
+	for w: PartyMember in get_targets(party):
+		w.worker.hp = w.hp
+		w.worker.energy = w.energy
+		w.worker.gain_xp("combat", 5.0)
+	battle_finished.emit()
