@@ -3,22 +3,19 @@ extends Node
 const Actor = preload("res://scenes/colony/battle/actor.gd")
 const ColonyMain = preload("res://scenes/colony/colony_main.gd")
 
-var max_hp: float
-var hp: float:
+@export var max_hp: float
+@export var hp: float:
 	set(to):
 		hp = to
 		if to <= 0:
 			ColonyMain.loge(name + " died!!")
-var max_energy: int
-var energy: int
+			_on_die()
+@export var max_energy: int
+@export var energy: int
 
 
 func _ready() -> void:
-	hp = 10
-
-
-func act() -> void:
-	assert(false, "pls implement me in supclass.............................")
+	pass
 
 
 func get_attack() -> float:
@@ -30,3 +27,8 @@ func strike(whom: Actor) -> void:
 	var dmg := get_attack()
 	whom.hp -= dmg
 	ColonyMain.loge(whom.name + " lost " + str(dmg) + " hp")
+	energy = maxi(0, energy - 3)
+
+
+func _on_die() -> void:
+	pass

@@ -30,8 +30,14 @@ layout_mode = 2
 text = "colonony.....game....."
 
 [node name="Play" type="Button" parent="PanelContainer/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Play"
+
+[node name="Battle" type="Button" parent="PanelContainer/CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Battle test"
 
 [node name="Man" type="Control" parent="."]
 layout_mode = 1
@@ -58,5 +64,3 @@ size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
 text = "welcome to colony game"
-
-[connection signal="pressed" from="PanelContainer/CenterContainer/VBoxContainer/Play" to="." method="_play_pressed"]

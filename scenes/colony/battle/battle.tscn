@@ -41,6 +41,10 @@ grow_vertical = 2
 texture = ExtResource("1_1oovu")
 flip_h = true
 script = ExtResource("2_nfq61")
+max_hp = 3.0
+hp = 3.0
+max_energy = 100
+energy = 100
 metadata/_edit_use_anchors_ = true
 
 [node name="Eenmy2" type="TextureRect" parent="Enemies"]
@@ -59,6 +63,10 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_1oovu")
 script = ExtResource("2_nfq61")
+max_hp = 3.0
+hp = 3.0
+max_energy = 100
+energy = 100
 metadata/_edit_use_anchors_ = true
 
 [node name="Eenmy3" type="TextureRect" parent="Enemies"]
@@ -77,6 +85,10 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_1oovu")
 script = ExtResource("2_nfq61")
+max_hp = 3.0
+hp = 3.0
+max_energy = 100
+energy = 100
 metadata/_edit_use_anchors_ = true
 
 [node name="Party" type="Node" parent="."]

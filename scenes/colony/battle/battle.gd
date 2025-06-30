@@ -4,6 +4,8 @@ const PartyMember = preload("res://scenes/colony/battle/party_member.gd")
 const Enemy = preload("res://scenes/colony/battle/enemy.gd")
 const Actor = preload("res://scenes/colony/battle/actor.gd")
 const ColonyMain = preload("res://scenes/colony/colony_main.gd")
+const Workers = preload("res://scenes/colony/workers.gd")
+const Worker = Workers.Worker
 
 signal action_chosen(callalbe: Callable)
 
@@ -16,23 +18,32 @@ var stats: Dictionary[StringName, int]
 
 
 func _ready() -> void:
-	%StrikeButton.pressed.connect(func() -> void:
-		var sp: SelectionPopup
-		var tgts := get_targets(enemies)
-		var tgt: Variant
-		while tgt is not Actor:
-			sp = SelectionPopup.create()
-			add_child(sp)
-			tgt = await sp.pop(sp.Parameters.new()
-			.set_title("attack whom..")
-			.set_inputs(tgts.map(func(a: Node)-> String: return a.name), tgts)
+	_connect_buttons()
+	party.get_children().map(func(a:Node)->void:a.free())
+	var suitable_workers := Workers.workers.filter(func(a: Worker) -> bool: return not a.dead)
+	print(suitable_workers)
+	var howmany_needed := mini(3, suitable_workers.size())
+	while party.get_child_count() < howmany_needed:
+		var sp := SelectionPopup.create()
+		SOL.add_ui_child(sp)
+		var s := suitable_workers.filter(func(a: Worker) -> bool:
+			return not party.get_children().any(func(b: Node) -> bool:
+				return b is PartyMember and b.worker == a
+			)
+		)
+		s.sort_custom(func(a: Worker, b: Worker) -> bool:
+			return a.attributes.get(&"combat", 0) > b.attributes.get("combat", 0)
+		)
+		var w: Workers.Worker = await sp.pop(sp.Parameters.new()
+			.set_title("defendants (" + str(howmany_needed  - party.get_child_count()) + " left")
+			.set_inputs(s.map(func(a: Workers.Worker) -> String: return a.name), s)
 			.set_result_callable(sp.wait_item_result)
-			.set_ok_cancel(false, true)
 		)
-		action_chosen.emit(func(initiator: Actor) -> void:
-			initiator.strike(tgt)
-		)
-	)
+
+		var pm := PartyMember.new()
+		pm.worker = w
+		party.add_child(pm)
+
 	while true:
 		await party_turn()
 		if get_targets(enemies).is_empty():
@@ -46,9 +57,34 @@ func _ready() -> void:
 			break
 
 
+
+func _option_init(options: Dictionary) -> void:
+	#enemies.get_children().map(func(a:Node)->void:a.free())
+	pass
+
+
+func _connect_buttons() -> void:
+	%StrikeButton.pressed.connect(func() -> void:
+		var tgts := get_targets(enemies)
+		var tgt: Variant
+		while tgt is not Actor:
+			var sp := SelectionPopup.create()
+			add_child(sp)
+			tgt = await sp.pop(sp.Parameters.new()
+			.set_title("attack whom..")
+			.set_inputs(tgts.map(func(a: Node)-> String: return a.name), tgts)
+			.set_result_callable(sp.wait_item_result)
+			.set_ok_cancel(false, true)
+		)
+		action_chosen.emit(func(initiator: Actor) -> void:
+			initiator.strike(tgt)
+		)
+	)
+
+
 func party_turn() -> void:
 	print("player turn..")
-	for p: PartyMember in party.get_children():
+	for p: PartyMember in get_targets(party):
 		actor_actions.show()
 		%MemberInfo.update(p)
 		var fun : Callable = await action_chosen
@@ -60,7 +96,9 @@ func party_turn() -> void:
 
 func enemy_turn() -> void:
 	print("enemt turn...")
-	for p: Enemy in enemies.get_children():
+	for p: Enemy in get_targets(enemies):
+		if p.hp <= 0:
+			continue
 		p.context = self
 		await p.act()
 	print("turn over")
@@ -69,5 +107,9 @@ func enemy_turn() -> void:
 
 func get_targets(which_group: Node) -> Array:
 	return which_group.get_children().filter(func(a: Node) -> bool:
-		return a is Actor and a.hp >= 0
+		return a is Actor and a.hp > 0 and a.energy > 0
 	)
+
+
+func finish() -> void:
+	pass
